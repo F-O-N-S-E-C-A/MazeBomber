@@ -1,0 +1,105 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Interface/Pause.gd" type="Script" id=1]
+[ext_resource path="res://Logic/MazeGenerator.gd" type="Script" id=2]
+[ext_resource path="res://World/images/GrassBackground.png" type="Texture" id=3]
+[ext_resource path="res://Interface/paused.png" type="Texture" id=4]
+[ext_resource path="res://Interface/gameover.png" type="Texture" id=5]
+[ext_resource path="res://Interface/restart_button.png" type="Texture" id=6]
+[ext_resource path="res://Interface/restart_button_pressed.png" type="Texture" id=7]
+[ext_resource path="res://TextureButton.gd" type="Script" id=8]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=2]
+light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=3]
+light_mode = 1
+
+[node name="World" type="Node2D"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( -88, -64 )
+texture = ExtResource( 3 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 2500, 1400 )
+
+[node name="MazeGenerator" type="Node2D" parent="."]
+script = ExtResource( 2 )
+
+[node name="YSort" type="YSort" parent="MazeGenerator"]
+
+[node name="Pause" type="Control" parent="MazeGenerator"]
+pause_mode = 2
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlackOverlay" type="ColorRect" parent="MazeGenerator/Pause"]
+anchor_right = 34.4
+anchor_bottom = 18.4
+margin_bottom = -6.10352e-05
+color = Color( 0, 0, 0, 0.364706 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="MazeGenerator/Pause"]
+material = SubResource( 1 )
+margin_left = 500.0
+margin_top = 200.0
+margin_right = 580.0
+margin_bottom = 225.0
+rect_scale = Vector2( 4, 4 )
+texture = ExtResource( 4 )
+
+[node name="GameOver" type="Control" parent="MazeGenerator"]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlackOverlay" type="ColorRect" parent="MazeGenerator/GameOver"]
+margin_right = 1376.0
+margin_bottom = 736.0
+color = Color( 0, 0, 0, 0.364706 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="MazeGenerator/GameOver"]
+material = SubResource( 2 )
+margin_left = 455.0
+margin_top = 200.0
+margin_right = 555.0
+margin_bottom = 240.0
+rect_scale = Vector2( 4, 4 )
+texture = ExtResource( 5 )
+
+[node name="Restart" type="TextureButton" parent="MazeGenerator/GameOver"]
+material = SubResource( 3 )
+margin_left = 620.0
+margin_top = 300.0
+margin_right = 660.0
+margin_bottom = 340.0
+rect_scale = Vector2( 3, 3 )
+texture_normal = ExtResource( 6 )
+texture_pressed = ExtResource( 7 )
+script = ExtResource( 8 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+light_mask = -2147483647
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
+[connection signal="pressed" from="MazeGenerator/GameOver/Restart" to="MazeGenerator/GameOver/Restart" method="_on_Restart_pressed"]
