@@ -5,3 +5,13 @@ func _input(event):
 		var pause_state = not get_tree().paused
 		get_tree().paused = pause_state
 		visible = pause_state
+
+
+func _on_quit_button_pressed():
+	get_tree().quit()
+
+
+func _on_menu_button_pressed():
+	get_tree().change_scene("res://Menu.tscn")
+	var pause_state = not get_tree().paused
+	get_tree().paused = pause_state

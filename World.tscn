@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://Interface/Pause.gd" type="Script" id=1]
 [ext_resource path="res://Logic/MazeGenerator.gd" type="Script" id=2]
@@ -8,9 +8,15 @@
 [ext_resource path="res://Interface/restart_button.png" type="Texture" id=6]
 [ext_resource path="res://Interface/restart_button_pressed.png" type="Texture" id=7]
 [ext_resource path="res://TextureButton.gd" type="Script" id=8]
+[ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=9]
+[ext_resource path="res://GameOver.gd" type="Script" id=10]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 1
+
+[sub_resource type="DynamicFont" id=4]
+size = 20
+font_data = ExtResource( 9 )
 
 [sub_resource type="CanvasItemMaterial" id=2]
 light_mode = 1
@@ -46,13 +52,11 @@ __meta__ = {
 }
 
 [node name="BlackOverlay" type="ColorRect" parent="MazeGenerator/Pause"]
+visible = false
 anchor_right = 34.4
 anchor_bottom = 18.4
 margin_bottom = -6.10352e-05
 color = Color( 0, 0, 0, 0.364706 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextureRect" type="TextureRect" parent="MazeGenerator/Pause"]
 material = SubResource( 1 )
@@ -63,21 +67,43 @@ margin_bottom = 225.0
 rect_scale = Vector2( 4, 4 )
 texture = ExtResource( 4 )
 
+[node name="VBoxContainer" type="VBoxContainer" parent="MazeGenerator/Pause"]
+margin_left = 528.0
+margin_top = 306.0
+margin_right = 912.0
+margin_bottom = 402.0
+
+[node name="menu_button" type="Button" parent="MazeGenerator/Pause/VBoxContainer"]
+margin_right = 384.0
+margin_bottom = 26.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Menu"
+flat = true
+align = 0
+
+[node name="quit_button" type="Button" parent="MazeGenerator/Pause/VBoxContainer"]
+margin_top = 30.0
+margin_right = 384.0
+margin_bottom = 56.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Quit"
+flat = true
+align = 0
+
 [node name="GameOver" type="Control" parent="MazeGenerator"]
 visible = false
 margin_right = 40.0
 margin_bottom = 40.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource( 10 )
 
 [node name="BlackOverlay" type="ColorRect" parent="MazeGenerator/GameOver"]
 margin_right = 1376.0
 margin_bottom = 736.0
 color = Color( 0, 0, 0, 0.364706 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="TextureRect" type="TextureRect" parent="MazeGenerator/GameOver"]
 material = SubResource( 2 )
@@ -90,16 +116,60 @@ texture = ExtResource( 5 )
 
 [node name="Restart" type="TextureButton" parent="MazeGenerator/GameOver"]
 material = SubResource( 3 )
-margin_left = 620.0
-margin_top = 300.0
-margin_right = 660.0
-margin_bottom = 340.0
+margin_left = 1221.0
+margin_top = 654.0
+margin_right = 1261.0
+margin_bottom = 694.0
 rect_scale = Vector2( 3, 3 )
 texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 7 )
 script = ExtResource( 8 )
 
+[node name="VBoxContainer" type="VBoxContainer" parent="MazeGenerator/GameOver"]
+margin_left = 468.0
+margin_top = 306.0
+margin_right = 804.0
+margin_bottom = 369.0
+
+[node name="restart_button" type="Button" parent="MazeGenerator/GameOver/VBoxContainer"]
+margin_right = 336.0
+margin_bottom = 26.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Restart"
+flat = true
+align = 0
+
+[node name="menu_button" type="Button" parent="MazeGenerator/GameOver/VBoxContainer"]
+margin_top = 30.0
+margin_right = 336.0
+margin_bottom = 56.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Menu"
+flat = true
+align = 0
+
+[node name="quit_button" type="Button" parent="MazeGenerator/GameOver/VBoxContainer"]
+margin_top = 60.0
+margin_right = 336.0
+margin_bottom = 86.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Quit"
+flat = true
+align = 0
+
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
 light_mask = -2147483647
 color = Color( 0.333333, 0.333333, 0.333333, 1 )
+
+[connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/menu_button" to="MazeGenerator/Pause" method="_on_menu_button_pressed"]
+[connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/quit_button" to="MazeGenerator/Pause" method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/Restart" to="MazeGenerator/GameOver/Restart" method="_on_Restart_pressed"]
+[connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/restart_button" to="MazeGenerator/GameOver" method="_on_restart_button_pressed"]
+[connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/menu_button" to="MazeGenerator/GameOver" method="_on_menu_button_pressed"]
+[connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/quit_button" to="MazeGenerator/GameOver" method="_on_quit_button_pressed"]
