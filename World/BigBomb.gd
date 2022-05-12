@@ -28,10 +28,17 @@ func _process(delta):
 func my_init(owner):
 	self.set_scale(GlobalVariables.scale_vector)
 	add_collision_exception_with(owner)
-	lifetime = Utils.uniform(2000, 3000)/1000
-
+	if Settings.explosion_time_random:
+		lifetime = Utils.uniform(2000, 3000)/1000
+	else:
+		lifetime = 2.5
 	var average_damage = base_damage * owner.damage_multiplier
-	damage = Utils.normal(average_damage, 30, average_damage - GlobalVariables.damage_threshold, average_damage + GlobalVariables.damage_threshold)
+	if Settings.explosion_damage_random:
+		damage = Utils.normal(average_damage, 30, average_damage - GlobalVariables.damage_threshold, average_damage + GlobalVariables.damage_threshold)
+	else:
+		damage = average_damage + GlobalVariables.damage_threshold/2
+		if Settings.nuke_mode:
+			damage = damage + 1000
 	calculate_color(damage - average_damage)
 
 	radius = base_radius * owner.radius_multiplier

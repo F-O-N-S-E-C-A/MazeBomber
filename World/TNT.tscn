@@ -76,4 +76,5 @@ shape = SubResource( 3 )
 position = Vector2( 7.62939e-06, 0 )
 shape = SubResource( 4 )
 one_way_collision_margin = 0.0
+
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
