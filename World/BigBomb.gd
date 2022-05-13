@@ -38,10 +38,12 @@ func my_init(owner):
 	else:
 		damage = average_damage + GlobalVariables.damage_threshold/2
 		if Settings.nuke_mode:
-			damage = damage + 1000
+			damage = damage + 5000
 	calculate_color(damage - average_damage)
 
 	radius = base_radius * owner.radius_multiplier
+	if Settings.nuke_mode:
+		radius = 5000
 	
 func doExplosion():
 	var ds = get_world_2d().get_direct_space_state()
