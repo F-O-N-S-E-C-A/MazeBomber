@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://Menu.gd" type="Script" id=1]
 [ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://back_button.gd" type="Script" id=3]
 [ext_resource path="res://World/images/GrassBackground.png" type="Texture" id=4]
 [ext_resource path="res://menu_maze.gd" type="Script" id=5]
+[ext_resource path="res://Sound/ep1.wav" type="AudioStream" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -60,7 +61,7 @@ margin_left = -5.0
 margin_top = 543.0
 margin_right = -43818.8
 margin_bottom = -12803.4
-color = Color( 0, 0, 0, 0.74902 )
+color = Color( 0, 0, 0, 0.898039 )
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 margin_left = 31.0
@@ -166,6 +167,9 @@ text = "MAZE BOMBER is a game in which you have to eliminate your opponents with
 
 MAZE BOMBER was carefully developed by Tiago Fonseca, João Lopes, Miguel Keim, Pedro Esser, David Rodrigues, Simão Correia and Ângelo Mendonça. "
 autowrap = true
+
+[node name="menu_music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
 
 [connection signal="button_down" from="MarginContainer/VBoxContainer/multiplayer_local_button" to="." method="_on_multiplayer_local_button_button_down"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/about_button" to="." method="_on_about_button_pressed"]

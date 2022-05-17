@@ -59,7 +59,7 @@ func _process(_delta):
 		
 func add_shield(shield):
 	$HPBar.add_shield(shield)
-
+	
 func add_hp(hp):
 	$HPBar.add_hp(hp)
 
@@ -84,3 +84,13 @@ func speed_up():
 func speed_down():
 	max_speed -= 100
 	speed_up_timer.stop()
+	
+func play_powerup_sound():
+	if Settings.sound_fx_enabled:
+		$powerup_sound.volume_db = Settings.sound_fx_volume - 25
+		$powerup_sound.play()
+		
+func play_load_sound():
+	if Settings.sound_fx_enabled:
+		$load_fx.volume_db = Settings.sound_fx_volume - 25
+		$load_fx.play()
