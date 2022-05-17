@@ -20,4 +20,4 @@ func _on_settings_button_pressed():
 
 
 func _on_about_button_pressed():
-	get_tree().change_scene("res://About.tscn")
+	$About.visible = true
