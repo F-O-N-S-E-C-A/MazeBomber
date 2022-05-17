@@ -60,7 +60,6 @@ func doExplosion():
 				collider.take_damage(damage_per_ray)
 		else:
 			collision_points.append(end_point)
-	play_explosion_sound()
 	update()
 
 func calculate_color(deviation): # max damage = more redish, min damage = more yellowish
@@ -80,9 +79,3 @@ func _draw():
 func _on_Area2D_body_exited(body):
 	if body is player:
 		remove_collision_exception_with(body)
-		
-func play_explosion_sound():
-	if Settings.sound_fx_enabled:
-		$explosion_sound_fx.volume_db = Settings.sound_fx_volume - 15
-		$explosion_sound_fx.play()
-

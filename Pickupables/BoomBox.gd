@@ -11,7 +11,6 @@ func pick_up(p):
 	my_player = p
 	if p.number_of_bombs != p.max_bombs:
 		p.number_of_bombs = p.max_bombs
-		p.play_load_sound()
 		queue_free()
 		spawner.start_timer()
 

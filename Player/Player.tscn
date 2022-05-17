@@ -1,10 +1,8 @@
-[gd_scene load_steps=31 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://World/images/Light.png" type="Texture" id=2]
 [ext_resource path="res://Player/HPBar.gd" type="Script" id=3]
-[ext_resource path="res://Sound/powerup.wav" type="AudioStream" id=4]
-[ext_resource path="res://Sound/load.wav" type="AudioStream" id=5]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 1
@@ -250,9 +248,3 @@ script = ExtResource( 3 )
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 rotation = -1.5708
 shape = SubResource( 25 )
-
-[node name="powerup_sound" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 4 )
-
-[node name="load_fx" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 5 )
