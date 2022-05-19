@@ -11,6 +11,7 @@ var max_speed = BASEMAXSPEED
 var max_bombs = 1
 var number_of_bombs = 1
 var big_bombs = 0
+var landMines = 0
 var speed_up_timer
 
 onready var animationPlayer = $AnimationPlayer
@@ -53,6 +54,13 @@ func _process(_delta):
 	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
 		big_bombs -= 1
 		var test_bomb = preload("res://World/BigBomb.tscn").instance()
+		test_bomb.my_init(self)
+		test_bomb.set_position(self.position)
+		get_parent().add_child(test_bomb)
+		
+	if Input.is_action_just_released(keys[5]) && landMines != 0:
+		landMines -= 1
+		var test_bomb = preload("res://World/LandMine.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)

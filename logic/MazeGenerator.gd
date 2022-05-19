@@ -87,7 +87,9 @@ func get_keys_for_player(i):
 
 func game_over():
 	$GameOver.visible = true
-	$gameover_fx.play()
+	if Settings.sound_fx_enabled:
+		$gameover_fx.play()
 	
 func is_over():
 	return $GameOver.visible
+	
