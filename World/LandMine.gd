@@ -38,6 +38,7 @@ func _on_land_mine_body_shape_entered(body_rid, body, body_shape_index, local_sh
 func my_init(owner):
 	self.set_scale(GlobalVariables.scale_vector)
 	add_collision_exception_with(owner)
+	get_node("CollisionShape2D").disabled = true
 	if Settings.explosion_time_random:
 		lifetime = Utils.uniform(2000, 3000)/1000
 	else:
