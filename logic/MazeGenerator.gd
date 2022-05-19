@@ -15,6 +15,7 @@ func my_init():
 	initialise_lights(12)
 	initialise_spawners()
 	
+	
 func initialise_walls():
 	maze.put_walls(.2)
 	maze.empty_corners(5)
@@ -86,6 +87,7 @@ func get_keys_for_player(i):
 
 func game_over():
 	$GameOver.visible = true
+	$gameover_fx.play()
 	
 func is_over():
 	return $GameOver.visible

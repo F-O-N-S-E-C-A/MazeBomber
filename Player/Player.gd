@@ -11,8 +11,6 @@ var max_speed = BASEMAXSPEED
 var max_bombs = 1
 var number_of_bombs = 1
 var big_bombs = 0
-var c4 = 0
-var c4_planted = null
 var speed_up_timer
 
 onready var animationPlayer = $AnimationPlayer
@@ -52,30 +50,16 @@ func _process(_delta):
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	#Big Bomb
-	#if Input.is_action_just_released(keys[6]) && big_bombs != 0:
-	#	big_bombs -= 1
-	#	var test_bomb = preload("res://World/BigBomb.tscn").instance()
-	#	test_bomb.my_init(self)
-	#	test_bomb.set_position(self.position)
-	#	get_parent().add_child(test_bomb)
-
-	#C-4 Setup
-	if Input.is_action_just_released(keys[5]):
-		if(c4_planted != null):
-			c4_planted.exploding = true
-			c4_planted = null
-		if(c4_planted == null && c4 > 0):
-			c4 -= 1
-			c4_planted = preload("res://World/C4.tscn").instance()
-			c4_planted.my_init(self)
-			c4_planted.set_position(self.position)
-			get_parent().add_child(c4_planted)
-
+	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
+		big_bombs -= 1
+		var test_bomb = preload("res://World/BigBomb.tscn").instance()
+		test_bomb.my_init(self)
+		test_bomb.set_position(self.position)
+		get_parent().add_child(test_bomb)
 		
 func add_shield(shield):
 	$HPBar.add_shield(shield)
-
+	
 func add_hp(hp):
 	$HPBar.add_hp(hp)
 
@@ -100,3 +84,13 @@ func speed_up():
 func speed_down():
 	max_speed -= 100
 	speed_up_timer.stop()
+	
+func play_powerup_sound():
+	if Settings.sound_fx_enabled:
+		$powerup_sound.volume_db = Settings.sound_fx_volume - 25
+		$powerup_sound.play()
+		
+func play_load_sound():
+	if Settings.sound_fx_enabled:
+		$load_fx.volume_db = Settings.sound_fx_volume - 25
+		$load_fx.play()
