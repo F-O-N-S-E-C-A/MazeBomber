@@ -15,6 +15,11 @@ func my_init():
 	initialise_lights(12)
 	initialise_spawners()
 	
+	if Settings.fog_of_war:
+		$CanvasModulate.set_color(Color(0,0,0))
+	else:
+		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
+	
 	
 func initialise_walls():
 	maze.put_walls(.2)

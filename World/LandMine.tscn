@@ -66,6 +66,7 @@ anims/Explosion = SubResource( 2 )
 anims/Timer = SubResource( 3 )
 
 [node name="Light2D" type="Light2D" parent="."]
+visible = false
 texture = ExtResource( 1 )
 texture_scale = 2.0
 mode = 2

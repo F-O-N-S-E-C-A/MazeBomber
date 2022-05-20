@@ -18,6 +18,7 @@ var exploding = false
 
 func _process(delta):
 	if to_explode:
+		$Light2D.visible = true
 		if exploding:
 			animationBomb.play("Explosion")
 			yield(animationBomb, "animation_finished")
