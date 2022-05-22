@@ -1,12 +1,9 @@
 extends Control
 
-
 func _ready():
 	if Settings.music_enabled:
 		$menu_music.volume_db = Settings.music_volume - 25
 		$menu_music.play()
-
-
 
 func _on_multiplayer_local_button_button_down():
 	get_tree().change_scene("res://World.tscn")
@@ -22,3 +19,6 @@ func _on_settings_button_pressed():
 
 func _on_about_button_pressed():
 	$About.visible = true
+
+func _on_multiplayer_online_button_pressed():
+	get_tree().change_scene("res://Multiplayer/Multiplayer_Menu.tscn")

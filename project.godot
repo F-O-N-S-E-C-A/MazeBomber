@@ -19,6 +19,7 @@ GlobalVariables="*res://Singletons/Global_variables.gd"
 Utils="*res://Singletons/Utils.gd"
 PowerUpRandomiser="*res://Singletons/Power_up_randomiser.gd"
 Settings="*res://Singletons/Settings.gd"
+Network="*res://Multiplayer/Network.gd"
 
 [display]
 
