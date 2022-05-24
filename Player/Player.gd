@@ -13,6 +13,7 @@ var number_of_bombs = 1
 var big_bombs = 0
 var landMines = 0
 var speed_up_timer
+var id = -1
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree

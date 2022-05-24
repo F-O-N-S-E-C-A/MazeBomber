@@ -1,7 +1,7 @@
 extends Node
 
 const DEFAULT_PORT = 1999
-const MAX_CLIENTS = 4
+const MAX_CLIENTS = 2
 
 var client = null
 var server = null
@@ -40,5 +40,5 @@ func _connected_to_server() -> void:
 func _server_disconnected() -> void:
 	print("Disconnected from the server")
 
-func _connection_failed():
+func _connection_failed() -> void:
 	print("Connecion Failed")
