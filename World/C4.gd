@@ -13,28 +13,18 @@ var collision_color
 var exploding = false
 var to_explode = false
 var collision_points = []
+var exploded = false
 
 func _process(delta):
-	#if exploding:
-	#	doExplosion()
-	#	animationBomb.play("Explosion")
-	#	yield(animationBomb, "animation_finished")
-	#	exploding = false
-	#	self.queue_free()
-	
 	if to_explode:
-		if exploding:
-			animationBomb.play("Explosion")
-			yield(animationBomb, "animation_finished")
-			self.queue_free()
-		else:
-			time_ellapsed += delta
-			animationBomb.set_speed_scale(0.5 + .6*time_ellapsed)
-			exploding = time_ellapsed > lifetime
-			if exploding:
-				play_explosion_sound()
-				doExplosion()
-
+		if !exploded:
+			doExplosion()
+			exploded = true
+		animationBomb.play("Explosion")
+		yield(animationBomb, "animation_finished")
+		to_explode = false
+		self.queue_free()
+		
 func my_init(owner):
 	self.set_scale(GlobalVariables.scale_vector)
 	add_collision_exception_with(owner)

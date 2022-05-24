@@ -8,7 +8,7 @@
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=5]
 resource_name = "Explosion"
 step = 0.05
 tracks/0/type = "value"
@@ -24,7 +24,7 @@ tracks/0/keys = {
 "values": [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=6]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -61,8 +61,8 @@ one_way_collision_margin = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Timer"
-anims/Explosion = SubResource( 2 )
-anims/Timer = SubResource( 3 )
+anims/Explosion = SubResource( 5 )
+anims/Timer = SubResource( 6 )
 
 [node name="Light2D" type="Light2D" parent="."]
 texture = ExtResource( 1 )
