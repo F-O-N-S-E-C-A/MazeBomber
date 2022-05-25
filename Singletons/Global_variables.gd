@@ -15,9 +15,12 @@ var my_height
 var my_scale
 var scale_vector
 
+var networkMode: bool
+
 func _init():
 	set_dimensions(default_width, default_height)
 	change_scale(default_scale)
+	networkMode = false
 
 func set_dimensions(w, h):
 	my_width = w
