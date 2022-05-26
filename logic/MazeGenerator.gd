@@ -22,9 +22,12 @@ func my_init():
 
 
 func initialise_walls():
-	maze.put_walls(.2)
+	if Settings.random_walls:
+		maze.put_walls(.2)
+	if Settings.center_room:
+		maze.make_room(16, 8, 8, 6)
+		
 	maze.empty_corners(5)
-	maze.make_room(16, 8, 8, 6)
 
 	var mid_point = Vector2(maze.width/2, maze.height/2) * GlobalVariables.my_scale
 	var max_dist = Vector2.ZERO.distance_to(mid_point)

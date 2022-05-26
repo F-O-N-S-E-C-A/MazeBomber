@@ -66,14 +66,12 @@ func calculate_color(deviation): # max damage = more redish, min damage = more y
 	collision_color = Color.from_hsv(hue, 1, 1)
 
 func _draw():
-	#draw_rays()
-	if exploding:
+	if to_explode:
 		for point in collision_points:
 			var center = (point - self.position) / GlobalVariables.scale_vector.x
 			var rect = Rect2(center.x - 1, center.y - 1, 2, 2)
 			self.draw_rect(rect, collision_color)
-	pass
-
+	
 
 func draw_rays():
 	var n = GlobalVariables.number_of_rays

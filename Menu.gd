@@ -2,6 +2,7 @@ extends Control
 
 
 func _ready():
+	Settings.load_settings()
 	if Settings.music_enabled:
 		$menu_music.volume_db = Settings.music_volume - 25
 		$menu_music.play()
