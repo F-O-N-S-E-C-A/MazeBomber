@@ -63,21 +63,21 @@ func _physics_process(delta):
 	velocity = move_and_slide(velocity)
 
 func _process(_delta):
-	if rng.randf_range(-10, 10) >= 9.85 || Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
+	if (rng.randf_range(-10, 10) >= 9.85 || Input.is_action_just_released(keys[4])) && number_of_bombs != 0:
 		number_of_bombs -= 1
 		var test_bomb = preload("res://World/TNT.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5]) && big_bombs != 0:
+	if (rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5])) && big_bombs != 0:
 		big_bombs -= 1
 		var test_bomb = preload("res://World/BigBomb.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5]) && landMines != 0:
+	if (rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5])) && landMines != 0:
 		landMines -= 1
 		var test_bomb = preload("res://World/LandMine.tscn").instance()
 		test_bomb.my_init(self)
