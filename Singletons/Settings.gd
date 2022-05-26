@@ -11,4 +11,3 @@ var sound_fx_enabled: bool
 
 var nuke_mode: bool
 var fog_of_war: bool
-

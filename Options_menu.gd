@@ -55,3 +55,4 @@ func _on_explosion_damage_random_toggled(button_pressed):
 
 func _on_fog_of_war_toggled(button_pressed):
 	Settings.fog_of_war = button_pressed
+

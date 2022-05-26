@@ -13,12 +13,15 @@ var number_of_bombs = 1
 var big_bombs = 0
 var landMines = 0
 var speed_up_timer
+var c4 = 0
+var c4_planted = null
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 
 func my_init(k, image, otherPlayers):
+	c4=1
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)
@@ -64,6 +67,17 @@ func _process(_delta):
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
+
+	if Input.is_action_just_released(keys[5]):
+		if(c4_planted != null):
+			c4_planted.to_explode = true
+			c4_planted = null
+		if(c4_planted == null && c4 > 0):
+			c4 -= 1
+			c4_planted = preload("res://World/C4.tscn").instance()
+			c4_planted.my_init(self)
+			c4_planted.set_position(self.position)
+			get_parent().add_child(c4_planted)
 
 func add_shield(shield):
 	$HPBar.add_shield(shield)
