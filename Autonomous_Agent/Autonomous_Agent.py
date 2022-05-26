@@ -1,7 +1,6 @@
 from godot import exposed, export
 from godot import *
 
-
 @exposed
 class Autonomous_Agent(KinematicBody2D):
 

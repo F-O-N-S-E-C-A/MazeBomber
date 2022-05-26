@@ -48,8 +48,14 @@ func initialise_walls():
 func initialise_players(n_players):
 	var players = []
 
-	for _i in range(n_players):
-		players.append(preload("res://Player/Player.tscn").instance())
+	for i in range(n_players):
+		if GameModes.singlePlayer:
+			if i == 0:
+				players.append(preload("res://Autonomous_Agent/Autonomous_Agent.tscn").instance())
+			else:
+				players.append(preload("res://Player/Player.tscn").instance())
+		else:
+			players.append(preload("res://Player/Player.tscn").instance())
 
 	for i in range(n_players):
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
@@ -57,13 +63,31 @@ func initialise_players(n_players):
 		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 
 	for i in range(n_players):
-		players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
-		players[i].set_scale(GlobalVariables.scale_vector)
-		$YSort.add_child(players[i])
-		var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
-		maze.remove_path(players[i].position)
-		$YSort.add_child(spawner)
-		spawner.spawn()
+		if GameModes.singlePlayer:
+			if i == 0:
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i), players)
+				players[i].set_scale(GlobalVariables.scale_vector)
+				$YSort.add_child(players[i])
+				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
+				maze.remove_path(players[i].position)
+				$YSort.add_child(spawner)
+				spawner.spawn()
+			else:
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+				players[i].set_scale(GlobalVariables.scale_vector)
+				$YSort.add_child(players[i])
+				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
+				maze.remove_path(players[i].position)
+				$YSort.add_child(spawner)
+				spawner.spawn()
+		else:
+			players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+			players[i].set_scale(GlobalVariables.scale_vector)
+			$YSort.add_child(players[i])
+			var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
+			maze.remove_path(players[i].position)
+			$YSort.add_child(spawner)
+			spawner.spawn()
 
 func initialise_lights(n_lights):
 	var random_positions = maze.get_random_paths(n_lights)
@@ -84,6 +108,9 @@ func initialise_spawners():
 
 func get_sprite_for_player(i):
 	return load("res://Player/Player" + str(i+1) + ".png")
+	
+func get_sprite_for_agent(i):
+	return load("res://Autonomous_Agent/AI" + str(i+1) + ".png")
 
 func get_keys_for_player(i):
 	return ["p" + str(i+1) + "_right",
