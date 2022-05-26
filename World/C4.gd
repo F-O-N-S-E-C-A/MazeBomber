@@ -73,7 +73,7 @@ func _draw():
 			var rect = Rect2(center.x - 1, center.y - 1, 2, 2)
 			self.draw_rect(rect, collision_color)
 	pass
-
+	
 
 func draw_rays():
 	var n = GlobalVariables.number_of_rays
