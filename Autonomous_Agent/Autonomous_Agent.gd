@@ -36,10 +36,8 @@ func my_init(k, image, otherPlayers):
 func _physics_process(delta):
 	var time_now = OS.get_unix_time()
 	
-	print(time_now - last_time)
 	
 	if time_now - last_time >= 1:
-		print("5 sec")
 		rng.randomize()
 		input_vector.x = rng.randf_range(-1, 1)
 		input_vector.y = rng.randf_range(-1, 1)
