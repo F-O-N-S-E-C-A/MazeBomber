@@ -10,6 +10,7 @@ func _ready():
 
 
 func _on_multiplayer_local_button_button_down():
+	GameModes.multiplayer_local()
 	get_tree().change_scene("res://World.tscn")
 
 
@@ -23,3 +24,8 @@ func _on_settings_button_pressed():
 
 func _on_about_button_pressed():
 	$About.visible = true
+
+
+func _on_single_player_button_button_down():
+	GameModes.singleplayer()
+	get_tree().change_scene("res://World.tscn")
