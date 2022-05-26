@@ -13,4 +13,5 @@ class Autonomous_Agent(KinematicBody2D):
 		Called every time the node is added to the scene.
 		Initialization here.
 		"""
-		pass
+		print("This should print")
+	

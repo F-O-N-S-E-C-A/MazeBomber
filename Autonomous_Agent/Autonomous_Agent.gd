@@ -39,8 +39,8 @@ func _physics_process(delta):
 	
 	if time_now - last_time >= 1:
 		rng.randomize()
-		input_vector.x = rng.randf_range(-1, 1)
-		input_vector.y = rng.randf_range(-1, 1)
+		input_vector.x = rng.randf_range(-10, 10)
+		input_vector.y = rng.randf_range(-10, 10)
 		input_vector = input_vector.normalized()
 		last_time = time_now
 	else:
