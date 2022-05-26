@@ -1,8 +1,9 @@
 from godot import exposed, export
 from godot import *
 
+
 @exposed
-class Autonomous_Agent(KinematicBody2D):
+class Autonomous_Agent(Control):
 
 	# member variables here, example:
 	a = export(int)
@@ -13,5 +14,4 @@ class Autonomous_Agent(KinematicBody2D):
 		Called every time the node is added to the scene.
 		Initialization here.
 		"""
-		print("This should print")
-	
+		print("sads")

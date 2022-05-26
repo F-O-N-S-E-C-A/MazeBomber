@@ -212,12 +212,17 @@ height = 1.0
 [node name="AI" type="KinematicBody2D"]
 script = ExtResource( 6 )
 
+[node name="Python_Controller" type="Control" parent="."]
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 2 )
+
 [node name="Sprite" type="Sprite" parent="."]
 material = SubResource( 1 )
 position = Vector2( 0, -6 )
 hframes = 25
 frame = 12
-script = ExtResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/IdleDown = SubResource( 2 )
