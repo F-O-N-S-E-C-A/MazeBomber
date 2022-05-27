@@ -171,6 +171,7 @@ autowrap = true
 [node name="menu_music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
 
+[connection signal="button_down" from="MarginContainer/VBoxContainer/single_player_button" to="." method="_on_single_player_button_button_down"]
 [connection signal="button_down" from="MarginContainer/VBoxContainer/multiplayer_local_button" to="." method="_on_multiplayer_local_button_button_down"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/multiplayer_online_button" to="." method="_on_multiplayer_online_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/about_button" to="." method="_on_about_button_pressed"]
