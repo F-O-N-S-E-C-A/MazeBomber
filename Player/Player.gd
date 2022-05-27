@@ -29,8 +29,17 @@ func my_init(k, image, otherPlayers):
 	$Sprite.set_texture(image)
 	speed_up_timer_init()
 	
-remote func syncPosition(x, y):
-	print(str(x) + ", " +  str(y))
+remote func syncPosition(x, y, input_vector, delta):
+	if input_vector != Vector2.ZERO:
+		animationTree.set("parameters/Idle/blend_position", input_vector)
+		animationTree.set("parameters/Run/blend_position", input_vector)
+		animationState.travel("Run")
+		velocity = velocity.move_toward(input_vector * max_speed, ACCELERATION * delta)
+	else:
+		animationState.travel("Idle")
+		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
+
+	velocity = move_and_slide(velocity)
 	self.position.x = x
 	self.position.y = y
 
@@ -53,7 +62,7 @@ func _physics_process(delta):
 	
 	if get_tree().is_network_server():
 		print(str(self.position.x) + ", " +  str(self.position.x))
-		rpc("syncPosition", self.position.x, self.position.y)
+		rpc("syncPosition", self.position.x, self.position.y, input_vector, delta)
 
 func _process(_delta):
 	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
