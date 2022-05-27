@@ -25,7 +25,6 @@ onready var last_time = OS.get_unix_time()
 onready var input_vector = Vector2.ZERO
 
 func my_init(k, image, otherPlayers):
-	c4=1
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)
