@@ -28,6 +28,11 @@ func my_init(k, image, otherPlayers):
 	keys = k
 	$Sprite.set_texture(image)
 	speed_up_timer_init()
+	
+remote func syncPosition(x, y):
+	print(str(x) + ", " +  str(y))
+	self.position.x = x
+	self.position.y = y
 
 func _physics_process(delta):
 	var input_vector = Vector2.ZERO
@@ -45,6 +50,10 @@ func _physics_process(delta):
 		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
 
 	velocity = move_and_slide(velocity)
+	
+	if get_tree().is_network_server():
+		print(str(self.position.x) + ", " +  str(self.position.x))
+		rpc("syncPosition", self.position.x, self.position.y)
 
 func _process(_delta):
 	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:

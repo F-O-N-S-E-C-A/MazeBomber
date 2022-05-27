@@ -25,7 +25,6 @@ onready var last_time = OS.get_unix_time()
 onready var input_vector = Vector2.ZERO
 
 func my_init(k, image, otherPlayers):
-	c4=1
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)
@@ -82,7 +81,7 @@ func _process(_delta):
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5]):
+	if (rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5])) && c4 != 0:
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null

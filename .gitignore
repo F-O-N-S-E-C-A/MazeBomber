@@ -17,3 +17,9 @@ World/.DS_Store
 .DS_Store
 Pickupables/.DS_Store
 .DS_Store
+*.md5
+addons/
+*.stex
+*.gdnlib
+*.pyc
+*.import

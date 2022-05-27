@@ -1,6 +1,7 @@
 extends Node2D
 
 var maze
+var players = []
 
 func _ready():
 	randomize()
@@ -46,8 +47,6 @@ func initialise_walls():
 				$YSort.add_child(wall)
 
 func initialise_players(n_players):
-	var players = []
-
 	for i in range(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:

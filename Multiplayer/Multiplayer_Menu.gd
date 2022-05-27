@@ -23,7 +23,10 @@ func _player_connected(id) -> void:
 	
 	if connected_players == Network.MAX_CLIENTS - 1:
 		#Ideally RPC game start
+		GameModes.multiplayer_online()
+		#if get_tree().is_network_server():
 		get_tree().change_scene("res://World.tscn")
+			#RPC MazeSync
 
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")
