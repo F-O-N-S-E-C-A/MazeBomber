@@ -1,14 +1,14 @@
 [gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://World/images/Light.png" type="Texture" id=1]
-[ext_resource path="res://World/images/land_mine.png" type="Texture" id=2]
-[ext_resource path="res://World/LandMine.gd" type="Script" id=3]
+[ext_resource path="res://World/images/c4.png" type="Texture" id=2]
+[ext_resource path="res://World/C4.gd" type="Script" id=3]
 [ext_resource path="res://Sound/big_bomb.wav" type="AudioStream" id=4]
 
 [sub_resource type="CircleShape2D" id=1]
 radius = 8.0
 
-[sub_resource type="Animation" id=2]
+[sub_resource type="Animation" id=5]
 resource_name = "Explosion"
 step = 0.05
 tracks/0/type = "value"
@@ -18,13 +18,13 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0.05, 0.1, 0.15, 0.2, 0.35, 0.5, 0.65, 0.8, 0.95 ),
-"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.05, 0.1, 0.15, 0.2, 0.35, 0.5, 0.65, 0.8, 0.95 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
 "update": 1,
-"values": [ 2, 4, 5, 6, 7, 8, 9, 10, 11 ]
+"values": [ 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=6]
 length = 0.2
 loop = true
 tracks/0/type = "value"
@@ -43,13 +43,12 @@ tracks/0/keys = {
 [sub_resource type="CircleShape2D" id=4]
 radius = 8.0
 
-[node name="LandMine" type="StaticBody2D"]
+[node name="C4" type="StaticBody2D"]
 collision_layer = 2147483650
 collision_mask = 2147483649
 script = ExtResource( 3 )
 
 [node name="Sprite" type="Sprite" parent="."]
-visible = false
 position = Vector2( -0.436447, -1 )
 texture = ExtResource( 2 )
 hframes = 12
@@ -62,11 +61,10 @@ one_way_collision_margin = 0.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "Timer"
-anims/Explosion = SubResource( 2 )
-anims/Timer = SubResource( 3 )
+anims/Explosion = SubResource( 5 )
+anims/Timer = SubResource( 6 )
 
 [node name="Light2D" type="Light2D" parent="."]
-visible = false
 texture = ExtResource( 1 )
 texture_scale = 2.0
 mode = 2
@@ -77,10 +75,8 @@ collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource( 4 )
-one_way_collision_margin = 0.0
 
 [node name="explosion_sound_fx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 4 )
 
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
-[connection signal="body_shape_entered" from="Area2D" to="." method="_on_land_mine_body_shape_entered"]

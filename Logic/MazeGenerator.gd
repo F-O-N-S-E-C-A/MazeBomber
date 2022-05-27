@@ -15,11 +15,19 @@ func my_init():
 	initialise_lights(12)
 	initialise_spawners()
 	
+	if Settings.fog_of_war:
+		$CanvasModulate.set_color(Color(0,0,0))
+	else:
+		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
+	
 	
 func initialise_walls():
-	maze.put_walls(.2)
+	if Settings.random_walls:
+		maze.put_walls(.2)
+	if Settings.center_room:
+		maze.make_room(16, 8, 8, 6)
+		
 	maze.empty_corners(5)
-	maze.make_room(16, 8, 8, 6)
 
 	var mid_point = Vector2(maze.width/2, maze.height/2) * GlobalVariables.my_scale
 	var max_dist = Vector2.ZERO.distance_to(mid_point)

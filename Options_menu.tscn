@@ -169,6 +169,20 @@ margin_bottom = 114.0
 custom_fonts/font = SubResource( 5 )
 text = "Random explosion damage"
 
+[node name="random_walls" type="CheckButton" parent="World_settings/MarginContainer2/VBoxContainer"]
+margin_top = 118.0
+margin_right = 418.0
+margin_bottom = 158.0
+custom_fonts/font = SubResource( 5 )
+text = "Walls that obstruct the maze"
+
+[node name="center_room" type="CheckButton" parent="World_settings/MarginContainer2/VBoxContainer"]
+margin_top = 162.0
+margin_right = 418.0
+margin_bottom = 202.0
+custom_fonts/font = SubResource( 5 )
+text = "Room in the center of the maze"
+
 [connection signal="pressed" from="MarginContainer/VBoxContainer/menu_button" to="." method="_on_menu_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/world_settimgs_button" to="." method="_on_world_settimgs_button_pressed"]
 [connection signal="toggled" from="MarginContainer/VBoxContainer/fog_of_war" to="." method="_on_fog_of_war_toggled"]
@@ -178,3 +192,5 @@ text = "Random explosion damage"
 [connection signal="pressed" from="World_settings/MarginContainer2/VBoxContainer/back_button" to="." method="_on_back_button_pressed"]
 [connection signal="toggled" from="World_settings/MarginContainer2/VBoxContainer/explosion_time_random" to="." method="_on_explosion_time_random_toggled"]
 [connection signal="toggled" from="World_settings/MarginContainer2/VBoxContainer/explosion_damage_random" to="." method="_on_explosion_damage_random_toggled"]
+[connection signal="toggled" from="World_settings/MarginContainer2/VBoxContainer/random_walls" to="." method="_on_random_walls_toggled"]
+[connection signal="toggled" from="World_settings/MarginContainer2/VBoxContainer/center_room" to="." method="_on_center_room_toggled"]

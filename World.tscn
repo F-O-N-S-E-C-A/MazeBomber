@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://Interface/Pause.gd" type="Script" id=1]
 [ext_resource path="res://Logic/MazeGenerator.gd" type="Script" id=2]
@@ -11,19 +11,41 @@
 [ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://GameOver.gd" type="Script" id=10]
 [ext_resource path="res://Sound/gameover.wav" type="AudioStream" id=11]
+[ext_resource path="res://tnt_img.png" type="Texture" id=12]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 1
 
+[sub_resource type="CanvasItemMaterial" id=5]
+blend_mode = 1
+
 [sub_resource type="DynamicFont" id=4]
 size = 20
 font_data = ExtResource( 9 )
+
+[sub_resource type="CanvasItemMaterial" id=6]
+blend_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id=2]
 light_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id=3]
 light_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=7]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=8]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=9]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=10]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=11]
+blend_mode = 1
 
 [node name="World" type="Node2D"]
 __meta__ = {
@@ -39,6 +61,10 @@ region_rect = Rect2( 0, 0, 2500, 1400 )
 
 [node name="MazeGenerator" type="Node2D" parent="."]
 script = ExtResource( 2 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="MazeGenerator"]
+light_mask = -2147483647
+color = Color( 0.333333, 0.333333, 0.333333, 1 )
 
 [node name="YSort" type="YSort" parent="MazeGenerator"]
 
@@ -74,6 +100,7 @@ margin_right = 912.0
 margin_bottom = 402.0
 
 [node name="menu_button" type="Button" parent="MazeGenerator/Pause/VBoxContainer"]
+material = SubResource( 5 )
 margin_right = 384.0
 margin_bottom = 26.0
 custom_colors/font_color = Color( 100, 100, 100, 1 )
@@ -84,6 +111,7 @@ flat = true
 align = 0
 
 [node name="quit_button" type="Button" parent="MazeGenerator/Pause/VBoxContainer"]
+material = SubResource( 6 )
 margin_top = 30.0
 margin_right = 384.0
 margin_bottom = 56.0
@@ -132,6 +160,7 @@ margin_right = 804.0
 margin_bottom = 369.0
 
 [node name="restart_button" type="Button" parent="MazeGenerator/GameOver/VBoxContainer"]
+material = SubResource( 7 )
 margin_right = 336.0
 margin_bottom = 26.0
 custom_colors/font_color = Color( 100, 100, 100, 1 )
@@ -142,6 +171,7 @@ flat = true
 align = 0
 
 [node name="menu_button" type="Button" parent="MazeGenerator/GameOver/VBoxContainer"]
+material = SubResource( 8 )
 margin_top = 30.0
 margin_right = 336.0
 margin_bottom = 56.0
@@ -153,6 +183,7 @@ flat = true
 align = 0
 
 [node name="quit_button" type="Button" parent="MazeGenerator/GameOver/VBoxContainer"]
+material = SubResource( 9 )
 margin_top = 60.0
 margin_right = 336.0
 margin_bottom = 86.0
@@ -166,9 +197,35 @@ align = 0
 [node name="gameover_fx" type="AudioStreamPlayer" parent="MazeGenerator"]
 stream = ExtResource( 11 )
 
-[node name="CanvasModulate" type="CanvasModulate" parent="."]
-light_mask = -2147483647
-color = Color( 0.333333, 0.333333, 0.333333, 1 )
+[node name="HUD" type="Control" parent="."]
+visible = false
+material = SubResource( 10 )
+margin_left = 1150.0
+margin_top = 639.0
+margin_right = 1304.0
+margin_bottom = 735.0
+
+[node name="BlackOverlay" type="ColorRect" parent="HUD"]
+margin_left = 105.0
+margin_top = 65.0
+margin_right = 164.0
+margin_bottom = 98.0
+color = Color( 0, 0, 0, 0.631373 )
+
+[node name="TextureRect" type="TextureRect" parent="HUD"]
+material = SubResource( 11 )
+margin_left = 94.0
+margin_top = 57.0
+margin_right = 144.0
+margin_bottom = 107.0
+texture = ExtResource( 12 )
+expand = true
+
+[node name="Label" type="Label" parent="HUD"]
+margin_left = 130.0
+margin_top = 75.0
+margin_right = 156.0
+margin_bottom = 89.0
 
 [connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/menu_button" to="MazeGenerator/Pause" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/quit_button" to="MazeGenerator/Pause" method="_on_quit_button_pressed"]
