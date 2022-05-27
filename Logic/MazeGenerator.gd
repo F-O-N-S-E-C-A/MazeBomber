@@ -2,19 +2,49 @@ extends Node2D
 
 var maze
 var players = []
+var networkMazeSet = false
+var selfPeerID
 
 func _ready():
 	randomize()
 	my_init()
+	#if GameModes.multiplayer_online():
+	#	selfPeerID = get_tree().get_network_unique_id()
+	#	self.set_network_master(selfPeerID)
+
+remote func syncWall(w):
+	$YSort.add_child(w)
+	
+remote func syncMaze(m):
+	networkMazeSet = true
+	maze = m
 
 func my_init():
-	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
-	maze.generate_maze()
-
-	initialise_walls()
-	initialise_players(2)
-	initialise_lights(12)
-	initialise_spawners()
+	if GameModes.multiplayer_online():
+		if !get_tree().is_network_server():
+			while !networkMazeSet:
+				continue
+			initialise_players(2)
+			initialise_lights(12)
+			initialise_spawners()
+		else:
+			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
+			maze.generate_maze()
+			
+			rpc("syncMaze", maze)
+			
+			initialise_walls()
+			initialise_players(2)
+			initialise_lights(12)
+			initialise_spawners()
+	else:
+		maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
+		maze.generate_maze()
+		
+		initialise_walls()
+		initialise_players(2)
+		initialise_lights(12)
+		initialise_spawners()
 
 	if Settings.fog_of_war:
 		$CanvasModulate.set_color(Color(0,0,0))
@@ -44,7 +74,12 @@ func initialise_walls():
 					wall.calculate_hp(1 - pos.distance_to(mid_point)/max_dist)
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
-				$YSort.add_child(wall)
+				if GameModes.multiplayer_online():
+					if get_tree().is_network_server():
+						$YSort.add_child(wall)
+						rpc("syncWall", wall)
+				else:
+					$YSort.add_child(wall)
 
 func initialise_players(n_players):
 	for i in range(n_players):

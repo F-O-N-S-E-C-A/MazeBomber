@@ -15,12 +15,21 @@ var landMines = 0
 var speed_up_timer
 var c4 = 0
 var c4_planted = null
+var updateFromNetwork = false
+var network_input_vector = Vector2.ZERO
+var position_x = 0
+var position_y = 0
+var selfPeerID
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 
 func my_init(k, image, otherPlayers):
+	if GameModes.multiplayer_online():
+		selfPeerID = get_tree().get_network_unique_id()
+		self.set_network_master(selfPeerID)
+		
 	c4=1
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
@@ -29,25 +38,21 @@ func my_init(k, image, otherPlayers):
 	$Sprite.set_texture(image)
 	speed_up_timer_init()
 	
-remote func syncPosition(x, y, input_vector, delta):
-	if input_vector != Vector2.ZERO:
-		animationTree.set("parameters/Idle/blend_position", input_vector)
-		animationTree.set("parameters/Run/blend_position", input_vector)
-		animationState.travel("Run")
-		velocity = velocity.move_toward(input_vector * max_speed, ACCELERATION * delta)
-	else:
-		animationState.travel("Idle")
-		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
-
-	velocity = move_and_slide(velocity)
-	self.position.x = x
-	self.position.y = y
+remote func syncPosition(x, y, input_vector):
+	updateFromNetwork = true
+	network_input_vector = input_vector
+	position_x = x
+	position_y = y
+	print(x)
 
 func _physics_process(delta):
 	var input_vector = Vector2.ZERO
-	input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
-	input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
-	input_vector = input_vector.normalized()
+	if updateFromNetwork:
+		input_vector = network_input_vector
+	else:
+		input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
+		input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
+		input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
@@ -60,9 +65,13 @@ func _physics_process(delta):
 
 	velocity = move_and_slide(velocity)
 	
+	if updateFromNetwork:
+		updateFromNetwork = false
+		self.position.x = position_x
+		self.position.y = position_y
+	
 	if get_tree().is_network_server():
-		print(str(self.position.x) + ", " +  str(self.position.x))
-		rpc("syncPosition", self.position.x, self.position.y, input_vector, delta)
+		rpc("syncPosition", self.position.x, self.position.y, input_vector)
 
 func _process(_delta):
 	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
