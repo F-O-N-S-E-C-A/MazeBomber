@@ -12,8 +12,13 @@ func _ready():
 	#	selfPeerID = get_tree().get_network_unique_id()
 	#	self.set_network_master(selfPeerID)
 
-remote func syncWall(w):
-	$YSort.add_child(w)
+remote func syncWall(b, pos, hp):
+	var wall = preload("res://World/Wall.tscn").instance()
+	wall.set_position(pos)
+	wall.set_scale(GlobalVariables.scale_vector)
+	wall.calculate_hp(hp)
+	
+	$YSort.add_child(wall)
 	
 remote func syncMaze(m):
 	networkMazeSet = true
@@ -24,6 +29,8 @@ func my_init():
 		if !get_tree().is_network_server() && 1 == 2:
 			while !networkMazeSet:
 				continue
+			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
+			maze.generate_maze()
 			initialise_players(2)
 			initialise_lights(12)
 			initialise_spawners()
@@ -75,13 +82,12 @@ func initialise_walls():
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
 				
-				#if GameModes.multiplayer_online:
-				#	if get_tree().is_network_server():
-				#		$YSort.add_child(wall)
-				#		rpc("syncWall", wall)
-				#else:
-				#	$YSort.add_child(wall)
-				$YSort.add_child(wall)
+				if GameModes.multiplayer_online:
+					if get_tree().is_network_server():
+						$YSort.add_child(wall)
+						rpc("syncWall", maze.is_border_v2(i, j), pos, 1 - pos.distance_to(mid_point)/max_dist)
+				else:
+					$YSort.add_child(wall)
 
 func initialise_players(n_players):
 	for i in range(n_players):
