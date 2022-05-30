@@ -20,7 +20,7 @@ remote func syncMaze(m):
 	maze = m
 
 func my_init():
-	if GameModes.multiplayer_online():
+	if GameModes.multiplayer_online:
 		if !get_tree().is_network_server():
 			while !networkMazeSet:
 				continue
@@ -74,7 +74,7 @@ func initialise_walls():
 					wall.calculate_hp(1 - pos.distance_to(mid_point)/max_dist)
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
-				if GameModes.multiplayer_online():
+				if GameModes.multiplayer_online:
 					if get_tree().is_network_server():
 						$YSort.add_child(wall)
 						rpc("syncWall", wall)
