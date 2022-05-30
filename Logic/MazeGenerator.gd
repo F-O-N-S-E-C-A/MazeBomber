@@ -33,6 +33,12 @@ remote func syncLight(pos):
 	light.set_scale(GlobalVariables.scale_vector)
 	$YSort.add_child(light)
 	
+remote func syncSpawner(pos):
+	var vec = maze.convert_to_vector(pos)
+	var spawner = load("res://Logic/BoomBoxSpawner.gd").new((vec + Vector2(.5, .5)) * GlobalVariables.my_scale)
+	$YSort.add_child(spawner)
+	spawner.spawn()
+	
 remote func syncMaze(m):
 	networkMazeSet = true
 	maze = m
@@ -43,8 +49,6 @@ func my_init():
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
 			initialise_players(2)
-			#initialise_lights(12)
-			initialise_spawners()
 		else:
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
@@ -160,7 +164,12 @@ func initialise_spawners():
 		if Utils.diracs([.05, .95]) == 0:
 			var vec = maze.convert_to_vector(pos)
 			var spawner = load("res://Logic/BoomBoxSpawner.gd").new((vec + Vector2(.5, .5)) * GlobalVariables.my_scale)
-			$YSort.add_child(spawner)
+			if GameModes.multiplayer_online:
+				if get_tree().is_network_server():
+					$YSort.add_child(spawner)
+					rpc("syncSpawner", pos)
+			else:
+				$YSort.add_child(spawner)
 			spawner.spawn()
 
 func get_sprite_for_player(i):
