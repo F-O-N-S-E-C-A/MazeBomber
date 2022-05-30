@@ -13,7 +13,7 @@ var number_of_bombs = 1
 var big_bombs = 0
 var landMines = 0
 var speed_up_timer
-var c4 = 0
+var c4 = 10
 var c4_planted = null
 var player: String
 var hud = null
