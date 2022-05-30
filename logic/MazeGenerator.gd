@@ -1,6 +1,7 @@
 extends Node2D
 
 var maze
+var huds = []
 
 func _ready():
 	randomize()
@@ -9,9 +10,11 @@ func _ready():
 func my_init():
 	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 	maze.generate_maze()
-
+	var n_players = 2
+	
 	initialise_walls()
-	initialise_players(2)
+	initialise_huds(n_players)
+	initialise_players(n_players)
 	initialise_lights(12)
 	initialise_spawners()
 	
@@ -20,7 +23,18 @@ func my_init():
 	else:
 		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
 	
-	
+func initialise_huds(n_players):
+	for i in range(n_players):
+		huds.append(preload("res://HUD.tscn").instance())
+		huds[i].my_init(str(i+1))
+		var pos = Vector2(0, 0)
+		if i == 0:
+			pos = Vector2(0, maze.height - 1) * GlobalVariables.my_scale
+		elif i == 1:
+			pos = Vector2(maze.width - 7, maze.height - 1) * GlobalVariables.my_scale
+		huds[i].set_position(pos - Vector2(0, 2))
+		$YSort.add_child(huds[i])
+		
 func initialise_walls():
 	if Settings.random_walls:
 		maze.put_walls(.2)
@@ -47,17 +61,17 @@ func initialise_walls():
 
 func initialise_players(n_players):
 	var players = []
-
+	
 	for _i in range(n_players):
 		players.append(preload("res://Player/Player.tscn").instance())
-	
+		
 	for i in range(n_players):
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-			
+		
 	for i in range(n_players):
-		players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+		players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, str(i+1), huds[i])
 		players[i].set_scale(GlobalVariables.scale_vector)
 		$YSort.add_child(players[i])
 		var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -91,13 +105,20 @@ func get_keys_for_player(i):
 			"p" + str(i+1) + "_left", 
 			"p" + str(i+1) + "_up", 
 			"p" + str(i+1) + "_bomb",
-			"p" + str(i+1) + "_big_bomb"]
+			"p" + str(i+1) + "_big_bomb",
+			"p" + str(i+1) + "_land_mine",
+			"p" + str(i+1) + "_c4"]
 
 func game_over():
+	hud_is_visible(false)
 	$GameOver.visible = true
 	if Settings.sound_fx_enabled:
 		$gameover_fx.play()
 	
 func is_over():
 	return $GameOver.visible
+	
+func hud_is_visible(is_visible):
+	for h in huds: 
+		h.visible(is_visible)
 	

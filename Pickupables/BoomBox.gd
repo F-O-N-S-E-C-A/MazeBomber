@@ -14,6 +14,7 @@ func pick_up(p):
 		p.play_load_sound()
 		queue_free()
 		spawner.start_timer()
+		p.updateHUD()
 
 func _on_BoomBox_body_entered(body):
 	if body is player:
