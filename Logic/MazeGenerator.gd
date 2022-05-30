@@ -60,7 +60,7 @@ func my_init():
 		maze.generate_maze()
 		
 		initialise_walls()
-		initialise_players(20)
+		initialise_players(2)
 		initialise_lights(12)
 		initialise_spawners()
 
@@ -103,7 +103,7 @@ func initialise_walls():
 func initialise_players(n_players):
 	for i in range(n_players):
 		if GameModes.singlePlayer:
-			if i != n_players-1:
+			if i == 0:
 				players.append(preload("res://Autonomous_Agent/Autonomous_Agent.tscn").instance())
 			else:
 				players.append(preload("res://Player/Player.tscn").instance())
@@ -113,13 +113,12 @@ func initialise_players(n_players):
 	for i in range(n_players):
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
-		#players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-		players[i].set_position(GlobalVariables.my_scale * Vector2(maze.width/2, maze.height/2))
+		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 		
 	for i in range(n_players):
 		if GameModes.singlePlayer:
-			if i != n_players-1:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i % 2), players)
+			if i == 0:
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i), players)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -127,7 +126,7 @@ func initialise_players(n_players):
 				$YSort.add_child(spawner)
 				spawner.spawn()
 			else:
-				players[i].my_init(get_keys_for_player(1), get_sprite_for_player(1), players)
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -167,10 +166,11 @@ func initialise_spawners():
 			if GameModes.multiplayer_online:
 				if get_tree().is_network_server():
 					$YSort.add_child(spawner)
+					spawner.spawn()
 					rpc("syncSpawner", pos)
 			else:
 				$YSort.add_child(spawner)
-			spawner.spawn()
+				spawner.spawn()
 
 func get_sprite_for_player(i):
 	return load("res://Player/Player" + str(i+1) + ".png")

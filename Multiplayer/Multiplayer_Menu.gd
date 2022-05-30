@@ -12,23 +12,18 @@ func _ready():
 func _on_Join_Server_pressed():
 	if $User_Name.text != "":
 		Network.join_server()
-		#get_tree().change_scene("res://Multiplayer/Waiting Lobby.tscn")
+		get_tree().change_scene("res://Multiplayer/Waiting Lobby.tscn")
 
 func _on_Create_Server_pressed():
 	if $User_Name.text != "":
 		Network.create_server()
-		#get_tree().change_scene("res://Multiplayer/Waiting Lobby.tscn")
+		get_tree().change_scene("res://Multiplayer/Waiting Lobby.tscn")
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
 	connected_players += 1
 	
-	if connected_players == Network.MAX_CLIENTS - 1:
-		#Ideally RPC game start
-		GameModes.multiplayer_online()
-		#if get_tree().is_network_server():
-		get_tree().change_scene("res://World.tscn")
-			#RPC MazeSync
+	#if connected_players == Network.MAX_CLIENTS - 1:
 
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")

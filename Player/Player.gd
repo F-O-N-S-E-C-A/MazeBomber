@@ -30,7 +30,7 @@ func setOwnerID(id):
 	ownerID = id
 
 func my_init(k, image, otherPlayers):
-	if GameModes.multiplayer_online():
+	if GameModes.multiplayer_online:
 		#selfPeerID = get_tree().get_network_unique_id()
 		#self.set_network_master(selfPeerID)
 		pass
