@@ -30,7 +30,6 @@ func my_init(k, image, otherPlayers):
 		selfPeerID = get_tree().get_network_unique_id()
 		self.set_network_master(selfPeerID)
 		
-	c4=1
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)
