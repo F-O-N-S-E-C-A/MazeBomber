@@ -14,9 +14,15 @@ func _ready():
 
 remote func syncWall(b, pos, hp):
 	var wall = preload("res://World/Wall.tscn").instance()
+	
 	wall.set_position(pos)
 	wall.set_scale(GlobalVariables.scale_vector)
-	wall.calculate_hp(hp)
+	
+	if b:
+		wall.set_border()
+	else:
+		wall.health = hp
+	wall.set_texture()
 	
 	$YSort.add_child(wall)
 	
@@ -26,19 +32,17 @@ remote func syncMaze(m):
 
 func my_init():
 	if GameModes.multiplayer_online:
-		if !get_tree().is_network_server() && 1 == 2:
-			while !networkMazeSet:
-				continue
+		if !get_tree().is_network_server():
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
 			initialise_players(2)
-			initialise_lights(12)
+			#initialise_lights(12)
 			initialise_spawners()
 		else:
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
 			
-			rpc("syncMaze", maze)
+			#rpc("syncMaze", maze)
 			
 			initialise_walls()
 			initialise_players(2)
@@ -85,7 +89,7 @@ func initialise_walls():
 				if GameModes.multiplayer_online:
 					if get_tree().is_network_server():
 						$YSort.add_child(wall)
-						rpc("syncWall", maze.is_border_v2(i, j), pos, 1 - pos.distance_to(mid_point)/max_dist)
+						rpc("syncWall", maze.is_border_v2(i, j), pos, wall.health)
 				else:
 					$YSort.add_child(wall)
 
