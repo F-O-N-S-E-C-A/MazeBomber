@@ -14,7 +14,6 @@ func _ready():
 
 remote func syncWall(b, pos, hp):
 	var wall = preload("res://World/Wall.tscn").instance()
-	
 	wall.set_position(pos)
 	wall.set_scale(GlobalVariables.scale_vector)
 	
@@ -39,9 +38,8 @@ remote func syncSpawner(pos):
 	$YSort.add_child(spawner)
 	spawner.spawn()
 	
-remote func syncMaze(m):
-	networkMazeSet = true
-	maze = m
+remote func syncPlayer(pos, id):
+	pass
 
 func my_init():
 	if GameModes.multiplayer_online:
@@ -62,7 +60,7 @@ func my_init():
 		maze.generate_maze()
 		
 		initialise_walls()
-		initialise_players(2)
+		initialise_players(20)
 		initialise_lights(12)
 		initialise_spawners()
 
@@ -105,7 +103,7 @@ func initialise_walls():
 func initialise_players(n_players):
 	for i in range(n_players):
 		if GameModes.singlePlayer:
-			if i == 0:
+			if i != n_players-1:
 				players.append(preload("res://Autonomous_Agent/Autonomous_Agent.tscn").instance())
 			else:
 				players.append(preload("res://Player/Player.tscn").instance())
@@ -115,12 +113,13 @@ func initialise_players(n_players):
 	for i in range(n_players):
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
-		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-
+		#players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
+		players[i].set_position(GlobalVariables.my_scale * Vector2(maze.width/2, maze.height/2))
+		
 	for i in range(n_players):
 		if GameModes.singlePlayer:
-			if i == 0:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i), players)
+			if i != n_players-1:
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i % 2), players)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -128,7 +127,7 @@ func initialise_players(n_players):
 				$YSort.add_child(spawner)
 				spawner.spawn()
 			else:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+				players[i].my_init(get_keys_for_player(1), get_sprite_for_player(1), players)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -136,6 +135,7 @@ func initialise_players(n_players):
 				$YSort.add_child(spawner)
 				spawner.spawn()
 		else:
+			#IP
 			players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
 			players[i].set_scale(GlobalVariables.scale_vector)
 			$YSort.add_child(players[i])

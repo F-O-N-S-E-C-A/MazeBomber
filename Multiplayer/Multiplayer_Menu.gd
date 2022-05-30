@@ -12,10 +12,12 @@ func _ready():
 func _on_Join_Server_pressed():
 	if $User_Name.text != "":
 		Network.join_server()
+		#get_tree().change_scene("res://Multiplayer/Waiting Lobby.tscn")
 
 func _on_Create_Server_pressed():
 	if $User_Name.text != "":
 		Network.create_server()
+		#get_tree().change_scene("res://Multiplayer/Waiting Lobby.tscn")
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")

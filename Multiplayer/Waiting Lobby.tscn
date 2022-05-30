@@ -23,3 +23,5 @@ anchor_bottom = 1.0
 margin_top = -20.0
 rect_scale = Vector2( 1.00963, 1.02416 )
 text = "Start Game"
+
+[connection signal="pressed" from="CanvasLayer/Player_List/Button" to="." method="_on_Button_pressed"]

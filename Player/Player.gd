@@ -20,10 +20,14 @@ var network_input_vector = Vector2.ZERO
 var position_x = 0
 var position_y = 0
 var selfPeerID
+var ownerID = 1
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
+
+func setOwnerID(id):
+	ownerID = id
 
 func my_init(k, image, otherPlayers):
 	if GameModes.multiplayer_online():
@@ -43,16 +47,18 @@ remote func syncPosition(x, y, input_vector):
 	network_input_vector = input_vector
 	position_x = x
 	position_y = y
-	print(x)
 
 func _physics_process(delta):
 	var input_vector = Vector2.ZERO
 	if updateFromNetwork:
 		input_vector = network_input_vector
 	else:
-		input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
-		input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
-		input_vector = input_vector.normalized()
+		if true || get_tree().is_network_server():
+			input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
+			input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
+			input_vector = input_vector.normalized()
+		else:
+			input_vector = Vector2.ZERO
 
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
