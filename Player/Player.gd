@@ -27,8 +27,9 @@ onready var animationState = animationTree.get("parameters/playback")
 
 func my_init(k, image, otherPlayers):
 	if GameModes.multiplayer_online():
-		selfPeerID = get_tree().get_network_unique_id()
-		self.set_network_master(selfPeerID)
+		#selfPeerID = get_tree().get_network_unique_id()
+		#self.set_network_master(selfPeerID)
+		pass
 		
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:

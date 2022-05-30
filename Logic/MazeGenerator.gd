@@ -26,6 +26,13 @@ remote func syncWall(b, pos, hp):
 	
 	$YSort.add_child(wall)
 	
+remote func syncLight(pos):
+	var vec = maze.convert_to_vector(pos)
+	var light = preload("res://World/Torch.tscn").instance()
+	light.set_position((vec + Vector2(.5, .5)) * GlobalVariables.my_scale)
+	light.set_scale(GlobalVariables.scale_vector)
+	$YSort.add_child(light)
+	
 remote func syncMaze(m):
 	networkMazeSet = true
 	maze = m
@@ -41,8 +48,6 @@ func my_init():
 		else:
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
-			
-			#rpc("syncMaze", maze)
 			
 			initialise_walls()
 			initialise_players(2)
@@ -142,7 +147,13 @@ func initialise_lights(n_lights):
 		var light = preload("res://World/Torch.tscn").instance()
 		light.set_position((vec + Vector2(.5, .5)) * GlobalVariables.my_scale)
 		light.set_scale(GlobalVariables.scale_vector)
-		$YSort.add_child(light)
+		
+		if GameModes.multiplayer_online:
+			if get_tree().is_network_server():
+				$YSort.add_child(light)
+				rpc("syncLight", pos)
+		else:
+			$YSort.add_child(light)
 
 func initialise_spawners():
 	for pos in maze.path_positions:
