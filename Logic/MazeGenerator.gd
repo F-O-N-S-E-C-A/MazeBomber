@@ -161,7 +161,7 @@ func initialise_players(n_players):
 			maze.remove_path(players[i].position)
 			$YSort.add_child(spawner)
 			spawner.spawn()
-			rpc("syncPlayer")
+			rpc("syncPlayer", ids[i])
 		
 
 func initialise_lights(n_lights):
