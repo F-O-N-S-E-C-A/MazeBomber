@@ -63,11 +63,9 @@ func _physics_process(delta):
 			var rand_value = my_array[randi() % my_array.size()]
 			input_vector.x = rand_value
 			directionHistory[1] = true
-			last_time = time_now
 		directionHistory[2] = false
 		directionHistory[3] = false
 		input_vector.y = 0
-		self.position.y = playerCoord.y * 32 + 16
 		input_vector = input_vector.normalized()
 	elif self.is_on_ceiling():
 		rng.randomize()
@@ -75,11 +73,9 @@ func _physics_process(delta):
 			var rand_value = my_array[randi() % my_array.size()]
 			input_vector.x = rand_value
 			directionHistory[0] = true
-			last_time = time_now
 		directionHistory[2] = false
 		directionHistory[3] = false
 		input_vector.y = 0
-		self.position.y = playerCoord.y * 32 + 16
 		input_vector = input_vector.normalized()
 	elif self.is_on_wall(): 
 		rng.randomize()
@@ -89,18 +85,40 @@ func _physics_process(delta):
 				var rand_value = my_array[randi() % my_array.size()]
 				input_vector.y = rand_value
 				directionHistory[2] = true
-				last_time = time_now
 		else:
 			if not directionHistory[3]: 
 				var rand_value = my_array[randi() % my_array.size()]
 				input_vector.y = rand_value
 				directionHistory[3] = true
-				last_time = time_now
 		directionHistory[0] = false
 		directionHistory[1] = false
-		self.position.x = playerCoord.x * 32 + 16
 		input_vector = input_vector.normalized()
-
+	
+	# Check for corridors in the middle of halls
+	if time_now - last_time > 0.5: # Let it cooldown...
+		if input_vector.x != 0: # If player walking horizontally
+			if typeof(mapMatrix[playerCoord.x][playerCoord.y+1]) == 2 or typeof(mapMatrix[playerCoord.x][playerCoord.y-1]) == 2 : # If the cell above or bellow the agent has no wall...
+				var rand_value = my_array[randi() % my_array.size()] # Generate random vector
+				input_vector.y = rand_value # Start Moving vertically
+				input_vector.x = 0 # Stop moving horizontally
+				input_vector = input_vector.normalized()
+				last_time = time_now # reset timer
+				directionHistory[2] = true
+				directionHistory[3] = true
+				directionHistory[0] = false
+				directionHistory[1] = false
+		if input_vector.y != 0: # If player walking vertically
+			if typeof(mapMatrix[playerCoord.x-1][playerCoord.y]) == 2 or typeof(mapMatrix[playerCoord.x+1][playerCoord.y]) == 2 : # If the cell above or bellow the agent has no wall...
+				var rand_value = my_array[randi() % my_array.size()] # Generate random vector
+				input_vector.y = 0 # Stop moving vertically
+				input_vector.x = rand_value # Start Moving horizontally
+				input_vector = input_vector.normalized()
+				last_time = time_now # reset timer
+				directionHistory[0] = true
+				directionHistory[1] = true
+				directionHistory[2] = false
+				directionHistory[3] = false
+	
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
 		animationTree.set("parameters/Run/blend_position", input_vector)
