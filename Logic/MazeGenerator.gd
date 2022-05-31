@@ -117,9 +117,9 @@ func initialise_walls():
 
 func initialise_players(n_players):
 	var ids = []
-	if get_tree().is_network_server():
-		ids.append(1)
 	if GameModes.multiplayer_online:
+		if get_tree().is_network_server():
+			ids.append(1)
 		for p in get_tree().get_network_connected_peers():
 			ids.append(p)
 		
@@ -131,7 +131,8 @@ func initialise_players(n_players):
 				players.append(preload("res://Player/Player.tscn").instance())
 		else:
 			players.append(preload("res://Player/Player.tscn").instance())
-			players[i].ownerID = ids[i]
+			if GameModes.multiplayer_online:
+				players[i].ownerID = ids[i]
 		
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
@@ -156,14 +157,18 @@ func initialise_players(n_players):
 				spawner.spawn()
 		else:
 			#IP
-			players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players)
+			if GameModes.multiplayer_online:
+				players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players)
+			else:
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
 			players[i].set_scale(GlobalVariables.scale_vector)
 			$YSort.add_child(players[i])
 			var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
 			maze.remove_path(players[i].position)
 			$YSort.add_child(spawner)
 			spawner.spawn()
-			rpc("syncPlayer", ids[i])
+			if GameModes.multiplayer_online:
+				rpc("syncPlayer", ids[i])
 		
 
 func initialise_lights(n_lights):
