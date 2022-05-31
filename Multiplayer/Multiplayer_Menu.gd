@@ -30,3 +30,7 @@ func _player_disconnected(id) -> void:
 
 func instance_player(id) -> void:
 	pass
+
+
+func _on_Server_IP_Address_text_changed(new_text):
+	Network.ip_address = new_text

@@ -58,5 +58,6 @@ margin_right = 364.0
 margin_bottom = 726.0
 text = "127.0.0.1"
 
+[connection signal="text_changed" from="Server_IP_Address" to="." method="_on_Server_IP_Address_text_changed"]
 [connection signal="pressed" from="Create_Server" to="." method="_on_Create_Server_pressed"]
 [connection signal="pressed" from="Join_Server" to="." method="_on_Join_Server_pressed"]
