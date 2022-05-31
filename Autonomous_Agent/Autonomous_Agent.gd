@@ -18,6 +18,8 @@ var c4_planted = null
 
 #===================================
 var directionHistory = [false, false, false, false]
+var playerCoord = Vector2(0, 0) # coordenates of player in the matrix
+var mapMatrix # matrix of current map
 #===================================
 
 onready var animationPlayer = $AnimationPlayer
@@ -46,60 +48,58 @@ func _physics_process(delta):
 	var time_now = OS.get_unix_time()
 	var ceiling = self.is_on_ceiling()
 	
-	#print(self.position.x / 16*GlobalVariables.scale.x - int(self.position.x /16*GlobalVariables.scale.x) )
-	#print(self.position.x / (1312 / 41) - int(self.position.x / (1312 / 41)))
-	var block = self.position.x / (1312 / 41) - int(self.position.x / (1312 / 41))
+	var blockX = self.position.x / (1312 / 41) - int(self.position.x / (1312 / 41))
+	var blockY = self.position.y / (736 / 23) - int(self.position.y / (736 / 23))
 	var my_array = [-1,1]
-	if !(block >= 0.45 and block <= 0.55) :
-		if self.is_on_floor():
-			rng.randomize()
-			if not directionHistory[1]: 
-				var rand_value = my_array[randi() % my_array.size()]
-				input_vector.x = rand_value
-				directionHistory[1] = true
-			directionHistory[2] = false
-			directionHistory[3] = false
-			input_vector.y = 0
-			input_vector = input_vector.normalized()
-			last_time = time_now
-		elif self.is_on_ceiling():
-			rng.randomize()
-			if not directionHistory[0]: 
-				var rand_value = my_array[randi() % my_array.size()]
-				input_vector.x = rand_value
-				directionHistory[0] = true
-			directionHistory[2] = false
-			directionHistory[3] = false
-			input_vector.y = 0
-			input_vector = input_vector.normalized()
-			last_time = time_now
-		elif self.is_on_wall(): 
-			rng.randomize()
-			input_vector.x = 0
-			if input_vector.x < 0:
-				if not directionHistory[2]: 
-					var rand_value = my_array[randi() % my_array.size()]
-					input_vector.y = rand_value
-					directionHistory[2] = true
-			else:
-				if not directionHistory[3]: 
-					var rand_value = my_array[randi() % my_array.size()]
-					input_vector.y = rand_value
-					directionHistory[3] = true
-			directionHistory[0] = false
-			directionHistory[1] = false
-			input_vector = input_vector.normalized()
-			last_time = time_now
-	else:
-		print("passei bloco")
-		rng.randomize()
-		var add_vector = Vector2(0,0)
-		#add_vector.x = my_array[randi() % my_array.size()]
-		add_vector.x = 0
-		add_vector.y = my_array[randi() % my_array.size()]
-		input_vector = add_vector.normalized()* 1
-		input_vector.normalized()
 	
+	playerCoord = Vector2(int(self.position.x / (1312 / 41)), int(self.position.y / (736 / 23))) # Get player coordenates
+	
+	#if mapMatrix[playerCoord.x][playerCoord.y-1] != null and typeof(mapMatrix[playerCoord.x][playerCoord.y-1]) != 2:
+	#	print(mapMatrix[playerCoord.x][playerCoord.y-1].health)
+	
+	if self.is_on_floor():
+		rng.randomize()
+		if not directionHistory[1]: 
+			var rand_value = my_array[randi() % my_array.size()]
+			input_vector.x = rand_value
+			directionHistory[1] = true
+			last_time = time_now
+		directionHistory[2] = false
+		directionHistory[3] = false
+		input_vector.y = 0
+		self.position.y = playerCoord.y * 32 + 16
+		input_vector = input_vector.normalized()
+	elif self.is_on_ceiling():
+		rng.randomize()
+		if not directionHistory[0]: 
+			var rand_value = my_array[randi() % my_array.size()]
+			input_vector.x = rand_value
+			directionHistory[0] = true
+			last_time = time_now
+		directionHistory[2] = false
+		directionHistory[3] = false
+		input_vector.y = 0
+		self.position.y = playerCoord.y * 32 + 16
+		input_vector = input_vector.normalized()
+	elif self.is_on_wall(): 
+		rng.randomize()
+		input_vector.x = 0
+		if input_vector.x < 0:
+			if not directionHistory[2]: 
+				var rand_value = my_array[randi() % my_array.size()]
+				input_vector.y = rand_value
+				directionHistory[2] = true
+				last_time = time_now
+		else:
+			if not directionHistory[3]: 
+				var rand_value = my_array[randi() % my_array.size()]
+				input_vector.y = rand_value
+				directionHistory[3] = true
+				last_time = time_now
+		directionHistory[0] = false
+		directionHistory[1] = false
+		self.position.x = playerCoord.x * 32 + 16
+		input_vector = input_vector.normalized()
 
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)

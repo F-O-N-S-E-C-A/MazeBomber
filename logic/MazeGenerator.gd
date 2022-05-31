@@ -2,6 +2,8 @@ extends Node2D
 
 var maze
 
+var mazeMatrix = [] # Matrix of current map
+
 func _ready():
 	randomize()
 	my_init()
@@ -33,6 +35,7 @@ func initialise_walls():
 	var max_dist = Vector2.ZERO.distance_to(mid_point)
 
 	for i in range(maze.width):
+		var line = [] #Line of matrix
 		for j in range(maze.height):
 			if maze.is_wall(i, j):
 				var pos = Vector2(i+.5, j+.5) * GlobalVariables.my_scale
@@ -41,10 +44,14 @@ func initialise_walls():
 					wall.set_border()
 				else:
 					wall.calculate_hp(1 - pos.distance_to(mid_point)/max_dist)
+				line.append(wall) # if there is a wall, add her to the matrix
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(wall)
-
+			else:
+				line.append(0) # else set matrix value to 0
+		mazeMatrix.append(line)# add line to matrix
+	
 func initialise_players(n_players):
 	var players = []
 
@@ -52,6 +59,7 @@ func initialise_players(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
 				players.append(preload("res://Autonomous_Agent/Autonomous_Agent.tscn").instance())
+				players[0].mapMatrix = mazeMatrix # Give map matrix to autonomous agent
 			else:
 				players.append(preload("res://Player/Player.tscn").instance())
 		else:
