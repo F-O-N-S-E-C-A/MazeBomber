@@ -52,7 +52,7 @@ func _physics_process(delta):
 	if updateFromNetwork:
 		input_vector = network_input_vector
 	else:
-		if selfPeerID == ownerID:
+		if selfPeerID == ownerID || !GameModes.multiplayer_online:
 			input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
 			input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
 			input_vector = input_vector.normalized()
@@ -79,11 +79,26 @@ func _physics_process(delta):
 		if input_vector != Vector2.ZERO:
 			rpc("syncPosition", self.position.x, self.position.y, input_vector)
 
-remote func syncTNT():
+remote func syncTNT(p):
 	var test_bomb = preload("res://World/TNT.tscn").instance()
 	test_bomb.my_init(self)
-	test_bomb.set_position(self.position)
+	test_bomb.set_position(p)
 	get_parent().add_child(test_bomb)
+	
+remote func syncBigBomb(p):
+	var test_bomb = preload("res://World/BigBomb.tscn").instance()
+	test_bomb.my_init(self)
+	test_bomb.set_position(p)
+	get_parent().add_child(test_bomb)
+	
+remote func syncLandMine(p):
+	var test_bomb = preload("res://World/LandMine.tscn").instance()
+	test_bomb.my_init(self)
+	test_bomb.set_position(self.p)
+	get_parent().add_child(test_bomb)
+	
+remote func syncC4(p):
+	pass
 
 func _process(_delta):
 	if GameModes.multiplayer_online:
@@ -96,7 +111,8 @@ func _process(_delta):
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
-		rpc("syncTNT")
+		if GameModes.multiplayer_online:
+			rpc("syncTNT", self.position)
 
 	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
 		big_bombs -= 1
@@ -104,6 +120,8 @@ func _process(_delta):
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
+		if GameModes.multiplayer_online:
+			rpc("syncBigBomb", self.position)
 
 	if Input.is_action_just_released(keys[5]) && landMines != 0:
 		landMines -= 1
@@ -111,6 +129,8 @@ func _process(_delta):
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
+		if GameModes.multiplayer_online:
+			rpc("syncLandMine", self.position)
 
 	if Input.is_action_just_released(keys[5]):
 		if(c4_planted != null):
