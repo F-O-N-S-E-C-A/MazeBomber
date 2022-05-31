@@ -27,6 +27,7 @@ func _player_connected(id) -> void:
 
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")
+	connected_players -= 1
 
 func instance_player(id) -> void:
 	pass

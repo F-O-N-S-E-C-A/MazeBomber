@@ -38,7 +38,7 @@ remote func syncSpawner(pos):
 	$YSort.add_child(spawner)
 	spawner.spawn()
 	
-remote func syncPlayer(pos, id):
+remote func syncPlayer():
 	players.append(preload("res://Player/Player.tscn").instance())
 	var i = len(players)
 	var dir = Vector2(i % 2, abs(i % 2 - i / 2))
@@ -152,6 +152,7 @@ func initialise_players(n_players):
 			maze.remove_path(players[i].position)
 			$YSort.add_child(spawner)
 			spawner.spawn()
+			rpc("syncPlayer")
 		
 
 func initialise_lights(n_lights):
