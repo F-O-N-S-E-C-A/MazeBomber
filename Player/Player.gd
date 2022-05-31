@@ -76,15 +76,27 @@ func _physics_process(delta):
 		self.position.y = position_y
 	
 	if selfPeerID == ownerID:
-		rpc("syncPosition", self.position.x, self.position.y, input_vector)
+		if input_vector != Vector2.ZERO:
+			rpc("syncPosition", self.position.x, self.position.y, input_vector)
+
+remote func syncTNT():
+	var test_bomb = preload("res://World/TNT.tscn").instance()
+	test_bomb.my_init(self)
+	test_bomb.set_position(self.position)
+	get_parent().add_child(test_bomb)
 
 func _process(_delta):
+	if GameModes.multiplayer_online:
+		if selfPeerID != ownerID:
+			return
+	
 	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
 		number_of_bombs -= 1
 		var test_bomb = preload("res://World/TNT.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
+		rpc("syncTNT")
 
 	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
 		big_bombs -= 1
