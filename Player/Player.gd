@@ -98,7 +98,16 @@ remote func syncLandMine(p):
 	get_parent().add_child(test_bomb)
 	
 remote func syncC4(p):
-	pass
+	if ownerID == get_tree().get_rpc_sender_id():
+		if(c4_planted != null):
+			c4_planted.to_explode = true
+			c4_planted = null
+		if(c4_planted == null && c4 > 0):
+			c4 -= 1
+			c4_planted = preload("res://World/C4.tscn").instance()
+			c4_planted.my_init(self)
+			c4_planted.set_position(self.position)
+			get_parent().add_child(c4_planted)
 
 func _process(_delta):
 	if GameModes.multiplayer_online:
@@ -142,6 +151,7 @@ func _process(_delta):
 			c4_planted.my_init(self)
 			c4_planted.set_position(self.position)
 			get_parent().add_child(c4_planted)
+		rpc("syncC4", self.position)
 
 func add_shield(shield):
 	$HPBar.add_shield(shield)
