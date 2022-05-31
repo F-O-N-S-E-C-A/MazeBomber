@@ -75,7 +75,7 @@ func _physics_process(delta):
 		self.position.x = position_x
 		self.position.y = position_y
 	
-	if get_tree().is_network_server():
+	if selfPeerID == ownerID:
 		rpc("syncPosition", self.position.x, self.position.y, input_vector)
 
 func _process(_delta):

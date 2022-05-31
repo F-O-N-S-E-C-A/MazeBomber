@@ -39,14 +39,15 @@ remote func syncSpawner(pos):
 	spawner.spawn()
 	
 remote func syncPlayer(id):
+	print("Player " + str(id) + " syncing")
 	players.append(preload("res://Player/Player.tscn").instance())
-	var i = len(players)
+	var i = len(players) - 1
 	var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 	players[i].ownerID = id
 	
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)	
-	players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+	players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players)
 	players[i].set_scale(GlobalVariables.scale_vector)
 	$YSort.add_child(players[i])
 	var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -63,8 +64,10 @@ func my_init():
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
 			
+			OS.delay_msec(1500)
+			
 			initialise_walls()
-			initialise_players(2)
+			initialise_players(len(get_tree().get_network_connected_peers())+1)
 			initialise_lights(12)
 			initialise_spawners()
 	else:
@@ -119,7 +122,6 @@ func initialise_players(n_players):
 	if GameModes.multiplayer_online:
 		for p in get_tree().get_network_connected_peers():
 			ids.append(p)
-		print(ids)
 		
 	for i in range(n_players):
 		if GameModes.singlePlayer:
@@ -154,7 +156,7 @@ func initialise_players(n_players):
 				spawner.spawn()
 		else:
 			#IP
-			players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+			players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players)
 			players[i].set_scale(GlobalVariables.scale_vector)
 			$YSort.add_child(players[i])
 			var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
