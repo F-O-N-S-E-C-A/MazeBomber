@@ -32,8 +32,13 @@ func initialise_huds(n_players):
 			pos = Vector2(0, maze.height - 1) * GlobalVariables.my_scale
 		elif i == 1:
 			pos = Vector2(maze.width - 7, maze.height - 1) * GlobalVariables.my_scale
+		elif i == 2:
+			pos = Vector2(0, 0) * GlobalVariables.my_scale
+		elif i == 3:
+			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
 		huds[i].set_position(pos - Vector2(0, 2))
 		$YSort.add_child(huds[i])
+		
 		
 func initialise_walls():
 	if Settings.random_walls:
