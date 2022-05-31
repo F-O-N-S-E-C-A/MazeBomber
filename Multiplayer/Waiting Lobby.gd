@@ -18,9 +18,9 @@ func addPlayer(p):
 	get_node("CanvasLayer/Player_List").add_item(p)
 	rpc("syncPlayers", playerlist)
 	
-remote func syncPlayers(playerlist):
+remote func syncPlayers(pl):
 	playerlist = []
-	for p in playerlist:
+	for p in pl:
 		playerlist.append(p)
 		get_node("CanvasLayer/Player_List").add_item(p)
 
