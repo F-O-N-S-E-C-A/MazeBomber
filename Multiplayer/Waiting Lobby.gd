@@ -16,7 +16,7 @@ func _ready():
 func addPlayer(p):
 	playerlist.append(p)
 	get_node("CanvasLayer/Player_List").add_item(p)
-	rpc("syncPlayers")
+	rpc("syncPlayers", playerlist)
 	
 remote func syncPlayers(playerlist):
 	playerlist = []
@@ -37,7 +37,8 @@ func _on_Button_pressed():
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
 	connected_players += 1
-	addPlayer("Player" + str(id))
+	if get_tree().is_network_server():
+		addPlayer("Player" + str(id))
 	
 	#if connected_players == Network.MAX_CLIENTS - 1:
 
