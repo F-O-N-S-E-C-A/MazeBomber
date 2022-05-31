@@ -29,10 +29,11 @@ onready var animationState = animationTree.get("parameters/playback")
 func setOwnerID(id):
 	ownerID = id
 
-func my_init(k, image, otherPlayers):
+func _ready():
 	if GameModes.multiplayer_online:
 		selfPeerID = get_tree().get_network_unique_id()
 
+func my_init(k, image, otherPlayers):
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)
@@ -51,7 +52,7 @@ func _physics_process(delta):
 	if updateFromNetwork:
 		input_vector = network_input_vector
 	else:
-		if true || get_tree().is_network_server():
+		if selfPeerID == ownerID:
 			input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
 			input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
 			input_vector = input_vector.normalized()

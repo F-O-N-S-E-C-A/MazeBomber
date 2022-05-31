@@ -38,11 +38,12 @@ remote func syncSpawner(pos):
 	$YSort.add_child(spawner)
 	spawner.spawn()
 	
-remote func syncPlayer():
+remote func syncPlayer(id):
 	players.append(preload("res://Player/Player.tscn").instance())
 	var i = len(players)
 	var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
+	players[i].ownerID = id
 	
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)	
 	players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
@@ -58,7 +59,6 @@ func my_init():
 		if !get_tree().is_network_server():
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
-			initialise_players(2)
 		else:
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
@@ -113,6 +113,14 @@ func initialise_walls():
 					$YSort.add_child(wall)
 
 func initialise_players(n_players):
+	var ids = []
+	if get_tree().is_network_server():
+		ids.append(1)
+	if GameModes.multiplayer_online:
+		for p in get_tree().get_network_connected_peers():
+			ids.append(p)
+		print(ids)
+		
 	for i in range(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
@@ -121,6 +129,7 @@ func initialise_players(n_players):
 				players.append(preload("res://Player/Player.tscn").instance())
 		else:
 			players.append(preload("res://Player/Player.tscn").instance())
+			players[i].ownerID = ids[i]
 		
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
