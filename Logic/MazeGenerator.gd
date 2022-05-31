@@ -39,7 +39,19 @@ remote func syncSpawner(pos):
 	spawner.spawn()
 	
 remote func syncPlayer(pos, id):
-	pass
+	players.append(preload("res://Player/Player.tscn").instance())
+	var i = len(players)
+	var dir = Vector2(i % 2, abs(i % 2 - i / 2))
+	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
+	
+	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)	
+	players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+	players[i].set_scale(GlobalVariables.scale_vector)
+	$YSort.add_child(players[i])
+	var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
+	maze.remove_path(players[i].position)
+	$YSort.add_child(spawner)
+	spawner.spawn()
 
 func my_init():
 	if GameModes.multiplayer_online:
@@ -109,13 +121,11 @@ func initialise_players(n_players):
 				players.append(preload("res://Player/Player.tscn").instance())
 		else:
 			players.append(preload("res://Player/Player.tscn").instance())
-
-	for i in range(n_players):
+		
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 		
-	for i in range(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
 				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i), players)
@@ -142,6 +152,7 @@ func initialise_players(n_players):
 			maze.remove_path(players[i].position)
 			$YSort.add_child(spawner)
 			spawner.spawn()
+		
 
 func initialise_lights(n_lights):
 	var random_positions = maze.get_random_paths(n_lights)
