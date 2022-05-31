@@ -16,6 +16,10 @@ var speed_up_timer
 var c4 = 0
 var c4_planted = null
 
+#===================================
+var directionHistory = [false, false, false, false]
+#===================================
+
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
@@ -31,22 +35,71 @@ func my_init(k, image, otherPlayers):
 	keys = k
 	$Sprite.set_texture(image)
 	speed_up_timer_init()
+	
+func _ready():
+	rng.randomize()
+	input_vector.x = rng.randf_range(-10, 10)
+	input_vector.y = rng.randf_range(-10, 10)
+	input_vector = input_vector.normalized()
 
 func _physics_process(delta):
 	var time_now = OS.get_unix_time()
+	var ceiling = self.is_on_ceiling()
 	
-	
-	if time_now - last_time >= 1:
-		rng.randomize()
-		input_vector.x = rng.randf_range(-10, 10)
-		input_vector.y = rng.randf_range(-10, 10)
-		input_vector = input_vector.normalized()
-		last_time = time_now
+	#print(self.position.x / 16*GlobalVariables.scale.x - int(self.position.x /16*GlobalVariables.scale.x) )
+	#print(self.position.x / (1312 / 41) - int(self.position.x / (1312 / 41)))
+	var block = self.position.x / (1312 / 41) - int(self.position.x / (1312 / 41))
+	var my_array = [-1,1]
+	if !(block >= 0.45 and block <= 0.55) :
+		if self.is_on_floor():
+			rng.randomize()
+			if not directionHistory[1]: 
+				var rand_value = my_array[randi() % my_array.size()]
+				input_vector.x = rand_value
+				directionHistory[1] = true
+			directionHistory[2] = false
+			directionHistory[3] = false
+			input_vector.y = 0
+			input_vector = input_vector.normalized()
+			last_time = time_now
+		elif self.is_on_ceiling():
+			rng.randomize()
+			if not directionHistory[0]: 
+				var rand_value = my_array[randi() % my_array.size()]
+				input_vector.x = rand_value
+				directionHistory[0] = true
+			directionHistory[2] = false
+			directionHistory[3] = false
+			input_vector.y = 0
+			input_vector = input_vector.normalized()
+			last_time = time_now
+		elif self.is_on_wall(): 
+			rng.randomize()
+			input_vector.x = 0
+			if input_vector.x < 0:
+				if not directionHistory[2]: 
+					var rand_value = my_array[randi() % my_array.size()]
+					input_vector.y = rand_value
+					directionHistory[2] = true
+			else:
+				if not directionHistory[3]: 
+					var rand_value = my_array[randi() % my_array.size()]
+					input_vector.y = rand_value
+					directionHistory[3] = true
+			directionHistory[0] = false
+			directionHistory[1] = false
+			input_vector = input_vector.normalized()
+			last_time = time_now
 	else:
-		#input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
-		#input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
-		#input_vector = input_vector.normalized()
-		pass
+		print("passei bloco")
+		rng.randomize()
+		var add_vector = Vector2(0,0)
+		#add_vector.x = my_array[randi() % my_array.size()]
+		add_vector.x = 0
+		add_vector.y = my_array[randi() % my_array.size()]
+		input_vector = add_vector.normalized()* 1
+		input_vector.normalized()
+	
 
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
@@ -57,7 +110,7 @@ func _physics_process(delta):
 		animationState.travel("Idle")
 		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
 		
-	velocity = move_and_slide(velocity)
+	velocity = move_and_slide(velocity, Vector2(0,-1))
 
 func _process(_delta):
 	if (rng.randf_range(-10, 10) >= 9.85 || Input.is_action_just_released(keys[4])) && number_of_bombs != 0:
