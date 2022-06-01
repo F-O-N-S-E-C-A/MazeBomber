@@ -14,7 +14,7 @@ func _on_multiplayer_local_button_button_down():
 	GameModes.multiplayer_local()
 
 func _on_quit_button_button_down():
-	get_tree().quit()
+	$ConfirmQuit.visible = true
 
 
 func _on_settings_button_pressed():
@@ -32,3 +32,11 @@ func _on_single_player_button_button_down():
 
 func _on_multiplayer_online_button_button_down():
 	GameModes.multiplayer_online()
+	
+func _on_yes_pressed():
+	get_tree().quit()
+
+
+func _on_no_pressed():
+	$ConfirmQuit.visible = false
+

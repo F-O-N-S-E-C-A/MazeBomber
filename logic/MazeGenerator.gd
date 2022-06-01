@@ -8,6 +8,10 @@ func _ready():
 	my_init()
 
 func my_init():
+	if Settings.music_enabled:
+		$music.volume_db = Settings.music_volume - 25
+		$music.play()
+		
 	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 	maze.generate_maze()
 	var n_players = 2
@@ -127,3 +131,4 @@ func hud_is_visible(is_visible):
 	for h in huds: 
 		h.visible(is_visible)
 	
+

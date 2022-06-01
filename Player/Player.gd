@@ -58,6 +58,7 @@ func _process(_delta):
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 		updateHUD()
+		play_place_bomb_sound()
 
 	if Input.is_action_just_released(key_map[5]) && big_bombs != 0:
 		big_bombs -= 1
@@ -66,6 +67,7 @@ func _process(_delta):
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 		updateHUD()
+		play_place_bomb_sound()
 		
 	if Input.is_action_just_released(key_map[6]) && landMines != 0:
 		landMines -= 1
@@ -74,6 +76,7 @@ func _process(_delta):
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 		updateHUD()
+		play_place_bomb_sound()
 		
 	if Input.is_action_just_released(key_map[7]):
 		if(c4_planted != null):
@@ -86,6 +89,7 @@ func _process(_delta):
 			c4_planted.set_position(self.position)
 			get_parent().add_child(c4_planted)
 			updateHUD()
+			play_place_bomb_sound()
 		
 func add_shield(shield):
 	$HPBar.add_shield(shield)
@@ -114,7 +118,12 @@ func speed_up():
 func speed_down():
 	max_speed -= 100
 	speed_up_timer.stop()
-	
+
+func play_place_bomb_sound():
+	if Settings.sound_fx_enabled:
+		$place_bomb_sound.volume_db = Settings.sound_fx_volume - 25
+		$place_bomb_sound.play()
+
 func play_powerup_sound():
 	if Settings.sound_fx_enabled:
 		$powerup_sound.volume_db = Settings.sound_fx_volume - 25

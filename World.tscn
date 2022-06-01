@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=37 format=2]
 
 [ext_resource path="res://Interface/Pause.gd" type="Script" id=1]
 [ext_resource path="res://Logic/MazeGenerator.gd" type="Script" id=2]
@@ -11,6 +11,9 @@
 [ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://GameOver.gd" type="Script" id=10]
 [ext_resource path="res://Sound/gameover.wav" type="AudioStream" id=11]
+[ext_resource path="res://ConfirmQuit.gd" type="Script" id=12]
+[ext_resource path="res://InGameOptions.gd" type="Script" id=13]
+[ext_resource path="res://Sound/mazebomber.wav" type="AudioStream" id=14]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 1
@@ -24,6 +27,14 @@ font_data = ExtResource( 9 )
 
 [sub_resource type="CanvasItemMaterial" id=6]
 blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=11]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=10]
+size = 20
+outline_color = Color( 0, 1, 1, 1 )
+font_data = ExtResource( 9 )
 
 [sub_resource type="CanvasItemMaterial" id=2]
 light_mode = 1
@@ -39,6 +50,43 @@ blend_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id=9]
 blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=12]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=13]
+size = 20
+font_data = ExtResource( 9 )
+
+[sub_resource type="DynamicFont" id=14]
+size = 38
+font_data = ExtResource( 9 )
+
+[sub_resource type="CanvasItemMaterial" id=15]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=16]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=17]
+size = 20
+font_data = ExtResource( 9 )
+
+[sub_resource type="CanvasItemMaterial" id=18]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=19]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=20]
+blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=21]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=22]
+size = 20
+font_data = ExtResource( 9 )
 
 [node name="World" type="Node2D"]
 __meta__ = {
@@ -89,13 +137,25 @@ texture = ExtResource( 4 )
 [node name="VBoxContainer" type="VBoxContainer" parent="MazeGenerator/Pause"]
 margin_left = 528.0
 margin_top = 306.0
-margin_right = 912.0
+margin_right = 632.0
 margin_bottom = 402.0
+
+[node name="options_button" type="Button" parent="MazeGenerator/Pause/VBoxContainer"]
+material = SubResource( 5 )
+margin_right = 104.0
+margin_bottom = 26.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Options"
+flat = true
+align = 0
 
 [node name="menu_button" type="Button" parent="MazeGenerator/Pause/VBoxContainer"]
 material = SubResource( 5 )
-margin_right = 384.0
-margin_bottom = 26.0
+margin_top = 30.0
+margin_right = 104.0
+margin_bottom = 56.0
 custom_colors/font_color = Color( 100, 100, 100, 1 )
 custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
 custom_fonts/font = SubResource( 4 )
@@ -105,15 +165,68 @@ align = 0
 
 [node name="quit_button" type="Button" parent="MazeGenerator/Pause/VBoxContainer"]
 material = SubResource( 6 )
-margin_top = 30.0
-margin_right = 384.0
-margin_bottom = 56.0
+margin_top = 60.0
+margin_right = 104.0
+margin_bottom = 86.0
 custom_colors/font_color = Color( 100, 100, 100, 1 )
 custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
 custom_fonts/font = SubResource( 4 )
 text = "Quit"
 flat = true
 align = 0
+
+[node name="ConfirmQuit" type="Control" parent="MazeGenerator"]
+pause_mode = 2
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 12 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlackOverlay" type="ColorRect" parent="MazeGenerator/ConfirmQuit"]
+anchor_right = 34.4
+anchor_bottom = 18.4
+margin_bottom = -6.10352e-05
+color = Color( 0, 0, 0, 0.698039 )
+
+[node name="yes" type="Button" parent="MazeGenerator/ConfirmQuit"]
+material = SubResource( 6 )
+margin_left = 488.0
+margin_top = 320.0
+margin_right = 536.0
+margin_bottom = 346.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "Yes"
+flat = true
+align = 0
+
+[node name="no" type="Button" parent="MazeGenerator/ConfirmQuit"]
+material = SubResource( 5 )
+margin_left = 696.0
+margin_top = 320.0
+margin_right = 732.0
+margin_bottom = 346.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 4 )
+text = "No"
+flat = true
+align = 0
+
+[node name="Label" type="Label" parent="MazeGenerator/ConfirmQuit"]
+material = SubResource( 11 )
+margin_left = 384.0
+margin_top = 232.0
+margin_right = 867.0
+margin_bottom = 257.0
+custom_colors/font_color = Color( 48.03, 47.78, 42.98, 1 )
+custom_fonts/font = SubResource( 10 )
+text = "Are you sure you would like to quit the game?"
+autowrap = true
 
 [node name="GameOver" type="Control" parent="MazeGenerator"]
 visible = false
@@ -187,12 +300,112 @@ text = "Quit"
 flat = true
 align = 0
 
+[node name="music" type="AudioStreamPlayer" parent="MazeGenerator"]
+pause_mode = 2
+stream = ExtResource( 14 )
+
 [node name="gameover_fx" type="AudioStreamPlayer" parent="MazeGenerator"]
 stream = ExtResource( 11 )
 
+[node name="InGameOptions" type="Control" parent="MazeGenerator"]
+pause_mode = 2
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 13 )
+
+[node name="BlackOverlay" type="ColorRect" parent="MazeGenerator/InGameOptions"]
+margin_right = 1376.0
+margin_bottom = 736.0
+color = Color( 0, 0, 0, 0.364706 )
+
+[node name="Label2" type="Label" parent="MazeGenerator/InGameOptions"]
+material = SubResource( 12 )
+margin_left = 64.0
+margin_top = 384.0
+margin_right = 384.0
+margin_bottom = 496.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 13 )
+text = "These are the In Game options, to adjust other settings please exit the game to the main menu.
+"
+autowrap = true
+
+[node name="title" type="Label" parent="MazeGenerator/InGameOptions"]
+material = SubResource( 12 )
+margin_left = 64.0
+margin_top = 181.0
+margin_right = 384.0
+margin_bottom = 262.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 14 )
+text = "OPTIONS
+"
+
+[node name="settings" type="MarginContainer" parent="MazeGenerator/InGameOptions"]
+material = SubResource( 15 )
+margin_left = 64.0
+margin_top = 232.0
+margin_right = 384.0
+margin_bottom = 448.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MazeGenerator/InGameOptions/settings"]
+margin_right = 320.0
+margin_bottom = 216.0
+
+[node name="music_label" type="Label" parent="MazeGenerator/InGameOptions/settings/VBoxContainer"]
+material = SubResource( 16 )
+margin_right = 320.0
+margin_bottom = 43.0
+custom_fonts/font = SubResource( 17 )
+text = "
+Music Volume"
+
+[node name="music_slider" type="HSlider" parent="MazeGenerator/InGameOptions/settings/VBoxContainer"]
+material = SubResource( 18 )
+margin_top = 47.0
+margin_right = 320.0
+margin_bottom = 63.0
+min_value = -50.0
+max_value = 50.0
+
+[node name="sound_effects_label" type="Label" parent="MazeGenerator/InGameOptions/settings/VBoxContainer"]
+material = SubResource( 19 )
+margin_top = 67.0
+margin_right = 320.0
+margin_bottom = 87.0
+custom_fonts/font = SubResource( 17 )
+text = "Sound effects Volume"
+
+[node name="sound_effects_slider" type="HSlider" parent="MazeGenerator/InGameOptions/settings/VBoxContainer"]
+material = SubResource( 20 )
+margin_top = 91.0
+margin_right = 320.0
+margin_bottom = 107.0
+min_value = -50.0
+max_value = 50.0
+
+[node name="back_button" type="Button" parent="MazeGenerator/InGameOptions"]
+material = SubResource( 21 )
+margin_left = 64.0
+margin_top = 621.0
+margin_right = 136.0
+margin_bottom = 647.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 22 )
+text = "Back"
+flat = true
+align = 0
+
+[connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/options_button" to="MazeGenerator/Pause" method="_on_options_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/menu_button" to="MazeGenerator/Pause" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/quit_button" to="MazeGenerator/Pause" method="_on_quit_button_pressed"]
+[connection signal="pressed" from="MazeGenerator/ConfirmQuit/yes" to="MazeGenerator/ConfirmQuit" method="_on_yes_pressed"]
+[connection signal="pressed" from="MazeGenerator/ConfirmQuit/no" to="MazeGenerator/ConfirmQuit" method="_on_no_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/Restart" to="MazeGenerator/GameOver/Restart" method="_on_Restart_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/restart_button" to="MazeGenerator/GameOver" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/menu_button" to="MazeGenerator/GameOver" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/quit_button" to="MazeGenerator/GameOver" method="_on_quit_button_pressed"]
+[connection signal="value_changed" from="MazeGenerator/InGameOptions/settings/VBoxContainer/music_slider" to="MazeGenerator/InGameOptions" method="_on_music_slider_value_changed"]
+[connection signal="value_changed" from="MazeGenerator/InGameOptions/settings/VBoxContainer/sound_effects_slider" to="MazeGenerator/InGameOptions" method="_on_sound_effects_slider_value_changed"]
+[connection signal="pressed" from="MazeGenerator/InGameOptions/back_button" to="MazeGenerator/InGameOptions" method="_on_back_button_pressed"]
