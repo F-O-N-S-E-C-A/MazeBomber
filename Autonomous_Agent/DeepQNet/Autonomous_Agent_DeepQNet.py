@@ -65,16 +65,21 @@ class Autonomous_Agent(Control):
 		print(reward)
 		self.store(self.lastState, self.lastAction, reward, state)
 		
-		self.retrain(len(self.expirience_replay) % 2)
+		if (len(self.expirience_replay) % 25 == 0):
+			self.retrain(5)
 		self.lastState = state
 		self.lastAction = a
+		
+		self.alighn_target_model()
 		
 	
 	def _build_compile_model(self):
 		model = Sequential()
-		model.add(Dense(100, activation='relu', input_dim=self.state_size))
-		model.add(Dense(100, activation='relu'))
-		model.add(Dense(100, activation='relu'))
+		model.add(Dense(32, activation='relu', input_dim=self.state_size))
+		model.add(Dense(32, activation='relu'))
+		model.add(Dense(32, activation='relu'))
+		model.add(Dense(32, activation='relu'))
+		model.add(Dense(32, activation='relu'))
 		model.add(Dense(self.action_size, activation='linear'))
 
 		model.compile(loss='mse', optimizer=self.optimizer)
@@ -88,7 +93,7 @@ class Autonomous_Agent(Control):
 		
 	def act(self, state):
 		if np.random.rand() <= self.epsilon:
-			return random.randint(0, len(self.action_space)-1)
+			return np.random.randint(0, len(self.action_space)-1)
 
 		q_values = self.q_network.predict(state, verbose = 0)
 		return np.argmax(q_values[0])
