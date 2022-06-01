@@ -17,6 +17,7 @@ var c4 = 0
 var c4_planted = null
 var updateFromNetwork = false
 var network_input_vector = Vector2.ZERO
+var input_vector = Vector2.ZERO
 var position_x = 0
 var position_y = 0
 var selfPeerID
@@ -48,16 +49,17 @@ remote func syncPosition(x, y, input_vector):
 	position_y = y
 
 func _physics_process(delta):
-	var input_vector = Vector2.ZERO
 	if updateFromNetwork:
 		input_vector = network_input_vector
+		updateFromNetwork = false
 	else:
 		if selfPeerID == ownerID || !GameModes.multiplayer_online:
 			input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
 			input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
 			input_vector = input_vector.normalized()
 		else:
-			input_vector = Vector2.ZERO
+			#input_vector = Vector2.ZERO
+			pass
 
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
@@ -70,14 +72,14 @@ func _physics_process(delta):
 
 	velocity = move_and_slide(velocity)
 	
-	if updateFromNetwork:
-		updateFromNetwork = false
-		self.position.x = position_x
-		self.position.y = position_y
+	#if updateFromNetwork:
+	#	updateFromNetwork = false
+	#	self.position.x = position_x
+	#	self.position.y = position_y
 	
 	if selfPeerID == ownerID:
-		if input_vector != Vector2.ZERO:
-			rpc("syncPosition", self.position.x, self.position.y, input_vector)
+		#if input_vector != Vector2.ZERO:
+		rpc("syncPosition", self.position.x, self.position.y, input_vector)
 
 remote func syncTNT(p):
 	var test_bomb = preload("res://World/TNT.tscn").instance()
