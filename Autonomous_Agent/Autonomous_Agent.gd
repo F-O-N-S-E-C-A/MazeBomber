@@ -31,6 +31,10 @@ onready var rng = RandomNumberGenerator.new()
 onready var last_time = OS.get_unix_time()
 onready var input_vector = Vector2.ZERO
 
+func setVec(x, y):
+	input_vector.x = x
+	input_vector.y = y
+
 func my_init(k, image, otherPlayers):
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
@@ -130,31 +134,31 @@ func _physics_process(delta):
 		animationState.travel("Idle")
 		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
 		
-	velocity = move_and_slide(velocity, Vector2(0,-1))
+	velocity = move_and_slide(velocity)
 
 func _process(_delta):
-	if (rng.randf_range(-10, 10) >= 9.85 || Input.is_action_just_released(keys[4])) && number_of_bombs != 0:
+	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
 		number_of_bombs -= 1
 		var test_bomb = preload("res://World/TNT.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if (rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5])) && big_bombs != 0:
+	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
 		big_bombs -= 1
 		var test_bomb = preload("res://World/BigBomb.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if (rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5])) && landMines != 0:
+	if Input.is_action_just_released(keys[5]) && landMines != 0:
 		landMines -= 1
 		var test_bomb = preload("res://World/LandMine.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if rng.randf_range(-10, 10) >= 9.9 || Input.is_action_just_released(keys[5]):
+	if Input.is_action_just_released(keys[5]):
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null
