@@ -58,8 +58,7 @@ func initialise_players(n_players):
 	for i in range(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
-				players.append(preload("res://Autonomous_Agent/Autonomous_Agent.tscn").instance())
-				players[0].mapMatrix = mazeMatrix # Give map matrix to autonomous agent
+				players.append(preload("res://Autonomous_Agent/DeepQNet/Autonomous_Agent_DeepQNet.tscn").instance())
 			else:
 				players.append(preload("res://Player/Player.tscn").instance())
 		else:
