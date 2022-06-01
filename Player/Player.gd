@@ -51,7 +51,6 @@ remote func syncPosition(x, y, input_vector):
 func _physics_process(delta):
 	if updateFromNetwork:
 		input_vector = network_input_vector
-		updateFromNetwork = false
 	else:
 		if selfPeerID == ownerID || !GameModes.multiplayer_online:
 			input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
@@ -72,10 +71,10 @@ func _physics_process(delta):
 
 	velocity = move_and_slide(velocity)
 	
-	#if updateFromNetwork:
-	#	updateFromNetwork = false
-	#	self.position.x = position_x
-	#	self.position.y = position_y
+	if updateFromNetwork:
+		updateFromNetwork = false
+		self.position.x = position_x
+		self.position.y = position_y
 	
 	if selfPeerID == ownerID:
 		#if input_vector != Vector2.ZERO:
