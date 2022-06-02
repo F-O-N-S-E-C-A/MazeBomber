@@ -95,7 +95,7 @@ remote func syncBigBomb(p):
 remote func syncLandMine(p):
 	var test_bomb = preload("res://World/LandMine.tscn").instance()
 	test_bomb.my_init(self)
-	test_bomb.set_position(self.p)
+	test_bomb.set_position(p)
 	get_parent().add_child(test_bomb)
 	
 remote func syncC4(p):
