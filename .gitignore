@@ -19,7 +19,6 @@ Pickupables/.DS_Store
 *.md5
 addons/
 *.stex
-*.gdnlib
 *.pyc
 *.import
 .DS_Store
