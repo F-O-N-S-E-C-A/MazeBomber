@@ -42,7 +42,7 @@ func my_init(k, image, otherPlayers):
 	keys = k
 	$Sprite.set_texture(image)
 	speed_up_timer_init()
-	
+
 func _ready():
 	rng.randomize()
 	input_vector.x = rng.randf_range(-10, 10)
@@ -52,19 +52,19 @@ func _ready():
 func _physics_process(delta):
 	var time_now = OS.get_unix_time()
 	var ceiling = self.is_on_ceiling()
-	
+
 	var blockX = self.position.x / (1312 / 41) - int(self.position.x / (1312 / 41))
 	var blockY = self.position.y / (736 / 23) - int(self.position.y / (736 / 23))
 	var my_array = [-1,1]
-	
+
 	playerCoord = Vector2(int(self.position.x / (1312 / 41)), int(self.position.y / (736 / 23))) # Get player coordenates
-	
+
 	#if mapMatrix[playerCoord.x][playerCoord.y-1] != null and typeof(mapMatrix[playerCoord.x][playerCoord.y-1]) != 2:
 	#	print(mapMatrix[playerCoord.x][playerCoord.y-1].health)
 	if !self.model:
 		if self.is_on_floor():
 			rng.randomize()
-			if not directionHistory[1]: 
+			if not directionHistory[1]:
 				var rand_value = my_array[randi() % my_array.size()]
 				input_vector.x = rand_value
 				directionHistory[1] = true
@@ -74,7 +74,7 @@ func _physics_process(delta):
 			input_vector = input_vector.normalized()
 		elif self.is_on_ceiling():
 			rng.randomize()
-			if not directionHistory[0]: 
+			if not directionHistory[0]:
 				var rand_value = my_array[randi() % my_array.size()]
 				input_vector.x = rand_value
 				directionHistory[0] = true
@@ -82,23 +82,23 @@ func _physics_process(delta):
 			directionHistory[3] = false
 			input_vector.y = 0
 			input_vector = input_vector.normalized()
-		elif self.is_on_wall(): 
+		elif self.is_on_wall():
 			rng.randomize()
 			input_vector.x = 0
 			if input_vector.x < 0:
-				if not directionHistory[2]: 
+				if not directionHistory[2]:
 					var rand_value = my_array[randi() % my_array.size()]
 					input_vector.y = rand_value
 					directionHistory[2] = true
 			else:
-				if not directionHistory[3]: 
+				if not directionHistory[3]:
 					var rand_value = my_array[randi() % my_array.size()]
 					input_vector.y = rand_value
 					directionHistory[3] = true
 			directionHistory[0] = false
 			directionHistory[1] = false
 			input_vector = input_vector.normalized()
-		
+
 		# Check for corridors in the middle of halls
 		if time_now - last_time > 0.5: # Let it cooldown...
 			if input_vector.x != 0: # If player walking horizontally
@@ -123,8 +123,8 @@ func _physics_process(delta):
 					directionHistory[1] = true
 					directionHistory[2] = false
 					directionHistory[3] = false
-		
-	
+
+
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
 		animationTree.set("parameters/Run/blend_position", input_vector)
@@ -133,7 +133,7 @@ func _physics_process(delta):
 	else:
 		animationState.travel("Idle")
 		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
-		
+
 	velocity = move_and_slide(velocity)
 
 func _process(_delta):
@@ -206,3 +206,6 @@ func play_load_sound():
 	if Settings.sound_fx_enabled:
 		$load_fx.volume_db = Settings.sound_fx_volume - 25
 		$load_fx.play()
+
+func updateHUD():
+	pass

@@ -4,7 +4,7 @@ const ACCELERATION = 1600
 const BASEMAXSPEED = 160
 const FRICTION = 800
 var velocity = Vector2.ZERO
-var keys = []
+var key_map = []
 var damage_multiplier = 1
 var radius_multiplier = 1
 var max_speed = BASEMAXSPEED
@@ -15,24 +15,55 @@ var landMines = 0
 var speed_up_timer
 var c4 = 0
 var c4_planted = null
+var updateFromNetwork = false
+var network_input_vector = Vector2.ZERO
+var input_vector = Vector2.ZERO
+var position_x = 0
+var position_y = 0
+var selfPeerID
+var ownerID = 1
+var player: String
+var hud = null
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 
-func my_init(k, image, otherPlayers):
+func setOwnerID(id):
+	ownerID = id
+
+func _ready():
+	if GameModes.multiplayer_online:
+		selfPeerID = get_tree().get_network_unique_id()
+
+func my_init(k, image, otherPlayers, p, h):
+	hud = h
+	updateHUD()
+	player = p
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)
-	keys = k
+	key_map = k
 	$Sprite.set_texture(image)
 	speed_up_timer_init()
 
+remote func syncPosition(x, y, input_vector):
+	updateFromNetwork = true
+	network_input_vector = input_vector
+	position_x = x
+	position_y = y
+
 func _physics_process(delta):
-	var input_vector = Vector2.ZERO
-	input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
-	input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
-	input_vector = input_vector.normalized()
+	if updateFromNetwork:
+		input_vector = network_input_vector
+	else:
+		if selfPeerID == ownerID || !GameModes.multiplayer_online:
+			input_vector.x = Input.get_action_strength(key_map[0]) - Input.get_action_strength(key_map[2])
+			input_vector.y = Input.get_action_strength(key_map[1]) - Input.get_action_strength(key_map[3])
+			input_vector = input_vector.normalized()
+		else:
+			#input_vector = Vector2.ZERO
+			pass
 
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
@@ -45,29 +76,35 @@ func _physics_process(delta):
 
 	velocity = move_and_slide(velocity)
 
-func _process(_delta):
-	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
-		number_of_bombs -= 1
-		var test_bomb = preload("res://World/TNT.tscn").instance()
-		test_bomb.my_init(self)
-		test_bomb.set_position(self.position)
-		get_parent().add_child(test_bomb)
+	if updateFromNetwork:
+		updateFromNetwork = false
+		self.position.x = position_x
+		self.position.y = position_y
 
-	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
-		big_bombs -= 1
-		var test_bomb = preload("res://World/BigBomb.tscn").instance()
-		test_bomb.my_init(self)
-		test_bomb.set_position(self.position)
-		get_parent().add_child(test_bomb)
+	if selfPeerID == ownerID:
+		#if input_vector != Vector2.ZERO:
+		rpc("syncPosition", self.position.x, self.position.y, input_vector)
 
-	if Input.is_action_just_released(keys[5]) && landMines != 0:
-		landMines -= 1
-		var test_bomb = preload("res://World/LandMine.tscn").instance()
-		test_bomb.my_init(self)
-		test_bomb.set_position(self.position)
-		get_parent().add_child(test_bomb)
+remote func syncTNT(p):
+	var test_bomb = preload("res://World/TNT.tscn").instance()
+	test_bomb.my_init(self)
+	test_bomb.set_position(p)
+	get_parent().add_child(test_bomb)
 
-	if Input.is_action_just_released(keys[5]):
+remote func syncBigBomb(p):
+	var test_bomb = preload("res://World/BigBomb.tscn").instance()
+	test_bomb.my_init(self)
+	test_bomb.set_position(p)
+	get_parent().add_child(test_bomb)
+
+remote func syncLandMine(p):
+	var test_bomb = preload("res://World/LandMine.tscn").instance()
+	test_bomb.my_init(self)
+	test_bomb.set_position(p)
+	get_parent().add_child(test_bomb)
+
+remote func syncC4(p):
+	if ownerID == get_tree().get_rpc_sender_id():
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null
@@ -77,6 +114,59 @@ func _process(_delta):
 			c4_planted.my_init(self)
 			c4_planted.set_position(self.position)
 			get_parent().add_child(c4_planted)
+
+func _process(_delta):
+	if GameModes.multiplayer_online:
+		if selfPeerID != ownerID:
+			return
+
+	if Input.is_action_just_released(key_map[4]) && number_of_bombs != 0:
+		number_of_bombs -= 1
+		var test_bomb = preload("res://World/TNT.tscn").instance()
+		test_bomb.my_init(self)
+		test_bomb.set_position(self.position)
+		get_parent().add_child(test_bomb)
+		if GameModes.multiplayer_online:
+			rpc("syncTNT", self.position)
+		updateHUD()
+		play_place_bomb_sound()
+
+	if Input.is_action_just_released(key_map[5]) && big_bombs != 0:
+		big_bombs -= 1
+		var test_bomb = preload("res://World/BigBomb.tscn").instance()
+		test_bomb.my_init(self)
+		test_bomb.set_position(self.position)
+		get_parent().add_child(test_bomb)
+		if GameModes.multiplayer_online:
+			rpc("syncBigBomb", self.position)
+		updateHUD()
+		play_place_bomb_sound()
+
+	if Input.is_action_just_released(key_map[6]) && landMines != 0:
+		landMines -= 1
+		var test_bomb = preload("res://World/LandMine.tscn").instance()
+		test_bomb.my_init(self)
+		test_bomb.set_position(self.position)
+		get_parent().add_child(test_bomb)
+		if GameModes.multiplayer_online:
+			rpc("syncLandMine", self.position)
+		updateHUD()
+		play_place_bomb_sound()
+
+	if Input.is_action_just_released(key_map[7]):
+		if(c4_planted != null):
+			c4_planted.to_explode = true
+			c4_planted = null
+		elif(c4_planted == null && c4 > 0):
+			c4 -= 1
+			c4_planted = preload("res://World/C4.tscn").instance()
+			c4_planted.my_init(self)
+			c4_planted.set_position(self.position)
+			get_parent().add_child(c4_planted)
+		rpc("syncC4", self.position)
+
+		updateHUD()
+		play_place_bomb_sound()
 
 func add_shield(shield):
 	$HPBar.add_shield(shield)
@@ -106,6 +196,11 @@ func speed_down():
 	max_speed -= 100
 	speed_up_timer.stop()
 
+func play_place_bomb_sound():
+	if Settings.sound_fx_enabled:
+		$place_bomb_sound.volume_db = Settings.sound_fx_volume - 25
+		$place_bomb_sound.play()
+
 func play_powerup_sound():
 	if Settings.sound_fx_enabled:
 		$powerup_sound.volume_db = Settings.sound_fx_volume - 25
@@ -115,3 +210,7 @@ func play_load_sound():
 	if Settings.sound_fx_enabled:
 		$load_fx.volume_db = Settings.sound_fx_volume - 25
 		$load_fx.play()
+
+func updateHUD():
+	if hud != null:
+		hud.updateBombs([number_of_bombs, big_bombs, landMines, c4])

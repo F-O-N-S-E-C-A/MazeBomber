@@ -26,13 +26,25 @@ func take_damage(damage):
 			health = new_health
 			set_texture()
 
+remote func syncPowerUpSpawn(pos, name):
+	var power_up = load("res://Pickupables/" + name + ".tscn").instance()
+	power_up.set_position(pos)
+	power_up.set_scale(GlobalVariables.scale_vector)
+	get_parent().add_child(power_up)
+
 func destroy():
+	if GameModes.multiplayer_online:
+		if !get_tree().is_network_server():
+			return
+
 	var name = PowerUpRandomiser.get_random_power_up()
 	if name != null:
 		var power_up = load("res://Pickupables/" + name + ".tscn").instance()
 		power_up.set_position(self.position)
 		power_up.set_scale(GlobalVariables.scale_vector)
 		get_parent().add_child(power_up)
+		if GameModes.multiplayer_online:
+			rpc("syncPowerUpSpawn", self.position, name)
 		
 
 func set_texture():

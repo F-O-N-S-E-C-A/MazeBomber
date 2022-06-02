@@ -1,11 +1,11 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://Menu.gd" type="Script" id=1]
 [ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://back_button.gd" type="Script" id=3]
 [ext_resource path="res://World/images/GrassBackground.png" type="Texture" id=4]
 [ext_resource path="res://menu_maze.gd" type="Script" id=5]
-[ext_resource path="res://Sound/ep1.wav" type="AudioStream" id=6]
+[ext_resource path="res://Sound/mazebomber.wav" type="AudioStream" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -33,6 +33,25 @@ font_data = ExtResource( 2 )
 
 [sub_resource type="DynamicFont" id=7]
 size = 20
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=8]
+size = 38
+font_data = ExtResource( 2 )
+
+[sub_resource type="CanvasItemMaterial" id=9]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=10]
+size = 20
+font_data = ExtResource( 2 )
+
+[sub_resource type="CanvasItemMaterial" id=11]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=12]
+size = 20
+outline_color = Color( 0, 1, 1, 1 )
 font_data = ExtResource( 2 )
 
 [node name="Menu" type="Control"]
@@ -146,10 +165,10 @@ margin_bottom = 740.0
 color = Color( 0, 0, 0, 0.898039 )
 
 [node name="back_button" type="Button" parent="About"]
-margin_left = 65.0
-margin_top = 144.0
-margin_right = 483.0
-margin_bottom = 170.0
+margin_left = 64.0
+margin_top = 612.0
+margin_right = 128.0
+margin_bottom = 638.0
 custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
 custom_fonts/font = SubResource( 6 )
 text = "Back"
@@ -158,22 +177,86 @@ align = 0
 script = ExtResource( 3 )
 
 [node name="Label" type="Label" parent="About"]
-margin_left = 70.0
+margin_left = 64.0
 margin_top = 192.0
-margin_right = 1204.0
+margin_right = 1198.0
 margin_bottom = 382.0
 custom_fonts/font = SubResource( 7 )
-text = "MAZE BOMBER is a game in which you have to eliminate your opponents with explosions. You can collect the bombs in the bomb spawns. The map is a randomly generated maze and you can explode the walls of the maze to find a way to reach your opponent or to pick up powerups, which allow you to have special habilities. 
+text = "MAZE BOMBER is a game in which you have to eliminate your opponents with explosions. You can collect the bombs in the bomb spawns. The map is a randomly generated maze and you can explode the walls of the maze to find a way to reach your opponent or to pick up powerups, which allow you to have special habilities.
 
 MAZE BOMBER was carefully developed by Tiago Fonseca, João Lopes, Miguel Keim, Pedro Esser, David Rodrigues, Simão Correia and Ângelo Mendonça. "
 autowrap = true
 
+[node name="Label2" type="Label" parent="About"]
+margin_left = 64.0
+margin_top = 96.0
+margin_right = 296.0
+margin_bottom = 177.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 8 )
+text = "ABOUT
+"
+
 [node name="menu_music" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
 
+[node name="ConfirmQuit" type="Control" parent="."]
+pause_mode = 2
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BlackOverlay" type="ColorRect" parent="ConfirmQuit"]
+anchor_right = 34.4
+anchor_bottom = 18.4
+margin_bottom = -6.10352e-05
+color = Color( 0, 0, 0, 0.698039 )
+
+[node name="yes" type="Button" parent="ConfirmQuit"]
+material = SubResource( 9 )
+margin_left = 488.0
+margin_top = 320.0
+margin_right = 536.0
+margin_bottom = 346.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 10 )
+text = "Yes"
+flat = true
+align = 0
+
+[node name="no" type="Button" parent="ConfirmQuit"]
+material = SubResource( 11 )
+margin_left = 696.0
+margin_top = 320.0
+margin_right = 732.0
+margin_bottom = 346.0
+custom_colors/font_color = Color( 100, 100, 100, 1 )
+custom_colors/font_color_hover = Color( 100, 100, 0, 1 )
+custom_fonts/font = SubResource( 10 )
+text = "No"
+flat = true
+align = 0
+
+[node name="Label" type="Label" parent="ConfirmQuit"]
+margin_left = 384.0
+margin_top = 232.0
+margin_right = 867.0
+margin_bottom = 257.0
+custom_colors/font_color = Color( 48.03, 47.78, 42.98, 1 )
+custom_fonts/font = SubResource( 12 )
+text = "Are you sure you would like to quit the game?"
+autowrap = true
+
 [connection signal="button_down" from="MarginContainer/VBoxContainer/single_player_button" to="." method="_on_single_player_button_button_down"]
 [connection signal="button_down" from="MarginContainer/VBoxContainer/multiplayer_local_button" to="." method="_on_multiplayer_local_button_button_down"]
+[connection signal="button_down" from="MarginContainer/VBoxContainer/multiplayer_online_button" to="." method="_on_multiplayer_online_button_button_down"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/about_button" to="." method="_on_about_button_pressed"]
 [connection signal="pressed" from="MarginContainer/VBoxContainer/settings_button" to="." method="_on_settings_button_pressed"]
 [connection signal="button_down" from="MarginContainer/VBoxContainer/quit_button" to="." method="_on_quit_button_button_down"]
 [connection signal="pressed" from="About/back_button" to="About/back_button" method="_on_back_button_pressed"]
+[connection signal="pressed" from="ConfirmQuit/yes" to="." method="_on_yes_pressed"]
+[connection signal="pressed" from="ConfirmQuit/no" to="." method="_on_no_pressed"]
