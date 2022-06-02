@@ -17,6 +17,7 @@ var fog_of_war: bool
 var save_settings_file = "user://save_game.save"
 var data = {}
 
+
 func _ready():
 	load_settings()
 

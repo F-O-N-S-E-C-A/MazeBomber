@@ -79,7 +79,7 @@ func initialise_player():
 	var players = []
 	players.append(preload("res://Player/Player.tscn").instance())
 	players.append(player)
-	player.my_init(get_keys_for_player(1), get_sprite_for_player(1), players)
+	player.my_init(get_keys_for_player(1), get_sprite_for_player(1), players, "2", null)
 	player.set_scale(GlobalVariables.scale_vector)
 	$YSort.add_child(player)
 	var spawner = load("res://Logic/BoomBoxSpawner.gd").new(player.position)
@@ -93,7 +93,9 @@ func get_keys_for_player(i):
 			"p" + str(i+1) + "_left", 
 			"p" + str(i+1) + "_up", 
 			"p" + str(i+1) + "_bomb",
-			"p" + str(i+1) + "_big_bomb"]
+			"p" + str(i+1) + "_big_bomb",
+			"p" + str(i+1) + "_land_mine",
+			"p" + str(i+1) + "_c4"]
 
 func get_sprite_for_player(i):
 	return load("res://Player/Player" + str(i+1) + ".png")
