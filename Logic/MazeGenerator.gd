@@ -49,13 +49,20 @@ remote func syncPlayer(id):
 	players[i].ownerID = id
 
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-	players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
+	if selfPeerID == id:
+		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[1])
+	else:
+		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
+	#players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 	players[i].set_scale(GlobalVariables.scale_vector)
 	$YSort.add_child(players[i])
 	var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
 	maze.remove_path(players[i].position)
 	$YSort.add_child(spawner)
 	spawner.spawn()
+	
+remote func init_huds_everyone(n):
+	initialise_huds(1)
 
 func my_init():
 	if GameModes.multiplayer_online:
@@ -70,6 +77,8 @@ func my_init():
 
 			initialise_walls()
 			initialise_players(len(get_tree().get_network_connected_peers())+1)
+			initialise_huds(1)
+			rpc("init_huds_everyone", 1)
 			initialise_lights(12)
 			initialise_spawners()
 	else:
@@ -183,7 +192,10 @@ func initialise_players(n_players):
 		else:
 			#IP
 			if GameModes.multiplayer_online:
-				players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, "1", null)
+				if selfPeerID == ids[i]:
+					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[1])
+				else:
+					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 			else:
 				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, str(i+1), huds[i])
 			players[i].set_scale(GlobalVariables.scale_vector)
