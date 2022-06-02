@@ -173,7 +173,7 @@ func initialise_players(n_players):
 				$YSort.add_child(spawner)
 				spawner.spawn()
 			else:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, "2", huds[i])
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -183,9 +183,9 @@ func initialise_players(n_players):
 		else:
 			#IP
 			if GameModes.multiplayer_online:
-				players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players)
+				players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[i])
 			else:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players)
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, str(i+1), huds[i])
 			players[i].set_scale(GlobalVariables.scale_vector)
 			$YSort.add_child(players[i])
 			var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)

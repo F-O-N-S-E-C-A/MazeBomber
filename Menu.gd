@@ -27,13 +27,13 @@ func _on_single_player_button_button_down():
 	GameModes.singleplayer()
 	get_tree().change_scene("res://World.tscn")
 
-func _on_multiplayer_online_button_pressed():
-	get_tree().change_scene("res://Multiplayer/Multiplayer_Menu.tscn")
-
-
 func _on_yes_pressed():
 	get_tree().quit()
 
 
 func _on_no_pressed():
 	$ConfirmQuit.visible = false
+
+
+func _on_multiplayer_online_button_button_down():
+	get_tree().change_scene("res://Multiplayer/Multiplayer_Menu.tscn")

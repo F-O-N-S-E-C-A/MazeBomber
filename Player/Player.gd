@@ -165,8 +165,8 @@ func _process(_delta):
 			get_parent().add_child(c4_planted)
 		rpc("syncC4", self.position)
 
-			updateHUD()
-			play_place_bomb_sound()
+		updateHUD()
+		play_place_bomb_sound()
 
 func add_shield(shield):
 	$HPBar.add_shield(shield)
