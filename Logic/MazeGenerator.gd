@@ -2,7 +2,6 @@ extends Node2D
 
 var maze
 var players = []
-var networkMazeSet = false
 var selfPeerID
 var huds = []
 
@@ -10,9 +9,8 @@ func _ready():
 	randomize()
 	my_init()
 
-	#if GameModes.multiplayer_online():
-	#	selfPeerID = get_tree().get_network_unique_id()
-	#	self.set_network_master(selfPeerID)
+	if GameModes.multiplayer_online:
+		selfPeerID = get_tree().get_network_unique_id()
 
 remote func syncWall(b, pos, hp):
 	var wall = preload("res://World/Wall.tscn").instance()
@@ -49,8 +47,8 @@ remote func syncPlayer(id):
 	players[i].ownerID = id
 
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-	if selfPeerID == id:
-		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[1])
+	if get_tree().get_network_unique_id() == id:
+		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[0])
 	else:
 		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 	#players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
@@ -76,9 +74,9 @@ func my_init():
 			OS.delay_msec(1500)
 
 			initialise_walls()
-			initialise_players(len(get_tree().get_network_connected_peers())+1)
 			initialise_huds(1)
 			rpc("init_huds_everyone", 1)
+			initialise_players(len(get_tree().get_network_connected_peers())+1)
 			initialise_lights(12)
 			initialise_spawners()
 	else:
@@ -192,8 +190,8 @@ func initialise_players(n_players):
 		else:
 			#IP
 			if GameModes.multiplayer_online:
-				if selfPeerID == ids[i]:
-					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[1])
+				if get_tree().get_network_unique_id() == ids[i]:
+					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[0])
 				else:
 					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 			else:

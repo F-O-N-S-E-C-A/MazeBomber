@@ -11,7 +11,7 @@ func updateBombs(b):
 	updateLabels()
 	
 func updateLabels():
-	if GameModes.multiplayer_local:
+	if GameModes.multiplayer_local || GameModes.multiplayer_online:
 		if bombs[0] == 0:
 			$TNT.visible = false
 		else: 
