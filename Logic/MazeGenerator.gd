@@ -60,7 +60,7 @@ remote func syncPlayer(id):
 	spawner.spawn()
 	
 remote func init_huds_everyone(n):
-	initialise_huds(1)
+	huds.append(initialise_hud("bottom_right"))
 
 func my_init():
 	if GameModes.multiplayer_online:
@@ -74,7 +74,7 @@ func my_init():
 			OS.delay_msec(1500)
 
 			initialise_walls()
-			initialise_huds(1)
+			#initialise_huds(1)
 			rpc("init_huds_everyone", 1)
 			initialise_players(len(get_tree().get_network_connected_peers())+1)
 			initialise_lights(12)
@@ -103,7 +103,6 @@ func my_init():
 func initialise_huds(n_players):
 	for i in range(n_players):
 		huds.append(preload("res://HUD.tscn").instance())
-		huds[i].my_init(str(i+1))
 		var pos = Vector2(0, 0)
 		if i == 0:
 			pos = Vector2(0, maze.height - 1) * GlobalVariables.my_scale
@@ -115,6 +114,21 @@ func initialise_huds(n_players):
 			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
 		huds[i].set_position(pos - Vector2(0, 2))
 		$YSort.add_child(huds[i])
+		
+func initialise_hud(location):
+		var hud = preload("res://HUD.tscn").instance()
+		var pos = Vector2(0, 0)
+		if location == "bottom_left":
+			pos = Vector2(0, maze.height - 1) * GlobalVariables.my_scale
+		elif location == "bottom_right":
+			pos = Vector2(maze.width - 7, maze.height - 1) * GlobalVariables.my_scale
+		elif location == "top_left":
+			pos = Vector2(0, 0) * GlobalVariables.my_scale
+		elif location == "top_right":
+			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
+		hud.set_position(pos - Vector2(0, 2))
+		$YSort.add_child(hud)
+		return hud
 
 
 func initialise_walls():
@@ -191,7 +205,7 @@ func initialise_players(n_players):
 			#IP
 			if GameModes.multiplayer_online:
 				if get_tree().get_network_unique_id() == ids[i]:
-					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[0])
+					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), initialise_hud("bottom_right"))
 				else:
 					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 			else:
