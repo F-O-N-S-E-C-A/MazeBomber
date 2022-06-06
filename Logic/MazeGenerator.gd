@@ -86,7 +86,7 @@ func my_init():
 
 		maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 		maze.generate_maze()
-		var n_players = 2
+		var n_players = 4
 
 		initialise_walls()
 		initialise_huds(n_players)
@@ -112,7 +112,7 @@ func initialise_huds(n_players):
 			pos = Vector2(0, 0) * GlobalVariables.my_scale
 		elif i == 3:
 			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
-		huds[i].set_position(pos - Vector2(0, 2))
+		huds[i].set_position(pos - Vector2(0, 1))
 		$YSort.add_child(huds[i])
 		
 func initialise_hud(location):
@@ -128,7 +128,7 @@ func initialise_hud(location):
 			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
 		elif location == "bottom_middle":
 			pos = Vector2(maze.width/2 - 3, maze.height - 1) * GlobalVariables.my_scale
-		hud.set_position(pos - Vector2(0, 2))
+		hud.set_position(pos - Vector2(0, 1))
 		$YSort.add_child(hud)
 		return hud
 

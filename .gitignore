@@ -5,3 +5,4 @@ addons/
 *.pyc
 *.stex
 *.import
+.DS_Store
