@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://Interface/Pause.gd" type="Script" id=1]
 [ext_resource path="res://Logic/MazeGenerator.gd" type="Script" id=2]
@@ -80,6 +80,13 @@ blend_mode = 1
 
 [sub_resource type="CanvasItemMaterial" id=20]
 blend_mode = 1
+
+[sub_resource type="CanvasItemMaterial" id=23]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=24]
+size = 20
+font_data = ExtResource( 9 )
 
 [sub_resource type="CanvasItemMaterial" id=21]
 blend_mode = 1
@@ -385,6 +392,14 @@ margin_bottom = 107.0
 min_value = -50.0
 max_value = 50.0
 
+[node name="static_hud" type="CheckButton" parent="MazeGenerator/InGameOptions/settings/VBoxContainer"]
+material = SubResource( 23 )
+margin_top = 111.0
+margin_right = 320.0
+margin_bottom = 151.0
+custom_fonts/font = SubResource( 24 )
+text = "Static HUD"
+
 [node name="back_button" type="Button" parent="MazeGenerator/InGameOptions"]
 material = SubResource( 21 )
 margin_left = 64.0
@@ -408,4 +423,5 @@ align = 0
 [connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/quit_button" to="MazeGenerator/GameOver" method="_on_quit_button_pressed"]
 [connection signal="value_changed" from="MazeGenerator/InGameOptions/settings/VBoxContainer/music_slider" to="MazeGenerator/InGameOptions" method="_on_music_slider_value_changed"]
 [connection signal="value_changed" from="MazeGenerator/InGameOptions/settings/VBoxContainer/sound_effects_slider" to="MazeGenerator/InGameOptions" method="_on_sound_effects_slider_value_changed"]
+[connection signal="toggled" from="MazeGenerator/InGameOptions/settings/VBoxContainer/static_hud" to="MazeGenerator/InGameOptions" method="_on_static_hud_toggled"]
 [connection signal="pressed" from="MazeGenerator/InGameOptions/back_button" to="MazeGenerator/InGameOptions" method="_on_back_button_pressed"]
