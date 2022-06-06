@@ -13,6 +13,8 @@ func _ready():
 	$world_settings/VBoxContainer/random_walls.pressed = Settings.random_walls
 	$world_settings/VBoxContainer/center_room.pressed = Settings.center_room
 	
+	$world_settings/VBoxContainer/static_hud.pressed = Settings.static_hud
+	
 	if Settings.music_enabled:
 		$menu_music.volume_db = Settings.music_volume - 25
 		$menu_music.play()
@@ -63,3 +65,7 @@ func _on_random_walls_toggled(button_pressed):
 
 func _on_center_room_toggled(button_pressed):
 	Settings.center_room = button_pressed
+
+
+func _on_static_hud_toggled(button_pressed):
+	Settings.static_hud = button_pressed

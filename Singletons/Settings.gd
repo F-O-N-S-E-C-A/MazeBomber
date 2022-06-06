@@ -14,6 +14,8 @@ var sound_fx_enabled: bool
 var nuke_mode: bool
 var fog_of_war: bool
 
+var static_hud: bool
+
 var save_settings_file = "user://save_game.save"
 var data = {}
 
@@ -33,7 +35,8 @@ func save_settings():
 		"music_enabled" : music_enabled,
 		"sound_fx_enabled" : sound_fx_enabled,
 		"nuke_mode" : nuke_mode,
-		"fog_of_war" : fog_of_war
+		"fog_of_war" : fog_of_war, 
+		"static_hud" : static_hud
 	}
 	file.open(save_settings_file, File.WRITE)
 	file.store_var(data)
@@ -52,7 +55,8 @@ func load_settings():
 			"music_enabled" : true,
 			"sound_fx_enabled" : true,
 			"nuke_mode" : false,
-			"fog_of_war" : false
+			"fog_of_war" : false,
+			"static_hud" : false
 		}
 		save_settings()
 	file.open(save_settings_file, File.READ)
@@ -67,6 +71,7 @@ func load_settings():
 	sound_fx_enabled = data["sound_fx_enabled"]
 	nuke_mode = data["nuke_mode"]
 	fog_of_war = data["fog_of_war"]
+	static_hud = data["static_hud"]
 	file.close()
 	
 

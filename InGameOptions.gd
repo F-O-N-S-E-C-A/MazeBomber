@@ -3,7 +3,8 @@ extends Control
 func _ready():
 	$settings/VBoxContainer/music_slider.value = Settings.music_volume
 	$settings/VBoxContainer/sound_effects_slider.value = Settings.sound_fx_volume
-
+	$settings/VBoxContainer/static_hud.pressed = Settings.static_hud
+	
 func _on_back_button_pressed():
 	Settings.save_settings()	
 	visible = false
@@ -28,3 +29,7 @@ func _on_sound_effects_slider_value_changed(value):
 	else:
 		Settings.sound_fx_enabled = true
 		
+
+
+func _on_static_hud_toggled(button_pressed):
+	Settings.static_hud = button_pressed

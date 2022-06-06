@@ -124,6 +124,13 @@ margin_bottom = 172.0
 custom_fonts/font = SubResource( 5 )
 text = "Room in the center of the maze"
 
+[node name="static_hud" type="CheckButton" parent="world_settings/VBoxContainer"]
+margin_top = 176.0
+margin_right = 405.0
+margin_bottom = 216.0
+custom_fonts/font = SubResource( 5 )
+text = "Static HUD"
+
 [node name="sound" type="MarginContainer" parent="."]
 margin_left = 64.0
 margin_top = 232.0
@@ -194,6 +201,7 @@ stream = ExtResource( 4 )
 [connection signal="toggled" from="world_settings/VBoxContainer/explosion_damage_random" to="." method="_on_explosion_damage_random_toggled"]
 [connection signal="toggled" from="world_settings/VBoxContainer/random_walls" to="." method="_on_random_walls_toggled"]
 [connection signal="toggled" from="world_settings/VBoxContainer/center_room" to="." method="_on_center_room_toggled"]
+[connection signal="toggled" from="world_settings/VBoxContainer/static_hud" to="." method="_on_static_hud_toggled"]
 [connection signal="value_changed" from="sound/VBoxContainer/music_slider" to="." method="_on_music_slider_value_changed"]
 [connection signal="value_changed" from="sound/VBoxContainer/sound_effects_slider" to="." method="_on_sound_effects_slider_value_changed"]
 [connection signal="toggled" from="game_modes/VBoxContainer/fog_of_war" to="." method="_on_fog_of_war_toggled"]
