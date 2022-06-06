@@ -2,7 +2,6 @@ extends Node2D
 
 var maze
 var players = []
-var networkMazeSet = false
 var selfPeerID
 var huds = []
 
@@ -10,9 +9,8 @@ func _ready():
 	randomize()
 	my_init()
 
-	#if GameModes.multiplayer_online():
-	#	selfPeerID = get_tree().get_network_unique_id()
-	#	self.set_network_master(selfPeerID)
+	if GameModes.multiplayer_online:
+		selfPeerID = get_tree().get_network_unique_id()
 
 remote func syncWall(b, pos, hp):
 	var wall = preload("res://World/Wall.tscn").instance()
@@ -49,8 +47,8 @@ remote func syncPlayer(id):
 	players[i].ownerID = id
 
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-	if selfPeerID == id:
-		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[1])
+	if get_tree().get_network_unique_id() == id:
+		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[0])
 	else:
 		players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 	#players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
@@ -62,7 +60,7 @@ remote func syncPlayer(id):
 	spawner.spawn()
 	
 remote func init_huds_everyone(n):
-	initialise_huds(1)
+	huds.append(initialise_hud("bottom_right"))
 
 func my_init():
 	if GameModes.multiplayer_online:
@@ -76,9 +74,9 @@ func my_init():
 			OS.delay_msec(1500)
 
 			initialise_walls()
-			initialise_players(len(get_tree().get_network_connected_peers())+1)
-			initialise_huds(1)
+			#initialise_huds(1)
 			rpc("init_huds_everyone", 1)
+			initialise_players(len(get_tree().get_network_connected_peers())+1)
 			initialise_lights(12)
 			initialise_spawners()
 	else:
@@ -105,7 +103,6 @@ func my_init():
 func initialise_huds(n_players):
 	for i in range(n_players):
 		huds.append(preload("res://HUD.tscn").instance())
-		huds[i].my_init(str(i+1))
 		var pos = Vector2(0, 0)
 		if i == 0:
 			pos = Vector2(0, maze.height - 1) * GlobalVariables.my_scale
@@ -117,6 +114,21 @@ func initialise_huds(n_players):
 			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
 		huds[i].set_position(pos - Vector2(0, 2))
 		$YSort.add_child(huds[i])
+		
+func initialise_hud(location):
+		var hud = preload("res://HUD.tscn").instance()
+		var pos = Vector2(0, 0)
+		if location == "bottom_left":
+			pos = Vector2(0, maze.height - 1) * GlobalVariables.my_scale
+		elif location == "bottom_right":
+			pos = Vector2(maze.width - 7, maze.height - 1) * GlobalVariables.my_scale
+		elif location == "top_left":
+			pos = Vector2(0, 0) * GlobalVariables.my_scale
+		elif location == "top_right":
+			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
+		hud.set_position(pos - Vector2(0, 2))
+		$YSort.add_child(hud)
+		return hud
 
 
 func initialise_walls():
@@ -192,8 +204,8 @@ func initialise_players(n_players):
 		else:
 			#IP
 			if GameModes.multiplayer_online:
-				if selfPeerID == ids[i]:
-					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), huds[1])
+				if get_tree().get_network_unique_id() == ids[i]:
+					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), initialise_hud("bottom_right"))
 				else:
 					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 			else:
