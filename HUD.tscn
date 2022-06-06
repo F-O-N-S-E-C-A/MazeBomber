@@ -61,16 +61,16 @@ custom_fonts/font = SubResource( 4 )
 text = "10"
 
 [node name="BigBombs" type="Control" parent="."]
-margin_left = 167.0
+margin_left = 112.0
 margin_top = 3.0
-margin_right = 223.0
+margin_right = 168.0
 margin_bottom = 34.0
 
 [node name="background" type="TextureRect" parent="BigBombs"]
 material = SubResource( 1 )
-margin_left = -61.0
+margin_left = -6.0
 margin_top = -17.0
-margin_right = 9.0
+margin_right = 64.0
 margin_bottom = 51.0
 texture = ExtResource( 3 )
 expand = true
@@ -78,8 +78,8 @@ stretch_mode = 5
 
 [node name="TextureRect" type="TextureRect" parent="BigBombs"]
 material = SubResource( 2 )
-margin_left = -57.0
-margin_right = -14.0
+margin_left = -2.0
+margin_right = 41.0
 margin_bottom = 36.0
 texture = ExtResource( 4 )
 expand = true
@@ -87,25 +87,25 @@ stretch_mode = 5
 
 [node name="Label" type="Label" parent="BigBombs"]
 material = SubResource( 3 )
-margin_left = -30.0
+margin_left = 25.0
 margin_top = 10.0
-margin_right = -6.0
+margin_right = 49.0
 margin_bottom = 26.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 4 )
 text = "10"
 
 [node name="LandMines" type="Control" parent="."]
-margin_left = 112.0
+margin_left = 57.0
 margin_top = 3.0
-margin_right = 168.0
+margin_right = 113.0
 margin_bottom = 34.0
 
 [node name="background" type="TextureRect" parent="LandMines"]
 material = SubResource( 1 )
-margin_left = -61.0
+margin_left = -6.0
 margin_top = -17.0
-margin_right = 9.0
+margin_right = 64.0
 margin_bottom = 51.0
 texture = ExtResource( 3 )
 expand = true
@@ -113,9 +113,9 @@ stretch_mode = 5
 
 [node name="TextureRect" type="TextureRect" parent="LandMines"]
 material = SubResource( 2 )
-margin_left = -49.0
+margin_left = 6.0
 margin_top = 4.0
-margin_right = -25.0
+margin_right = 30.0
 margin_bottom = 22.0
 texture = ExtResource( 2 )
 expand = true
@@ -123,25 +123,25 @@ stretch_mode = 5
 
 [node name="Label" type="Label" parent="LandMines"]
 material = SubResource( 3 )
-margin_left = -30.0
+margin_left = 25.0
 margin_top = 10.0
-margin_right = -6.0
+margin_right = 49.0
 margin_bottom = 26.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 4 )
 text = "10"
 
 [node name="c4" type="Control" parent="."]
-margin_left = 57.0
+margin_left = 2.0
 margin_top = 3.0
-margin_right = 113.0
+margin_right = 58.0
 margin_bottom = 34.0
 
 [node name="background" type="TextureRect" parent="c4"]
 material = SubResource( 1 )
-margin_left = -61.0
+margin_left = -6.0
 margin_top = -17.0
-margin_right = 9.0
+margin_right = 64.0
 margin_bottom = 51.0
 texture = ExtResource( 3 )
 expand = true
@@ -149,9 +149,9 @@ stretch_mode = 5
 
 [node name="TextureRect" type="TextureRect" parent="c4"]
 material = SubResource( 2 )
-margin_left = -48.0
+margin_left = 7.0
 margin_top = 9.0
-margin_right = -24.0
+margin_right = 31.0
 margin_bottom = 27.0
 texture = ExtResource( 5 )
 expand = true
@@ -159,9 +159,9 @@ stretch_mode = 5
 
 [node name="Label" type="Label" parent="c4"]
 material = SubResource( 3 )
-margin_left = -30.0
+margin_left = 25.0
 margin_top = 10.0
-margin_right = -6.0
+margin_right = 49.0
 margin_bottom = 26.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = SubResource( 4 )

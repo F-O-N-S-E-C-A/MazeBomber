@@ -80,10 +80,6 @@ func my_init():
 			initialise_lights(12)
 			initialise_spawners()
 	else:
-		if Settings.music_enabled:
-			$music.volume_db = Settings.music_volume - 25
-			$music.play()
-
 		maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 		maze.generate_maze()
 		var n_players = 2
@@ -93,7 +89,10 @@ func my_init():
 		initialise_players(n_players)
 		initialise_lights(12)
 		initialise_spawners()
-
+		
+	if Settings.music_enabled:
+			$music.volume_db = Settings.music_volume - 25
+			$music.play()
 
 	if Settings.fog_of_war:
 		$CanvasModulate.set_color(Color(0,0,0))
@@ -112,7 +111,7 @@ func initialise_huds(n_players):
 			pos = Vector2(0, 0) * GlobalVariables.my_scale
 		elif i == 3:
 			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
-		huds[i].set_position(pos - Vector2(0, 2))
+		huds[i].set_position(pos - Vector2(0, 1))
 		$YSort.add_child(huds[i])
 		
 func initialise_hud(location):
@@ -126,7 +125,9 @@ func initialise_hud(location):
 			pos = Vector2(0, 0) * GlobalVariables.my_scale
 		elif location == "top_right":
 			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
-		hud.set_position(pos - Vector2(0, 2))
+		elif location == "bottom_middle":
+			pos = Vector2(maze.width/2 - 3, maze.height - 1) * GlobalVariables.my_scale
+		hud.set_position(pos - Vector2(0, 1))
 		$YSort.add_child(hud)
 		return hud
 
@@ -205,7 +206,9 @@ func initialise_players(n_players):
 			#IP
 			if GameModes.multiplayer_online:
 				if get_tree().get_network_unique_id() == ids[i]:
-					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), initialise_hud("bottom_right"))
+					var hud = initialise_hud("bottom_right")
+					huds.append(hud)
+					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), hud)
 				else:
 					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 			else:

@@ -4,3 +4,4 @@ addons/
 *.md5
 *.pyc
 *.stex
+.DS_Store
