@@ -80,20 +80,19 @@ func my_init():
 			initialise_lights(12)
 			initialise_spawners()
 	else:
-		if Settings.music_enabled:
-			$music.volume_db = Settings.music_volume - 25
-			$music.play()
-
 		maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 		maze.generate_maze()
-		var n_players = 4
+		var n_players = 2
 
 		initialise_walls()
 		initialise_huds(n_players)
 		initialise_players(n_players)
 		initialise_lights(12)
 		initialise_spawners()
-
+		
+	if Settings.music_enabled:
+			$music.volume_db = Settings.music_volume - 25
+			$music.play()
 
 	if Settings.fog_of_war:
 		$CanvasModulate.set_color(Color(0,0,0))
