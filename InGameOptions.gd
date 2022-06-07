@@ -33,3 +33,9 @@ func _on_sound_effects_slider_value_changed(value):
 
 func _on_static_hud_toggled(button_pressed):
 	Settings.static_hud = button_pressed
+	get_parent().update_huds()
+	
+func save(pause):
+	Settings.save_settings()	
+	if !pause:
+		visible = false
