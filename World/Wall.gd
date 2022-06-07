@@ -45,7 +45,8 @@ func destroy():
 		get_parent().add_child(power_up)
 		if GameModes.multiplayer_online:
 			rpc("syncPowerUpSpawn", self.position, name)
-		
+	if GameModes.singlePlayer: 
+		WorldObjects.walls.erase(self)
 
 func set_texture():
 	if !border:

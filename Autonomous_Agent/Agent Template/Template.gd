@@ -17,18 +17,10 @@ var c4 = 0
 var c4_planted = null
 var model = false
 
-#===================================
-var directionHistory = [false, false, false, false]
-var playerCoord = Vector2(0, 0) # coordenates of player in the matrix
-var mapMatrix # matrix of current map
-#===================================
-
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
 
-onready var rng = RandomNumberGenerator.new()
-onready var last_time = OS.get_unix_time()
 onready var input_vector = Vector2.ZERO
 
 func setVec(x, y):
@@ -43,88 +35,8 @@ func my_init(k, image, otherPlayers):
 	$Sprite.set_texture(image)
 	speed_up_timer_init()
 
-func _ready():
-	rng.randomize()
-	input_vector.x = rng.randf_range(-10, 10)
-	input_vector.y = rng.randf_range(-10, 10)
-	input_vector = input_vector.normalized()
-
 func _physics_process(delta):
-	var time_now = OS.get_unix_time()
-	var ceiling = self.is_on_ceiling()
-
-	var blockX = self.position.x / (1312 / 41) - int(self.position.x / (1312 / 41))
-	var blockY = self.position.y / (736 / 23) - int(self.position.y / (736 / 23))
-	var my_array = [-1,1]
-
-	playerCoord = Vector2(int(self.position.x / (1312 / 41)), int(self.position.y / (736 / 23))) # Get player coordenates
-
-	#if mapMatrix[playerCoord.x][playerCoord.y-1] != null and typeof(mapMatrix[playerCoord.x][playerCoord.y-1]) != 2:
-	#	print(mapMatrix[playerCoord.x][playerCoord.y-1].health)
-	if !self.model:
-		if self.is_on_floor():
-			rng.randomize()
-			if not directionHistory[1]:
-				var rand_value = my_array[randi() % my_array.size()]
-				input_vector.x = rand_value
-				directionHistory[1] = true
-			directionHistory[2] = false
-			directionHistory[3] = false
-			input_vector.y = 0
-			input_vector = input_vector.normalized()
-		elif self.is_on_ceiling():
-			rng.randomize()
-			if not directionHistory[0]:
-				var rand_value = my_array[randi() % my_array.size()]
-				input_vector.x = rand_value
-				directionHistory[0] = true
-			directionHistory[2] = false
-			directionHistory[3] = false
-			input_vector.y = 0
-			input_vector = input_vector.normalized()
-		elif self.is_on_wall():
-			rng.randomize()
-			input_vector.x = 0
-			if input_vector.x < 0:
-				if not directionHistory[2]:
-					var rand_value = my_array[randi() % my_array.size()]
-					input_vector.y = rand_value
-					directionHistory[2] = true
-			else:
-				if not directionHistory[3]:
-					var rand_value = my_array[randi() % my_array.size()]
-					input_vector.y = rand_value
-					directionHistory[3] = true
-			directionHistory[0] = false
-			directionHistory[1] = false
-			input_vector = input_vector.normalized()
-
-		# Check for corridors in the middle of halls
-		if time_now - last_time > 0.5: # Let it cooldown...
-			if input_vector.x != 0: # If player walking horizontally
-				if typeof(mapMatrix[playerCoord.x][playerCoord.y+1]) == 2 or typeof(mapMatrix[playerCoord.x][playerCoord.y-1]) == 2 : # If the cell above or bellow the agent has no wall...
-					var rand_value = my_array[randi() % my_array.size()] # Generate random vector
-					input_vector.y = rand_value # Start Moving vertically
-					input_vector.x = 0 # Stop moving horizontally
-					input_vector = input_vector.normalized()
-					last_time = time_now # reset timer
-					directionHistory[2] = true
-					directionHistory[3] = true
-					directionHistory[0] = false
-					directionHistory[1] = false
-			if input_vector.y != 0: # If player walking vertically
-				if typeof(mapMatrix[playerCoord.x-1][playerCoord.y]) == 2 or typeof(mapMatrix[playerCoord.x+1][playerCoord.y]) == 2 : # If the cell above or bellow the agent has no wall...
-					var rand_value = my_array[randi() % my_array.size()] # Generate random vector
-					input_vector.y = 0 # Stop moving vertically
-					input_vector.x = rand_value # Start Moving horizontally
-					input_vector = input_vector.normalized()
-					last_time = time_now # reset timer
-					directionHistory[0] = true
-					directionHistory[1] = true
-					directionHistory[2] = false
-					directionHistory[3] = false
-
-
+	
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
 		animationTree.set("parameters/Run/blend_position", input_vector)

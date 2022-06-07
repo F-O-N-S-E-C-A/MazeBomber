@@ -14,11 +14,17 @@ var collision_color
 var exploding = false
 var collision_points = []
 
+func _ready():
+	if GameModes.singlePlayer:
+		WorldObjects.bombs.append(self)
+
 func _process(delta):
 	if exploding:
 		animationBomb.play("Explosion")
 		yield(animationBomb, "animation_finished")
 		self.queue_free()
+		if GameModes.singlePlayer:
+			WorldObjects.bombs.erase(self)
 	else:
 		time_ellapsed += delta
 		animationBomb.set_speed_scale(0.5 + .6*time_ellapsed)
@@ -63,6 +69,7 @@ func doExplosion():
 			collision_points.append(end_point)
 	play_explosion_sound()
 	update()
+	
 
 func calculate_color(deviation): # max damage = more redish, min damage = more yellowish
 	var s = sign(-deviation)

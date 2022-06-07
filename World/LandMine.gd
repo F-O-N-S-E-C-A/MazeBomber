@@ -16,6 +16,9 @@ var able_to_explode = false
 var to_explode = false
 var exploding = false
 
+func _ready():
+	if GameModes.singlePlayer:
+		WorldObjects.bombs.append(self)
 
 func _process(delta):
 	if to_explode:
@@ -24,6 +27,8 @@ func _process(delta):
 			animationBomb.play("Explosion")
 			yield(animationBomb, "animation_finished")
 			self.queue_free()
+			if GameModes.singlePlayer:
+				WorldObjects.bombs.erase(self)
 		else:
 			time_ellapsed += delta
 			animationBomb.set_speed_scale(0.5 + .6*time_ellapsed)

@@ -21,6 +21,7 @@ PowerUpRandomiser="*res://Singletons/Power_up_randomiser.gd"
 Settings="*res://Singletons/Settings.gd"
 GameModes="*res://Singletons/GameModes.gd"
 Network="*res://Multiplayer/Network.gd"
+WorldObjects="*res://Singletons/world_objects.gd"
 
 [display]
 

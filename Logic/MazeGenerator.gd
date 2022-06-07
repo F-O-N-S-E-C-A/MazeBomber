@@ -154,14 +154,14 @@ func initialise_walls():
 					wall.calculate_hp(1 - pos.distance_to(mid_point)/max_dist)
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
-
+				
 				if GameModes.multiplayer_online:
 					if get_tree().is_network_server():
 						$YSort.add_child(wall)
 						rpc("syncWall", maze.is_border_v2(i, j), pos, wall.health)
 				else:
 					$YSort.add_child(wall)
-
+					WorldObjects.walls.append(wall)
 func initialise_players(n_players):
 	var ids = []
 	if GameModes.multiplayer_online:
@@ -173,9 +173,11 @@ func initialise_players(n_players):
 	for i in range(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
-				players.append(preload("res://Autonomous_Agent/Autonomous_Agent.tscn").instance())
+				players.append(preload("res://Autonomous_Agent/Agent Template/Template.tscn").instance())
+				WorldObjects.agent = players[0]
 			else:
 				players.append(preload("res://Player/Player.tscn").instance())
+				WorldObjects.player = players[1]
 		else:
 			players.append(preload("res://Player/Player.tscn").instance())
 			if GameModes.multiplayer_online:
@@ -193,6 +195,7 @@ func initialise_players(n_players):
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
 				maze.remove_path(players[i].position)
 				$YSort.add_child(spawner)
+				WorldObjects.spawners.append(spawner)
 				spawner.spawn()
 			else:
 				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, "2", huds[i])
@@ -201,6 +204,7 @@ func initialise_players(n_players):
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
 				maze.remove_path(players[i].position)
 				$YSort.add_child(spawner)
+				WorldObjects.spawners.append(spawner)
 				spawner.spawn()
 		else:
 			#IP
@@ -251,6 +255,7 @@ func initialise_spawners():
 					rpc("syncSpawner", pos)
 			else:
 				$YSort.add_child(spawner)
+				WorldObjects.spawners.append(spawner)
 				spawner.spawn()
 
 func get_sprite_for_player(i):

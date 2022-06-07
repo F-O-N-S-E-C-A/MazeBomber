@@ -16,6 +16,10 @@ var to_explode = false
 var collision_points = []
 var exploded = false
 
+func _ready():
+	if GameModes.singlePlayer:
+		WorldObjects.bombs.append(self)
+
 func _process(delta):
 	if to_explode:
 		if !exploded:
@@ -25,6 +29,8 @@ func _process(delta):
 		yield(animationBomb, "animation_finished")
 		to_explode = false
 		self.queue_free()
+		if GameModes.singlePlayer:
+			WorldObjects.bombs.erase(self)
 		
 func my_init(owner):
 	self.set_scale(GlobalVariables.scale_vector)

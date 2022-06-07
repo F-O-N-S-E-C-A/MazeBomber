@@ -1,7 +1,7 @@
 extends Area2D
 
 const player = preload("res://Player/Player.gd")
-const agent = preload("res://Autonomous_Agent/Autonomous_Agent.gd")
+const agent = preload("res://Autonomous_Agent/Agent Template/Template.gd")
 var spawner
 var my_player
 
