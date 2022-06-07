@@ -282,3 +282,7 @@ func is_over():
 func hud_is_visible(is_visible):
 	for h in huds:
 		h.visible(is_visible)
+		
+func update_huds():
+	for h in huds:
+		h.updateLabels()
