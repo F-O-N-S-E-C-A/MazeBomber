@@ -44,6 +44,7 @@ func observations():
 	for b in bombs: 
 		for i in range(len(bomb_classes)):
 			if b is bomb_classes[i]:
+				obs[posX(b)][posY(b)][2] = obs[posX(b)][posY(b)][2] + bomb_encoding[i]
 	return obs
 	
 func observations_continuous():
