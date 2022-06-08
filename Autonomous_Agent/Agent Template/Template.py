@@ -22,3 +22,4 @@ class Autonomous_Agent(Control):
 		#print(self.get_parent().world_objects.bombs)
 		pass
 		
+		

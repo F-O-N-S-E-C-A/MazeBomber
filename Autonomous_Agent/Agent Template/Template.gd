@@ -17,6 +17,8 @@ var c4 = 0
 var c4_planted = null
 var model = false
 
+onready var world_objects = WorldObjects
+
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
