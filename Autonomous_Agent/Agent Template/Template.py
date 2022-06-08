@@ -6,6 +6,7 @@ import time
 
 import numpy as np
 
+
 @exposed
 class Autonomous_Agent(Control):
 	def getYSort(self):
@@ -13,13 +14,13 @@ class Autonomous_Agent(Control):
 		self.sortedNodes = sorted(self.nodes, key = lambda n: (n.position.x, n.position.y))
 	
 	def _ready(self):
-		self.world = self.owner.get_parent().owner
+		"""self.world = self.owner.get_parent().owner
 		self.mazeGenerator = self.world.get_child(1)
 		self.YSort = self.mazeGenerator.get_child(1)
-		print(self)
+		print(self)"""
 
 	def  _process(self, delta):
 		#print(self.get_parent().world_objects.bombs)
-		pass
+		self.get_parent().world_objects.observations()
 		
 		
