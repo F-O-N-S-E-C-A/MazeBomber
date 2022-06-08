@@ -3,7 +3,6 @@ extends StaticBody2D
 onready var animationBomb = $AnimationPlayer
 const wall = preload("Wall.gd")
 var player = load("res://Player/Player.gd")
-var agent = load("res://Autonomous_Agent/Autonomous_Agent.gd")
 const base_damage = 1200
 const base_radius = 10
 var time_ellapsed = 0
@@ -75,7 +74,7 @@ func doExplosion():
 		if collision != null && !collision.empty():
 			var collider = collision.get("collider")
 			collision_points.append(collision.get("position"))
-			if collider is wall || collider is player || collider is agent:
+			if collider is wall || collider is player || GameModes.is_an_agent(collider):
 				collider.take_damage(damage_per_ray)
 		else:
 			collision_points.append(end_point)

@@ -1,7 +1,6 @@
 extends Area2D
 
 const player = preload("res://Player/Player.gd")
-const agent = preload("res://Autonomous_Agent/Agent Template/Template.gd")
 var spawner
 var my_player
 
@@ -18,7 +17,7 @@ func pick_up(p):
 		p.updateHUD()
 
 func _on_BoomBox_body_entered(body):
-	if body is player || body is agent:
+	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
 
 		

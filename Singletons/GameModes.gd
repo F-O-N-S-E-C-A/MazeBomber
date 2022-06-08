@@ -1,5 +1,8 @@
 extends Node
 
+var agent_classes = [preload("res://Autonomous_Agent/Agent Template/Template.gd"), 
+preload("res://Autonomous_Agent/DeepQNet/Autonomous_Agent_DeepQNet.gd")]
+
 var singlePlayer: bool
 var multiplayer_online: bool
 var multiplayer_local: bool
@@ -23,3 +26,10 @@ func menu():
 	singlePlayer = false
 	multiplayer_online = false
 	multiplayer_local = false
+
+func is_an_agent(var body):
+	if singlePlayer:
+		for a in agent_classes:
+			if body is a:
+				return true
+	return false

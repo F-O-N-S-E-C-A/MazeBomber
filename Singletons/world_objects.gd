@@ -38,6 +38,7 @@ func observations():
 		for i in range(len(pickupable_classes)):
 			if p is pickupable_classes[i]:
 				obs[posX(p)][posY(p)][1] = i + 2
+				
 	for s in spawners:
 		obs[posX(s)][posY(s)][1] = 1
 		
@@ -45,6 +46,7 @@ func observations():
 		for i in range(len(bomb_classes)):
 			if b is bomb_classes[i]:
 				obs[posX(b)][posY(b)][2] = obs[posX(b)][posY(b)][2] + bomb_encoding[i]
+				#print(obs[posX(b)][posY(b)][2], " - (", posX(b), ",", posY(b), ")")
 	return obs
 	
 func observations_continuous():

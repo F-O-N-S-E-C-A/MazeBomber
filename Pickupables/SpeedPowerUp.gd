@@ -1,7 +1,6 @@
 extends Area2D
 
 var player = load("res://Player/Player.gd")
-const agent = preload("res://Autonomous_Agent/Agent Template/Template.gd")
 var receiver
 
 func _ready():
@@ -12,7 +11,7 @@ func pick_up(body):
 	body.play_powerup_sound()
 
 func _on_SpeedPowerUp_body_entered(body):
-	if body is player || body is agent:
+	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
 		queue_free()
 		WorldObjects.pickupables.erase(self)

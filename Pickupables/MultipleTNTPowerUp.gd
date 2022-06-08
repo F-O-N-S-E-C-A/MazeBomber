@@ -11,7 +11,7 @@ func pick_up(body):
 	body.play_powerup_sound()
 
 func _on_MultipleTNTPowerUp_body_entered(body):
-	if body is player || body is agent:
+	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
 		queue_free()
 		WorldObjects.pickupables.erase(self)
