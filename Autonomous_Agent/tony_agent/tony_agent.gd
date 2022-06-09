@@ -17,6 +17,8 @@ var c4 = 0
 var c4_planted = null
 var model = false
 
+onready var world_objects = WorldObjects
+
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
@@ -55,29 +57,29 @@ func _physics_process(delta):
 		
 	velocity = move_and_slide(velocity)
 
-func _process(_delta):
-	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
+func place_bomb(bomb):
+	if bomb == "TNT" && number_of_bombs != 0:
 		number_of_bombs -= 1
 		var test_bomb = preload("res://World/TNT.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
+	if bomb == "BIG_BOMB" && big_bombs != 0:
 		big_bombs -= 1
 		var test_bomb = preload("res://World/BigBomb.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if Input.is_action_just_released(keys[5]) && landMines != 0:
+	if bomb == "LAND_MINE" && landMines != 0:
 		landMines -= 1
 		var test_bomb = preload("res://World/LandMine.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if Input.is_action_just_released(keys[5]):
+	if bomb == "C4":
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null

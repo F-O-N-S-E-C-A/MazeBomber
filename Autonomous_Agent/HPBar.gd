@@ -17,12 +17,19 @@ func take_damage(damage):
 		health += shield
 		shield = 0
 	update()
+	if GameModes.singlePlayer:
+		WorldObjects.agent_hp = health
+		WorldObjects.agent_shield_hp = shield
 	return health <= 0
 
 func add_hp(hp):
 	health = min(100, hp + health)
 	update()
+	if GameModes.singlePlayer:
+		WorldObjects.agent_hp = health
 
 func add_shield(amount):
 	shield = min(100, shield + amount)
 	update()
+	if GameModes.singlePlayer:
+		WorldObjects.agent_shield_hp = shield

@@ -3,9 +3,15 @@ extends Node
 # spawners = 1 
 # pickupable = 2, 3, ...
 
-var walls = []
 var agent
+var agent_hp = 0
+var agent_shield_hp = 0
+
 var player
+var player_hp = 0
+var player_shield_hp = 0
+
+var walls = []
 var pickupables = []
 var bombs = []
 var spawners = []
@@ -27,7 +33,7 @@ preload("res://World/C4.gd")]
 
 var bomb_encoding = [1000, 100, 10, 1]
 
-func observations():
+func map_obs():
 	var obs = init_obs()
 	for w in walls: 
 		if w.border:
@@ -49,15 +55,17 @@ func observations():
 				#print(obs[posX(b)][posY(b)][2], " - (", posX(b), ",", posY(b), ")")
 	return obs
 	
-func observations_continuous():
-	return [observations(), 
-	[player.position[0], player.position[1]], 
-	[agent.position[0], agent.position[1]]]
+func player_obs_continuous():
+	return [	player.position[0], player.position[1],
+	agent.position[0], agent.position[1], 
+	agent_hp, player_hp, agent_shield_hp, player_shield_hp, 
+	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
 	
-func observations_discrete():
-	return [observations(), 
-	[posX(player), posY(player)], 
-	[posX(agent), posY(agent)]]
+func player_obs_discrete():
+	return [posX(player), posY(player), 
+	posX(agent), posY(agent), 
+	agent_hp, player_hp, agent_shield_hp, player_shield_hp, 
+	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
 	
 func init_obs():
 	var obs = []
@@ -67,6 +75,7 @@ func init_obs():
 			lst.append([0, 0, 0])
 		obs.append(lst)
 	return obs
+
 	
 func posX(p):
 	return int(p.position[0]/GlobalVariables.my_scale)

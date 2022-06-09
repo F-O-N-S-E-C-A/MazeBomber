@@ -4,7 +4,7 @@
 [ext_resource path="res://Autonomous_Agent/tony_agent/tony_agent.py" type="Script" id=2]
 [ext_resource path="res://World/images/Light.png" type="Texture" id=3]
 [ext_resource path="res://Sound/load.wav" type="AudioStream" id=4]
-[ext_resource path="res://Player/HPBar.gd" type="Script" id=5]
+[ext_resource path="res://Autonomous_Agent/HPBar.gd" type="Script" id=5]
 [ext_resource path="res://Sound/powerup.wav" type="AudioStream" id=6]
 
 [sub_resource type="CanvasItemMaterial" id=1]

@@ -55,6 +55,7 @@ func _physics_process(delta):
 		
 	velocity = move_and_slide(velocity)
 
+
 func _process(_delta):
 	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
 		number_of_bombs -= 1

@@ -1,7 +1,8 @@
 extends Node
 
-var agent_classes = [preload("res://Autonomous_Agent/Agent Template/Template.gd"), 
-preload("res://Autonomous_Agent/DeepQNet/Autonomous_Agent_DeepQNet.gd")]
+const agent_classes = [preload("res://Autonomous_Agent/Agent Template/Template.gd"), 
+preload("res://Autonomous_Agent/DeepQNet/Autonomous_Agent_DeepQNet.gd"), 
+preload("res://Autonomous_Agent/tony_agent/tony_agent.gd")]
 
 var singlePlayer: bool
 var multiplayer_online: bool
