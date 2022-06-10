@@ -3,7 +3,7 @@
 [ext_resource path="res://Sound/load.wav" type="AudioStream" id=1]
 [ext_resource path="res://Autonomous_Agent/Agent Template/Template.py" type="Script" id=2]
 [ext_resource path="res://World/images/Light.png" type="Texture" id=3]
-[ext_resource path="res://Player/HPBar.gd" type="Script" id=4]
+[ext_resource path="res://Autonomous_Agent/HPBar.gd" type="Script" id=4]
 [ext_resource path="res://Sound/powerup.wav" type="AudioStream" id=5]
 [ext_resource path="res://Autonomous_Agent/Agent Template/Template.gd" type="Script" id=6]
 

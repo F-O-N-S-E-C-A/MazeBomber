@@ -26,12 +26,46 @@ preload("res://Pickupables/MultipleTNTPowerUp.gd"),
 preload("res://Pickupables/ShieldPowerUp.gd"),
 preload("res://Pickupables/SpeedPowerUp.gd")]
 
+var pickupable_names = ["BigBombPowerUp",
+"c4PowerUp",
+"DamagePowerUp",
+"HPPowerUp",
+"LandMinePowerUp",
+"MultipleTNTPowerUp",
+"ShieldPowerUp",
+"SpeedPowerUp"]
+
 var bomb_classes = [preload("res://World/TNT.gd"), 
 preload("res://World/BigBomb.gd"),
 preload("res://World/LandMine.gd"),
 preload("res://World/C4.gd")]
 
+var bomb_names =  ["TNT", "BigBomb", "LandMine", "C4"]
+
 var bomb_encoding = [1000, 100, 10, 1]
+
+# for deliberative agent
+func map_matrix():
+	var obs = init_matrix()
+	for w in walls: 
+		if w.border:
+			obs[posX(w)][posY(w)]["walls"] = -1
+		else:
+			obs[posX(w)][posY(w)]["walls"] = w.health
+	for p in pickupables:
+		for i in range(len(pickupable_classes)):
+			if p is pickupable_classes[i]:
+				obs[posX(p)][posY(p)]["pickupables"] = pickupable_names[i]
+				
+	for s in spawners:
+		obs[posX(s)][posY(s)]["spawners"] = 1
+		
+	for b in bombs: 
+		for i in range(len(bomb_classes)):
+			if b is bomb_classes[i]:
+				obs[posX(b)][posY(b)]["bombs"].append(bomb_names[i])
+	return obs
+				
 
 func map_obs():
 	var obs = init_obs()
@@ -75,8 +109,33 @@ func init_obs():
 			lst.append([0, 0, 0])
 		obs.append(lst)
 	return obs
-
 	
+# for deliberative agent
+func init_matrix():
+	var obs = []
+	for x in GlobalVariables.my_width:
+		var lst = []
+		for y in GlobalVariables.my_height:
+			lst.append({"walls" : 0, "pickupables" : 0, "spawners" : 0, "bombs" : [], })
+		obs.append(lst)
+	return obs
+	
+func get_maze_mat():
+	var obs = []
+	for x in GlobalVariables.my_width:
+		var lst = []
+		for y in GlobalVariables.my_height:
+			lst.append(0)
+		obs.append(lst)
+		
+	for w in walls: 
+		obs[posX(w)][posY(w)] = 1
+		
+	return obs
+	
+func discretize(p):
+	return Vector2(int(p[0]/GlobalVariables.my_scale), int(p[1]/GlobalVariables.my_scale))
+
 func posX(p):
 	return int(p.position[0]/GlobalVariables.my_scale)
 

@@ -17,6 +17,8 @@ var c4 = 0
 var c4_planted = null
 var model = false
 
+onready var world_objects = WorldObjects
+
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
@@ -25,9 +27,6 @@ onready var rng = RandomNumberGenerator.new()
 onready var last_time = OS.get_unix_time()
 onready var input_vector = Vector2.ZERO
 
-func setVec(x, y):
-	input_vector.x = x
-	input_vector.y = y
 
 func my_init(k, image, otherPlayers):
 	self.set_scale(GlobalVariables.scale_vector)
@@ -38,11 +37,30 @@ func my_init(k, image, otherPlayers):
 	speed_up_timer_init()
 	
 func _ready():
-	rng.randomize()
-	input_vector.x = rng.randf_range(-10, 10)
-	input_vector.y = rng.randf_range(-10, 10)
+	
+	input_vector.x = 0
+	input_vector.y = 0
 	input_vector = input_vector.normalized()
+	
 
+
+func _process(delta):
+	#go_to(Vector2(GlobalVariables.my_width/2, GlobalVariables.my_height/2))
+	#print(Vector2(WorldObjects.player.position[0], WorldObjects.player.position[1]))
+	go_to(WorldObjects.discretize(WorldObjects.player.position))
+
+func go_to(pos):		
+	var path = MazeAlg.shortest_path(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  pos)
+	
+	while len(path) > 0:
+		var p = path.pop_front()
+		var vector = p - WorldObjects.discretize(position)
+		input_vector = vector.normalized()
+		if WorldObjects.discretize(position) - p == Vector2(0,0):
+			setVec(0,0)
+	
+	
+	
 func _physics_process(delta):
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
@@ -54,31 +72,50 @@ func _physics_process(delta):
 		velocity = velocity.move_toward(Vector2.ZERO, delta * FRICTION)
 		
 	velocity = move_and_slide(velocity)
+	
+func distance(vec1, vec2):
+	return vec1-vec2
+	
+func setVec(x, y):
+	input_vector.x = x
+	input_vector.y = y
+	
+func move(direction):
+	if direction == "UP":
+		setVec(0, -1)
+	elif direction == "DOWN":
+		setVec(0, 1)
+	elif direction == "LEFT":
+		setVec(-1, 0)
+	elif direction == "RIGHT":
+		setVec(1, 0)
+	elif direction == "STOP":
+		setVec(0, 0)
 
 
-func _process(_delta):
-	if Input.is_action_just_released(keys[4]) && number_of_bombs != 0:
+func place_bomb(bomb):
+	if bomb == "TNT" && number_of_bombs != 0:
 		number_of_bombs -= 1
 		var test_bomb = preload("res://World/TNT.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if Input.is_action_just_released(keys[5]) && big_bombs != 0:
+	if bomb == "BIG_BOMB" && big_bombs != 0:
 		big_bombs -= 1
 		var test_bomb = preload("res://World/BigBomb.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if Input.is_action_just_released(keys[5]) && landMines != 0:
+	if bomb == "LAND_MINE" && landMines != 0:
 		landMines -= 1
 		var test_bomb = preload("res://World/LandMine.tscn").instance()
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
 
-	if Input.is_action_just_released(keys[5]):
+	if bomb == "C4":
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null
@@ -126,3 +163,4 @@ func play_load_sound():
 	if Settings.sound_fx_enabled:
 		$load_fx.volume_db = Settings.sound_fx_volume - 25
 		$load_fx.play()
+		

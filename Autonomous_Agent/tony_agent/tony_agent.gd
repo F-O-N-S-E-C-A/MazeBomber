@@ -57,6 +57,7 @@ func _physics_process(delta):
 		
 	velocity = move_and_slide(velocity)
 
+
 func place_bomb(bomb):
 	if bomb == "TNT" && number_of_bombs != 0:
 		number_of_bombs -= 1
