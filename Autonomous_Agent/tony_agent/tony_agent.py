@@ -13,18 +13,16 @@ import time
 
 batch_size = 25
 
-
-
 @exposed
 class Autonomous_Agent(Control):
-	
 	def _ready(self):
+		self.ready = False
 		
+	def init(self):
+		self.state, self.player_obs = self.observations()
 		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY", "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
-		self.init = False
 		
-		
-		"""self.state_size = len(self.state)
+		self.state_size = len(self.state)
 		self.action_size = len(self.actions)
 		self.optimizer = Adam(learning_rate=0.01)
 		
@@ -37,29 +35,14 @@ class Autonomous_Agent(Control):
 		# Build networks
 		self.q_network = self.build_compile_model()
 		self.target_network = self.build_compile_model()
-		self.alighn_target_model()"""
+		self.alighn_target_model()
+		self.ready = True
 		
 		
 	def _process(self, delta):
-		if not self.init:
-			self.init = True
-			self.state, self.player_obs = self.observations()
-			self.state_size = len(self.state)
-			self.action_size = len(self.actions)
-			self.optimizer = Adam(learning_rate=0.01)
-			
-			self.expirience_replay = deque(maxlen=2000)
-			
-			# Initialize discount and exploration rate
-			self.gamma = 0.6
-			self.epsilon = 0.1
-			
-			# Build networks
-			self.q_network = self.build_compile_model()
-			self.target_network = self.build_compile_model()
-			self.alighn_target_model()
-		
-		
+		if not self.ready:
+			return
+		print(self.state)
 		action = self.act(self.state)
 		self.perform_action(action)
 		
@@ -71,6 +54,7 @@ class Autonomous_Agent(Control):
 		self.store(self.state, action, reward, next_state, terminated)
 		
 		self.state = next_state
+		self.player_obs = next_player_obs
 		
 		if terminated:
 			self.alighn_target_model()
@@ -78,7 +62,6 @@ class Autonomous_Agent(Control):
 		if len(self.expirience_replay) > batch_size:
 			self.retrain(batch_size)
 			self.alighn_target_model()
-		
 		
 		
 	def observations(self):
@@ -107,11 +90,9 @@ class Autonomous_Agent(Control):
 	def store(self, state, action, reward, next_state, terminated):
 		self.expirience_replay.append((state, action, reward, next_state, terminated))
 		
-		
 	def build_compile_model(self):
 		model = Sequential()
-		model.add(Embedding(self.state_size, 10, input_length=1))
-		model.add(Reshape((10,)))
+		model.add(Dense(self.state_size, input_shape=(self.state_size,)))
 		model.add(Dense(50, activation='relu'))
 		model.add(Dense(50, activation='relu'))
 		model.add(Dense(self.action_size, activation='linear'))
@@ -126,6 +107,8 @@ class Autonomous_Agent(Control):
 		if np.random.rand() <= self.epsilon:
 			return self.actions.sample()
 
+		print(state)
+		print(state.shape)
 		q_values = self.q_network.predict(state)
 		return np.argmax(q_values[0])
 		

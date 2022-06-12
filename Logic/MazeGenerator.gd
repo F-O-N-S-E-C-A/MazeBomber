@@ -89,6 +89,7 @@ func my_init():
 		initialise_players(n_players)
 		initialise_lights(12)
 		initialise_spawners()
+		WorldObjects.agent.get_child(0).init()
 		
 	if Settings.music_enabled:
 			$music.volume_db = Settings.music_volume - 25

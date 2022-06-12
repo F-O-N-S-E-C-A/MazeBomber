@@ -16,6 +16,7 @@ var pickupables = []
 var bombs = []
 var spawners = []
 
+export(bool) var ready = false
 
 var pickupable_classes = [preload("res://Pickupables/BigBombPowerUp.gd"),
 preload("res://Pickupables/c4PowerUp.gd"),
