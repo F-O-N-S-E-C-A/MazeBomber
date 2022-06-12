@@ -11,7 +11,7 @@ from tensorflow.keras.optimizers import Adam
 import numpy as np
 import time
 
-batch_size = 25
+batch_size = 1000
 
 @exposed
 class Autonomous_Agent(Control):
@@ -42,7 +42,7 @@ class Autonomous_Agent(Control):
 	def _process(self, delta):
 		if not self.ready:
 			return
-		print(self.state)
+			
 		action = self.act(self.state)
 		self.perform_action(action)
 		
@@ -60,7 +60,8 @@ class Autonomous_Agent(Control):
 			self.alighn_target_model()
 			
 		if len(self.expirience_replay) > batch_size:
-			self.retrain(batch_size)
+			print("retraining")
+			self.retrain(5)
 			self.alighn_target_model()
 		
 		
@@ -92,7 +93,7 @@ class Autonomous_Agent(Control):
 		
 	def build_compile_model(self):
 		model = Sequential()
-		model.add(Dense(self.state_size, input_shape=(self.state_size,)))
+		model.add(Dense(self.state_size, input_shape = (1,)))
 		model.add(Dense(50, activation='relu'))
 		model.add(Dense(50, activation='relu'))
 		model.add(Dense(self.action_size, activation='linear'))
@@ -105,10 +106,8 @@ class Autonomous_Agent(Control):
 		
 	def act(self, state):
 		if np.random.rand() <= self.epsilon:
-			return self.actions.sample()
+			return random.randint(0, len(self.actions) - 1)
 
-		print(state)
-		print(state.shape)
 		q_values = self.q_network.predict(state)
 		return np.argmax(q_values[0])
 		

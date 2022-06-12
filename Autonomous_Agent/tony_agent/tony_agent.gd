@@ -128,3 +128,6 @@ func play_load_sound():
 	if Settings.sound_fx_enabled:
 		$load_fx.volume_db = Settings.sound_fx_volume - 25
 		$load_fx.play()
+		
+func updateHUD():
+	pass
