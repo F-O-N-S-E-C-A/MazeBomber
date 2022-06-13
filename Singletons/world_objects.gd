@@ -131,7 +131,10 @@ func get_maze_mat():
 		
 	for w in walls: 
 		obs[posX(w)][posY(w)] = 1
-		
+	
+	for p in bombs:
+		obs[posX(p)][posY(p)] = 1	
+	
 	return obs
 	
 func discretize(p):

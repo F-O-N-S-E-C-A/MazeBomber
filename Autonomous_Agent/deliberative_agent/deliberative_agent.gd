@@ -14,10 +14,12 @@ var big_bombs = 0
 var landMines = 0
 var speed_up_timer
 var c4 = 0
+var c4_pos
 var c4_planted = null
 var model = false
 
 onready var world_objects = WorldObjects
+onready var maze_algorithms = MazeAlg
 
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
@@ -27,6 +29,14 @@ onready var rng = RandomNumberGenerator.new()
 onready var last_time = OS.get_unix_time()
 onready var input_vector = Vector2.ZERO
 
+func get_worldObjects():
+	return WorldObjects
+
+func updateHUD():
+	pass
+	
+func get_number_of_bombs():
+	return number_of_bombs
 
 func my_init(k, image, otherPlayers):
 	self.set_scale(GlobalVariables.scale_vector)
@@ -47,19 +57,20 @@ func _ready():
 func _process(delta):
 	#go_to(Vector2(GlobalVariables.my_width/2, GlobalVariables.my_height/2))
 	#print(Vector2(WorldObjects.player.position[0], WorldObjects.player.position[1]))
-	go_to(WorldObjects.discretize(WorldObjects.player.position))
+	#go_to(WorldObjects.discretize(WorldObjects.player.position))
+	pass
 
 func go_to(pos):		
 	var path = MazeAlg.shortest_path(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  pos)
-	
+	if len(path) == 0:
+		return 0
 	while len(path) > 0:
 		var p = path.pop_front()
 		var vector = p - WorldObjects.discretize(position)
 		input_vector = vector.normalized()
 		if WorldObjects.discretize(position) - p == Vector2(0,0):
 			setVec(0,0)
-	
-	
+	return 1
 	
 func _physics_process(delta):
 	if input_vector != Vector2.ZERO:
@@ -124,6 +135,7 @@ func place_bomb(bomb):
 			c4_planted = preload("res://World/C4.tscn").instance()
 			c4_planted.my_init(self)
 			c4_planted.set_position(self.position)
+			c4_pos = self.position
 			get_parent().add_child(c4_planted)
 
 func add_shield(shield):
