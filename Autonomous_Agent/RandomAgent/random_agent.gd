@@ -32,6 +32,9 @@ onready var input_vector = Vector2.ZERO
 func get_worldObjects():
 	return WorldObjects
 
+func get_globalVariables():
+	return GlobalVariables
+
 func updateHUD():
 	pass
 	
@@ -51,25 +54,24 @@ func _ready():
 	input_vector.x = 0
 	input_vector.y = 0
 	input_vector = input_vector.normalized()
-	
 
-
-func _process(delta):
-	#go_to(Vector2(GlobalVariables.my_width/2, GlobalVariables.my_height/2))
-	#print(Vector2(WorldObjects.player.position[0], WorldObjects.player.position[1]))
-	#go_to(WorldObjects.discretize(WorldObjects.player.position))
-	pass
+func distance_to(pos):
+	var path = MazeAlg.shortest_path(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  pos)
+	return len(path)
 
 func go_to(pos):		
 	var path = MazeAlg.shortest_path(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  pos)
+	
 	if len(path) == 0:
 		return 0
+	
 	while len(path) > 0:
 		var p = path.pop_front()
 		var vector = p - WorldObjects.discretize(position)
 		input_vector = vector.normalized()
 		if WorldObjects.discretize(position) - p == Vector2(0,0):
 			setVec(0,0)
+	
 	return 1
 	
 func _physics_process(delta):
