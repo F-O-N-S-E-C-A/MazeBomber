@@ -6,7 +6,7 @@ import time
 import math
 
 from tensorflow.keras import Model, Sequential
-from tensorflow.keras.layers import Dense, Embedding, Reshape
+from tensorflow.keras.layers import Dense, Embedding, Reshape, InputLayer
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import initializers
 import tensorflow as tf
@@ -186,7 +186,8 @@ class Autonomous_Agent(Control):
 		#model.add(Embedding(self.state_size, 10, input_length=1))
 		#model.add(Reshape((10,)))
 		#model.add(Reshape(target_shape=(self.state_size,), input_shape=(1,self.state_size)))
-		model.add(Dense(self.state_size, input_shape = (1,), kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros()))
+		#model.add(Dense(self.state_size, input_shape = (1, ), kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros()))
+		model.add(InputLayer(input_shape = (1, ), batch_size = 1))
 		model.add(Dense(units = 256, kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros(), activation='relu'))
 		model.add(Dense(units = 256, kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros(), activation='relu'))
 		model.add(Dense(units = 64, kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros(), activation='relu'))
