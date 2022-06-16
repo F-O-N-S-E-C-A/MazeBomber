@@ -89,7 +89,8 @@ func my_init():
 		initialise_players(n_players)
 		initialise_lights(12)
 		initialise_spawners()
-		WorldObjects.agent.get_child(0).init()
+		if GameModes.singlePlayer:
+			WorldObjects.agent.get_child(0).init()
 		
 	if Settings.music_enabled:
 			$music.volume_db = Settings.music_volume - 25
@@ -174,7 +175,8 @@ func initialise_players(n_players):
 	for i in range(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
-				players.append(preload("res://Autonomous_Agent/tony_agent/tony_agent.tscn").instance())
+				players.append(preload("res://Autonomous_Agent/imitation_learning/imitation_learning.tscn").instance())
+				#players.append(preload("res://Autonomous_Agent/tony_agent/tony_agent.tscn").instance())
 				WorldObjects.agent = players[0]
 			else:
 				players.append(preload("res://Player/Player.tscn").instance())
@@ -186,7 +188,8 @@ func initialise_players(n_players):
 
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
-		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
+		#players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
+		players[i].set_position(Vector2(60,60))
 
 		if GameModes.singlePlayer:
 			if i == 0:

@@ -9,6 +9,7 @@ from tensorflow.keras import Model, Sequential
 from tensorflow.keras.layers import Dense, Embedding, Reshape
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import initializers
+import tensorflow as tf
 
 import numpy as np
 import time
@@ -22,47 +23,78 @@ class Autonomous_Agent(Control):
 		
 	def init(self):
 		self.state, self.player_obs = self.observations()
-		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY", "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
+		self.state = self.obs_discrete()
+		#self.state = np.array([[self.get_parent().position.x, self.get_parent().position.y]])
+		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY"]#, "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
 		
 		self.state_size = len(self.state)
 		self.action_size = len(self.actions)
-		self.optimizer = Adam(learning_rate=0.01)
+		self.optimizer = Adam(learning_rate=0.1)
 		
-		self.expirience_replay = deque(maxlen=1000)
+		self.expirience_replay = deque(maxlen=500)
 		
 		# Initialize discount and exploration rate
-		self.gamma = 0.6
-		self.epsilon = 1
+		self.gamma = 0.99
+		self.epsilon = 0.5
 		
 		# Build networks
 		self.q_network = self.build_compile_model()
 		self.target_network = self.build_compile_model()
 		self.alighn_target_model()
 		self.ready = True
-		self.last_position = np.array([[self.get_parent().position.x, self.get_parent().position.y]])	
+		self.last_position = np.array([[self.get_parent().position.x, self.get_parent().position.y]])
 		self.position = np.array([[self.get_parent().position.x, self.get_parent().position.y]])
+		self.comulativeReward = 0
 		
 		#t = threading.Thread(target=self.constant_training)
 		#t.start()
-		
 		
 	def _process(self, delta):
 		if not self.ready:
 			return
 			
 		self.position = np.array([[self.get_parent().position.x, self.get_parent().position.y]])	
-			
+		
+		
 		action = self.act(self.state)
 		self.perform_action(action)
-		
+		'''
+		if self.n_steps <= 300:
+			action = self.get_parent().act()
+		elif self.n_steps <= 350:
+			action = self.act(self.state)
+			self.perform_action(action)
+		else:
+			self.n_steps = 0
+			self.get_parent().reset()
+			return
+		'''
 		next_state, next_player_obs = self.observations()
+		next_state = self.obs_discrete()
+		#next_state = np.array([[self.get_parent().position.x, self.get_parent().position.y]])
 		reward = self.calculate_reward(next_player_obs, self.player_obs) # index 4 and 5 
+		self.comulativeReward += reward
 		self.state = next_state
 		
 		terminated = False
+		if self.n_steps % 300 == 0:
+			terminated = True
+		#print(self.state, action, reward, next_state, terminated)
 		self.store(self.state, action, reward, next_state, terminated)
+		#DELETE START
+		'''
+		target = self.q_network.predict(self.state, verbose = 0)
+		if terminated:
+			target[0][action] = reward
+		else:
+			t = self.target_network.predict(next_state, verbose = 0)
+			target[0][action] = reward + self.gamma * np.amax(t)
 		
-		self.state = next_state
+		self.q_network.fit(self.state, target, epochs=1, verbose=0)
+		self.alighn_target_model()
+		'''
+		#DELETE END
+		
 		self.last_position = self.position
 		
 		self.player_obs = next_player_obs
@@ -70,26 +102,48 @@ class Autonomous_Agent(Control):
 		if terminated:
 			self.alighn_target_model()
 			
-		if self.n_steps == 100 and self.epsilon >=0:
-			self.alighn_target_model()
+		if self.n_steps % 100 == 0:
 			t = threading.Thread(target=self.retrain, args=(100,))
 			t.start()
 		
-		if self.n_steps == 100:
-			self.epsilon -= 0.075
+		if self.n_steps % 300 == 0:
 			self.get_parent().reset()
+			
+		if self.n_steps % 300 == 0:
+			self.epsilon = 0
+			print("Comulative Reward: ", self.comulativeReward)
+			
+		if self.n_steps % 350 == 0:
+			self.get_parent().reset()
+			self.epsilon = 0.5
 			self.n_steps = 0
-		
-		if self.epsilon < 0:
-			self.epsilon = 1
+			self.comulativeReward = 0
 			
 		self.n_steps += 1
+		#print(self.n_steps)
 		
 		
 	def observations(self):
 		map = np.array(self.get_parent().world_objects.map_obs()).flatten()
 		player = np.array(self.get_parent().world_objects.player_obs_continuous())
 		return (np.concatenate([map, player]), player)
+		
+	def obs_discrete(self):
+		agentPos = [self.get_parent().world_objects.posX(self.get_parent()), self.get_parent().world_objects.posY(self.get_parent())]
+		lst = []
+		obs = self.get_parent().world_objects.map_obs()
+		
+		offsets = [[-1, -1], [0, -1], [1, -1], [-1, 0], [0, 0], [1, 0], [-1, 1], [0, 1], [1 ,1]]
+		
+		for i in [0, 1, 2]:
+			for offset in offsets:
+				lst.append(obs[agentPos[0] + offset[0]][agentPos[1] + offset[1]][i])
+		
+		obs = self.get_parent().world_objects.player_obs_discrete()
+		
+		lst = np.append(lst, obs)
+		#print(lst)
+		return np.array(lst)
 
 	def perform_action(self, a):
 		if a == 0:
@@ -111,10 +165,10 @@ class Autonomous_Agent(Control):
 		
 		totalReward += (next[5] - old[5]) + (old[4] - next[4]) #health reward
 		distance = np.linalg.norm(self.position - self.last_position)
-		if distance <= 2:
-			totalReward -= 10 * 1/(distance + 0.01)
+		if distance <= 3:
+			totalReward -= 1
 		else:
-			totalReward += distance
+			totalReward += 5
 		
 		#playerPos = self.get_parent().world_objects.player.position
 		#agentPos = self.get_parent().world_objects.agent.position
@@ -129,10 +183,13 @@ class Autonomous_Agent(Control):
 		
 	def build_compile_model(self):
 		model = Sequential()
-		model.add(Dense(self.state_size, input_shape = (1,), kernel_initializer=initializers.HeUniform(), bias_initializer=initializers.Zeros()))
-		model.add(Dense(units = 8, kernel_initializer=initializers.HeUniform(), bias_initializer=initializers.Zeros(), activation='sigmoid'))
-		model.add(Dense(units = 8, kernel_initializer=initializers.HeUniform(), bias_initializer=initializers.Zeros(), activation='sigmoid'))
-		model.add(Dense(units = 8, kernel_initializer=initializers.HeUniform(), bias_initializer=initializers.Zeros(), activation='sigmoid'))
+		#model.add(Embedding(self.state_size, 10, input_length=1))
+		#model.add(Reshape((10,)))
+		#model.add(Reshape(target_shape=(self.state_size,), input_shape=(1,self.state_size)))
+		model.add(Dense(self.state_size, input_shape = (1,), kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros()))
+		model.add(Dense(units = 256, kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros(), activation='relu'))
+		model.add(Dense(units = 256, kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros(), activation='relu'))
+		model.add(Dense(units = 64, kernel_initializer=initializers.Zeros(), bias_initializer=initializers.Zeros(), activation='relu'))
 		model.add(Dense(self.action_size, activation='linear'))
 		
 		model.compile(loss='mse', optimizer=self.optimizer)
@@ -145,11 +202,11 @@ class Autonomous_Agent(Control):
 		if np.random.rand() <= self.epsilon:
 			return random.randint(0, len(self.actions) - 1)
 
-		q_values = self.q_network.predict(state, verbose = 1)
+		q_values = self.q_network.predict(state, verbose = 0)
+		print(q_values[0])
 		return np.argmax(q_values[0])
 		
 	def retrain(self, batch_size):
-		print("Training; Eps:", self.epsilon)
 		minibatch = random.sample(self.expirience_replay, batch_size)
 		
 		for state, action, reward, next_state, terminated in minibatch:
@@ -163,6 +220,7 @@ class Autonomous_Agent(Control):
 				target[0][action] = reward + self.gamma * np.amax(t)
 			
 			self.q_network.fit(state, target, epochs=1, verbose=0)
+		self.alighn_target_model()
 		return	
 	
 	

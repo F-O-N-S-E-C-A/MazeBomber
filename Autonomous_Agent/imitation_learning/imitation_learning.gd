@@ -19,6 +19,7 @@ var model = false
 
 onready var world_objects = WorldObjects
 
+onready var hpbar = $HPBar
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")
@@ -62,6 +63,23 @@ func _physics_process(delta):
 		
 	velocity = move_and_slide(velocity)
 
+func act():
+	input_vector.x = Input.get_action_strength(keys[0]) - Input.get_action_strength(keys[2])
+	input_vector.y = Input.get_action_strength(keys[1]) - Input.get_action_strength(keys[3])
+	input_vector = input_vector.normalized()
+	
+	if input_vector == Vector2.ZERO:
+		return 4
+	if input_vector.x >= input_vector.y:
+		if input_vector.x > 0:
+			return 3
+		else:
+			return 0
+	else:
+		if input_vector.y > 0:
+			return 1
+		else:
+			return 2
 
 func place_bomb(bomb):
 	if bomb == "TNT" && number_of_bombs != 0:

@@ -99,7 +99,7 @@ func player_obs_continuous():
 func player_obs_discrete():
 	return [posX(player), posY(player), 
 	posX(agent), posY(agent), 
-	agent_hp, player_hp, agent_shield_hp, player_shield_hp, 
+	agent.hpbar.health, player.hpbar.health, agent.hpbar.shield, player.hpbar.shield, 
 	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
 	
 func init_obs():
