@@ -47,8 +47,11 @@ class Autonomous_Agent(Control):
 		# if you have bomb
 		else:
 			retVal = self.agent.go_to(self.worldObjects.discretize(self.worldObjects.player.position))
-			if self.worldObjects.discretize(self.agent.position) - self.worldObjects.discretize(self.worldObjects.player.position) == Vector2(0,0):
+			distance = math.sqrt((self.agent.position.x - self.worldObjects.player.position.x)**2 + (self.agent.position.y - self.worldObjects.player.position.y)**2)
+			if distance < 100:
 				self.agent.place_bomb("TNT")
+			#if self.worldObjects.discretize(self.agent.position) - self.worldObjects.discretize(self.worldObjects.player.position) == Vector2(0,0):
+			#	self.agent.place_bomb("TNT")
 		if retVal == 0:
 			if(len(self.history) > 0):
 				self.agent.go_to(self.worldObjects.discretize(self.history[len(self.history) - 1]))

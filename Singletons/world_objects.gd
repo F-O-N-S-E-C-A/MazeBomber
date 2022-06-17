@@ -16,6 +16,9 @@ var pickupables = []
 var bombs = []
 var spawners = []
 
+var time_to_win = 0
+var start_counting = false
+
 export(bool) var ready = false
 
 var pickupable_classes = [preload("res://Pickupables/BigBombPowerUp.gd"),
@@ -45,7 +48,19 @@ var bomb_names =  ["TNT", "BigBomb", "LandMine", "C4"]
 
 var bomb_encoding = [1000, 100, 10, 1]
 
-# for deliberative agent
+func _process(delta):
+	if(start_counting):
+		time_to_win = time_to_win + delta
+		
+func start_count():
+	start_counting = true
+	
+func stop_count():
+	if start_counting:
+		print(" Time to win: " + String(time_to_win))
+	start_counting = false
+		
+# for rule based agents
 func map_matrix():
 	var obs = init_matrix()
 	for w in walls: 

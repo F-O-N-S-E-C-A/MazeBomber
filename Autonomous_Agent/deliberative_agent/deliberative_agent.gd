@@ -52,13 +52,8 @@ func _ready():
 	input_vector.y = 0
 	input_vector = input_vector.normalized()
 	
-
-
-func _process(delta):
-	#go_to(Vector2(GlobalVariables.my_width/2, GlobalVariables.my_height/2))
-	#print(Vector2(WorldObjects.player.position[0], WorldObjects.player.position[1]))
-	#go_to(WorldObjects.discretize(WorldObjects.player.position))
-	pass
+	WorldObjects.time_to_win = 0
+	WorldObjects.start_count()
 
 func go_to(pos):		
 	var path = MazeAlg.shortest_path(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  pos)
@@ -147,6 +142,7 @@ func add_hp(hp):
 func take_damage(damage):
 	var dead = $HPBar.take_damage(damage)
 	if dead:
+		WorldObjects.stop_count()
 		queue_free()
 		get_parent().get_parent().game_over()
 
