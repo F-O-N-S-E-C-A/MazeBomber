@@ -55,6 +55,10 @@ func _ready():
 	input_vector.y = 0
 	input_vector = input_vector.normalized()
 
+func _process(delta):
+	WorldObjects.time_to_win = 0
+	WorldObjects.start_count()
+
 func distance_to(pos):
 	var path = MazeAlg.shortest_path(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  pos)
 	return len(path)

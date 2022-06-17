@@ -25,7 +25,7 @@ class Autonomous_Agent(Control):
 		self.state, self.player_obs = self.observations()
 		self.state = self.obs_discrete()
 		#self.state = np.array([[self.get_parent().position.x, self.get_parent().position.y]])
-		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY"]#, "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
+		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY", "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
 		
 		self.state_size = len(self.state)
 		self.action_size = len(self.actions)
@@ -145,7 +145,11 @@ class Autonomous_Agent(Control):
 		#	for offset in offsets:
 		#		lst.append(obs[agentPos[0] + offset[0]][agentPos[1] + offset[1]][i])
 		for offset in offsets:
-			lst.append(obs[agentPos[0] + offset[0]][agentPos[1] + offset[1]][0])
+			w = obs[agentPos[0] + offset[0]][agentPos[1] + offset[1]][0]
+			if w > 0:
+				lst.append(1)
+			else:
+				lst.append(w)
 		return np.array(lst)
 		
 		obs = self.get_parent().world_objects.player_obs_discrete()
