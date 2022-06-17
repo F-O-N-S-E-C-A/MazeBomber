@@ -25,6 +25,12 @@ class Autonomous_Agent(Control):
 			distance = math.sqrt((self.agent.c4_pos.x - self.worldObjects.player.position.x)**2 + (self.agent.c4_pos.y - self.worldObjects.player.position.y)**2)
 			if distance < 50:
 				self.agent.place_bomb("C4")
+		# Land Mine handler
+		if(self.agent.landMines > 0):
+			self.agent.place_bomb("LAND_MINE")
+		# Big Bomb handler
+		if(self.agent.big_bombs > 0):
+			self.agent.place_bomb("BIG_BOMB")
 		# If it doesn't have bombs
 		if(self.agent.get_number_of_bombs() == 0):
 			MinDist = Vector2(sys.maxsize, sys.maxsize)
@@ -44,7 +50,8 @@ class Autonomous_Agent(Control):
 			if self.worldObjects.discretize(self.agent.position) - self.worldObjects.discretize(self.worldObjects.player.position) == Vector2(0,0):
 				self.agent.place_bomb("TNT")
 		if retVal == 0:
-			self.agent.go_to(self.worldObjects.discretize(self.history[len(self.history) - 1]))
+			if(len(self.history) > 0):
+				self.agent.go_to(self.worldObjects.discretize(self.history[len(self.history) - 1]))
 		else:
 			self.history.insert(0, self.agent.position)
 			if(len(self.history) > 200):
