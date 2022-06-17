@@ -24,8 +24,9 @@ func _on_about_button_pressed():
 
 
 func _on_single_player_button_button_down():
-	GameModes.singleplayer()
-	get_tree().change_scene("res://World.tscn")
+	#GameModes.singleplayer()
+	#get_tree().change_scene("res://World.tscn")
+	get_tree().change_scene("res://Single Player Menu.tscn")
 
 func _on_yes_pressed():
 	get_tree().quit()

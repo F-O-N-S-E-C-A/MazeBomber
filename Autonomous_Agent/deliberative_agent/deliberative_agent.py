@@ -12,6 +12,9 @@ import numpy as np
 @exposed
 class Autonomous_Agent(Control):
 	
+	def init(self):
+		pass
+	
 	def _ready(self):
 		self.worldObjects = self.get_parent().get_worldObjects()
 		self.agent = self.get_parent()

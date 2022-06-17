@@ -175,7 +175,8 @@ func initialise_players(n_players):
 	for i in range(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
-				players.append(preload("res://Autonomous_Agent/imitation_learning/imitation_learning.tscn").instance())
+				players.append(GameModes.agent)
+				#players.append(preload("res://Autonomous_Agent/imitation_learning/imitation_learning.tscn").instance())
 				#players.append(preload("res://Autonomous_Agent/tony_agent/tony_agent.tscn").instance())
 				WorldObjects.agent = players[0]
 			else:
@@ -188,8 +189,8 @@ func initialise_players(n_players):
 
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
-		#players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-		players[i].set_position(Vector2(60,60))
+		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
+		#players[i].set_position(Vector2(60,60))
 
 		if GameModes.singlePlayer:
 			if i == 0:
@@ -266,6 +267,8 @@ func get_sprite_for_player(i):
 	return load("res://Player/Player" + str(i+1) + ".png")
 
 func get_sprite_for_agent(i):
+	if GameModes.singlePlayer:
+		return GameModes.agentSprite
 	return load("res://Autonomous_Agent/AI" + str(i+1) + ".png")
 
 

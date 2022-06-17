@@ -11,6 +11,8 @@ import numpy as np
 
 @exposed
 class Autonomous_Agent(Control):
+	def init(self):
+		pass
 	def getYSort(self):
 		self.nodes = self.YSort.get_children()
 		self.sortedNodes = sorted(self.nodes, key = lambda n: (n.position.x, n.position.y))

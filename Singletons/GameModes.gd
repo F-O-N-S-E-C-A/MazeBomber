@@ -10,6 +10,9 @@ var singlePlayer: bool
 var multiplayer_online: bool
 var multiplayer_local: bool
 
+var agent
+var agentSprite
+
 func multiplayer_online():
 	singlePlayer = false
 	multiplayer_online = true

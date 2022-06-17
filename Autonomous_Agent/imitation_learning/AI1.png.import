@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/AI1_1.png-4fe5ad7c0c9d0746dc6fc68b7c19db94.stex"
+path="res://.import/AI1.png-d02bf4a233db0f576c6a821daee1f706.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Autonomous_Agent/imitation_learning/AI1_1.png"
-dest_files=[ "res://.import/AI1_1.png-4fe5ad7c0c9d0746dc6fc68b7c19db94.stex" ]
+source_file="res://Autonomous_Agent/imitation_learning/AI1.png"
+dest_files=[ "res://.import/AI1.png-d02bf4a233db0f576c6a821daee1f706.stex" ]
 
 [params]
 
