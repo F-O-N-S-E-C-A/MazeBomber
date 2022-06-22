@@ -25,6 +25,8 @@ var ownerID = 1
 var player: String
 var hud = null
 
+var opponent = null
+
 onready var hpbar = $HPBar
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree

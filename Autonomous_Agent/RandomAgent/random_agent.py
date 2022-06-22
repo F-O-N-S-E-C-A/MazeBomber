@@ -35,7 +35,7 @@ class Autonomous_Agent(Control):
 			return
 		
 		while g >= 20:
-			self.destination = Vector2(random.randint(self.worldObjects.discretize(self.worldObjects.agent.position).x - 5,self.worldObjects.discretize(self.worldObjects.agent.position).x + 5), random.randint(self.worldObjects.discretize(self.worldObjects.agent.position).y - 5,self.worldObjects.discretize(self.worldObjects.agent.position).x + 5))
+			self.destination = Vector2(random.randint(self.worldObjects.discretize(self.agent.position).x - 5,self.worldObjects.discretize(self.agent.position).x + 5), random.randint(self.worldObjects.discretize(self.agent.position).y - 5,self.worldObjects.discretize(self.agent.position).x + 5))
 			g = self.agent.distance_to(self.destination)
 			if self.agent.go_to(self.destination) == 0:
 				g = 20
@@ -68,10 +68,10 @@ class Autonomous_Agent(Control):
 		
 		self.agent.go_to(self.destination)
 		
-		if(self.worldObjects.discretize(self.worldObjects.agent.position) == self.destination):
+		if(self.worldObjects.discretize(self.agent.position) == self.destination):
 			self.randLocation()
 
-		if self.bombTimer >= self.nextBombTime or self.agent.distance_to(self.worldObjects.discretize(self.worldObjects.player.position)) <= 5: # If timer done, try to drop bomb 
+		if self.bombTimer >= self.nextBombTime or self.agent.distance_to(self.worldObjects.discretize(self.agent.opponent.position)) <= 5: # If timer done, try to drop bomb 
 			self.randBomb()
 			self.nextBombTime = random.randint(0,5)
 			self.bombTimer = 0

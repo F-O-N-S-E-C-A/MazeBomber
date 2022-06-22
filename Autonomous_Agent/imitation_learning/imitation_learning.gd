@@ -30,6 +30,8 @@ onready var input_vector = Vector2.ZERO
 
 var initialPosition = Vector2(0,0)
 
+var opponent = null
+
 func reset():
 	self.position = initialPosition
 	$HPBar.health = 100
@@ -39,7 +41,7 @@ func setVec(x, y):
 	input_vector.x = x
 	input_vector.y = y
 
-func my_init(k, image, otherPlayers):
+func my_init(k, image, otherPlayers, a, b):
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)

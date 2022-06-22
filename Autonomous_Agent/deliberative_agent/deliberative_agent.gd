@@ -29,6 +29,8 @@ onready var rng = RandomNumberGenerator.new()
 onready var last_time = OS.get_unix_time()
 onready var input_vector = Vector2.ZERO
 
+var opponent = null
+
 func get_worldObjects():
 	return WorldObjects
 
@@ -38,7 +40,7 @@ func updateHUD():
 func get_number_of_bombs():
 	return number_of_bombs
 
-func my_init(k, image, otherPlayers):
+func my_init(k, image, otherPlayers, a, b):
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
 		add_collision_exception_with(p)

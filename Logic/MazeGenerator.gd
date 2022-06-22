@@ -180,8 +180,11 @@ func initialise_players(n_players):
 				#players.append(preload("res://Autonomous_Agent/tony_agent/tony_agent.tscn").instance())
 				WorldObjects.agent = players[0]
 			else:
-				players.append(preload("res://Player/Player.tscn").instance())
+				#players.append(preload("res://Player/Player.tscn").instance())
+				players.append(GameModes.player)
 				WorldObjects.player = players[1]
+				players[0].opponent = players[1]
+				players[1].opponent = players[0]
 		else:
 			players.append(preload("res://Player/Player.tscn").instance())
 			if GameModes.multiplayer_online:
@@ -194,7 +197,7 @@ func initialise_players(n_players):
 
 		if GameModes.singlePlayer:
 			if i == 0:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i), players)
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i), players, 0, 0)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -264,6 +267,8 @@ func initialise_spawners():
 				spawner.spawn()
 
 func get_sprite_for_player(i):
+	if GameModes.singlePlayer:
+		return GameModes.playerSprite
 	return load("res://Player/Player" + str(i+1) + ".png")
 
 func get_sprite_for_agent(i):

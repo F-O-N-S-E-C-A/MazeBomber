@@ -25,7 +25,7 @@ class Autonomous_Agent(Control):
 		if(self.agent.c4 > 0):
 			self.agent.place_bomb("C4")
 		if(self.agent.c4_planted):
-			distance = math.sqrt((self.agent.c4_pos.x - self.worldObjects.player.position.x)**2 + (self.agent.c4_pos.y - self.worldObjects.player.position.y)**2)
+			distance = math.sqrt((self.agent.c4_pos.x - self.agent.opponent.position.x)**2 + (self.agent.c4_pos.y - self.agent.opponent.position.y)**2)
 			if distance < 50:
 				self.agent.place_bomb("C4")
 		# Land Mine handler
@@ -49,8 +49,8 @@ class Autonomous_Agent(Control):
 			retVal = self.agent.go_to(self.worldObjects.discretize(MinDist))
 		# if you have bomb
 		else:
-			retVal = self.agent.go_to(self.worldObjects.discretize(self.worldObjects.player.position))
-			distance = math.sqrt((self.agent.position.x - self.worldObjects.player.position.x)**2 + (self.agent.position.y - self.worldObjects.player.position.y)**2)
+			retVal = self.agent.go_to(self.worldObjects.discretize(self.agent.opponent.position))
+			distance = math.sqrt((self.agent.position.x - self.agent.opponent.position.x)**2 + (self.agent.position.y - self.agent.opponent.position.y)**2)
 			if distance < 100:
 				self.agent.place_bomb("TNT")
 			#if self.worldObjects.discretize(self.agent.position) - self.worldObjects.discretize(self.worldObjects.player.position) == Vector2(0,0):

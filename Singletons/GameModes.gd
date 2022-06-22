@@ -12,6 +12,8 @@ var multiplayer_local: bool
 
 var agent
 var agentSprite
+var player
+var playerSprite
 
 func multiplayer_online():
 	singlePlayer = false
