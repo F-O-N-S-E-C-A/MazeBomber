@@ -20,6 +20,8 @@ var network_input_vector = Vector2.ZERO
 var input_vector = Vector2.ZERO
 var position_x = 0
 var position_y = 0
+var last_x = 0
+var last_y = 0
 var selfPeerID
 var ownerID = 1
 var player: String
@@ -81,9 +83,13 @@ func _physics_process(delta):
 		self.position.x = position_x
 		self.position.y = position_y
 
-	if selfPeerID == ownerID:
+	if selfPeerID == ownerID && (self.position.x != last_x || self.position.y != last_y):
 		#if input_vector != Vector2.ZERO:
-		rpc("syncPosition", self.position.x, self.position.y, input_vector)
+		rpc_unreliable("syncPosition", self.position.x, self.position.y, input_vector)
+	
+	last_x = self.position.x
+	last_y = self.position.y
+	
 
 remote func syncTNT(p):
 	var test_bomb = preload("res://World/TNT.tscn").instance()

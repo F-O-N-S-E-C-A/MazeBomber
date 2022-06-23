@@ -19,4 +19,5 @@ shape = SubResource( 1 )
 [node name="Sprite" type="Sprite" parent="."]
 material = SubResource( 2 )
 texture = ExtResource( 1 )
+
 [connection signal="body_entered" from="." to="." method="_on_BoomBox_body_entered"]

@@ -43,6 +43,7 @@ func save_settings():
 	file.close()
 	
 func load_settings():
+	#save_settings()
 	var file = File.new()
 	if not file.file_exists(save_settings_file):
 		data = {

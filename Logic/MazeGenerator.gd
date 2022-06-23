@@ -2,7 +2,7 @@ extends Node2D
 
 var maze
 var players = []
-var selfPeerID
+var selfPeerID = null
 var huds = []
 
 func _ready():
@@ -66,7 +66,7 @@ func my_init():
 	if GameModes.multiplayer_online:
 		if !get_tree().is_network_server():
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
-			maze.generate_maze()
+			#maze.generate_maze()
 		else:
 			maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 			maze.generate_maze()
@@ -208,9 +208,9 @@ func initialise_players(n_players):
 				if get_tree().get_network_unique_id() == ids[i]:
 					var hud = initialise_hud("bottom_right")
 					huds.append(hud)
-					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), hud)
+					players[i].my_init(get_keys_for_player(1), get_sprite_for_player(i%2), players, str(i+1), hud)
 				else:
-					players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
+					players[i].my_init(get_keys_for_player(1), get_sprite_for_player(i%2), players, str(i+1), null)
 			else:
 				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, str(i+1), huds[i])
 			players[i].set_scale(GlobalVariables.scale_vector)
