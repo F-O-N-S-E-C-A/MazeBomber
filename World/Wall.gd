@@ -21,6 +21,9 @@ func take_damage(damage):
 		if new_health < 0:
 			health = new_health
 			destroy()
+			if GameModes.multiplayer_online:
+				if !get_tree().is_network_server():
+					return
 			queue_free()
 		else:
 			health = new_health
@@ -31,6 +34,9 @@ remote func syncPowerUpSpawn(pos, name):
 	power_up.set_position(pos)
 	power_up.set_scale(GlobalVariables.scale_vector)
 	get_parent().add_child(power_up)
+	
+remote func syncWallDestruction():
+	queue_free()
 
 func destroy():
 	if GameModes.multiplayer_online:
@@ -45,6 +51,8 @@ func destroy():
 		get_parent().add_child(power_up)
 		if GameModes.multiplayer_online:
 			rpc("syncPowerUpSpawn", self.position, name)
+	if GameModes.multiplayer_online:
+		rpc("syncWallDestruction")
 		
 
 func set_texture():
