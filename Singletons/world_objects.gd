@@ -74,7 +74,7 @@ func map_matrix():
 				obs[posX(p)][posY(p)]["pickupables"] = pickupable_names[i]
 				
 	for s in spawners:
-		obs[posX(s)][posY(s)]["spawners"] = 1
+		obs[posX(s)][posY(s)]["spawners"] = s
 		
 	for b in bombs: 
 		for i in range(len(bomb_classes)):
@@ -132,7 +132,7 @@ func init_matrix():
 	for x in GlobalVariables.my_width:
 		var lst = []
 		for y in GlobalVariables.my_height:
-			lst.append({"walls" : 0, "pickupables" : 0, "spawners" : 0, "bombs" : [], })
+			lst.append({"walls" : 0, "pickupables" : 0, "spawners" : null, "bombs" : [], })
 		obs.append(lst)
 	return obs
 	

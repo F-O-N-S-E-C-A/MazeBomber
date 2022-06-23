@@ -89,8 +89,8 @@ func my_init():
 		initialise_players(n_players)
 		initialise_lights(12)
 		initialise_spawners()
-		if GameModes.singlePlayer:
-			WorldObjects.agent.get_child(0).init()
+		#if GameModes.singlePlayer:
+			#WorldObjects.agent.get_child(0).init()
 		
 	if Settings.music_enabled:
 			$music.volume_db = Settings.music_volume - 25
@@ -189,12 +189,13 @@ func initialise_players(n_players):
 
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
+		
 		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 		#players[i].set_position(Vector2(60,60))
 
 		if GameModes.singlePlayer:
 			if i == 0:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(i), players)
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(0), players)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -267,9 +268,7 @@ func get_sprite_for_player(i):
 	return load("res://Player/Player" + str(i+1) + ".png")
 
 func get_sprite_for_agent(i):
-	if GameModes.singlePlayer:
-		return GameModes.agentSprite
-	return load("res://Autonomous_Agent/AI" + str(i+1) + ".png")
+	return load("res://Autonomous_Agent/AI1" + ".png")
 
 
 func get_keys_for_player(i):

@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://Interface/Pause.gd" type="Script" id=1]
 [ext_resource path="res://Logic/MazeGenerator.gd" type="Script" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://Interface/gameover.png" type="Texture" id=5]
 [ext_resource path="res://Interface/restart_button.png" type="Texture" id=6]
 [ext_resource path="res://Interface/restart_button_pressed.png" type="Texture" id=7]
-[ext_resource path="res://TextureButton.gd" type="Script" id=8]
 [ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=9]
 [ext_resource path="res://GameOver.gd" type="Script" id=10]
 [ext_resource path="res://Sound/gameover.wav" type="AudioStream" id=11]
@@ -264,7 +263,6 @@ margin_bottom = 694.0
 rect_scale = Vector2( 3, 3 )
 texture_normal = ExtResource( 6 )
 texture_pressed = ExtResource( 7 )
-script = ExtResource( 8 )
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MazeGenerator/GameOver"]
 margin_left = 468.0

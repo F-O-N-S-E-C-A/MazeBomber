@@ -17,6 +17,9 @@ var c4 = 0
 var c4_pos
 var c4_planted = null
 var model = false
+var history = []
+
+var target_point = null
 
 onready var world_objects = WorldObjects
 onready var maze_algorithms = MazeAlg
@@ -37,6 +40,7 @@ func updateHUD():
 	
 func get_number_of_bombs():
 	return number_of_bombs
+	
 
 func my_init(k, image, otherPlayers):
 	self.set_scale(GlobalVariables.scale_vector)
@@ -54,6 +58,75 @@ func _ready():
 	
 	WorldObjects.time_to_win = 0
 	WorldObjects.start_count()
+	
+func _process(_delta):
+	
+	if c4 > 0:
+		place_bomb("C4")
+	if c4_planted:
+		if euc_distance(c4_pos, WorldObjects.player.position) < 50:
+			place_bomb("C4")
+	if landMines > 0:
+		place_bomb("LAND_MINE")
+	
+	for p in WorldObjects.pickupables:
+		go_to(WorldObjects.discretize(p.position))
+		return
+	
+	"""for b in WorldObjects.bombs:
+		if euc_distance(b.position, position) < 20:
+			input_vector = position - b.position"""
+	
+		
+	# If it doesn't have bombs
+	var retVal = 1
+	if number_of_bombs == 0:
+		var spawner = MazeAlg.closest_spawner(WorldObjects.map_matrix(), WorldObjects.discretize(position))
+		if spawner != null:
+			retVal = go_to(spawner)
+		
+	else:
+		if is_instance_valid(WorldObjects.player):
+			retVal = go_to(WorldObjects.discretize(WorldObjects.player.position))
+			if euc_distance(position, WorldObjects.player.position) < 50:
+				place_bomb("TNT")
+			
+	if big_bombs > 0:
+		if is_instance_valid(WorldObjects.player):
+			retVal = go_to(WorldObjects.discretize(WorldObjects.player.position))
+			if euc_distance(position, WorldObjects.player.position) < 50:
+				place_bomb("BIG_BOMB")
+				
+	if retVal == 0:
+		explore()
+		"""if(len(history) > 0):
+			go_to(WorldObjects.discretize(history[len(history) - 1]))
+		else:
+			explore()"""
+	else:
+		history.insert(0, position)
+		if(len(history) > 200):
+			history.pop_back()
+
+	
+func explore():
+	if target_point == null:
+		target_point = MazeAlg.closest_coordinate(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  WorldObjects.discretize(WorldObjects.player.position))
+	else:
+		go_to(target_point)
+			
+		if euc_distance(WorldObjects.discretize(position), target_point) < 0.5:
+			var spawner = MazeAlg.closest_spawner(WorldObjects.map_matrix(), WorldObjects.discretize(position))
+			if spawner != null:
+				go_to(spawner)
+				if euc_distance(spawner, WorldObjects.discretize(position)) > 1:
+					place_bomb("TNT")
+			target_point = null
+			
+
+func euc_distance(p1, p2):
+	return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2))
+	
 
 func go_to(pos):		
 	var path = MazeAlg.shortest_path(WorldObjects.get_maze_mat(), WorldObjects.discretize(position),  pos)
@@ -100,6 +173,11 @@ func move(direction):
 
 
 func place_bomb(bomb):
+	
+	for b in WorldObjects.bombs:
+		if euc_distance(b.position, position) < 70:
+			return 
+	
 	if bomb == "TNT" && number_of_bombs != 0:
 		number_of_bombs -= 1
 		var test_bomb = preload("res://World/TNT.tscn").instance()
