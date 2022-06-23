@@ -51,7 +51,7 @@ class Autonomous_Agent(Control):
 		else:
 			retVal = self.agent.go_to(self.worldObjects.discretize(self.agent.opponent.position))
 			distance = math.sqrt((self.agent.position.x - self.agent.opponent.position.x)**2 + (self.agent.position.y - self.agent.opponent.position.y)**2)
-			if distance < 100:
+			if distance < 50:
 				self.agent.place_bomb("TNT")
 			#if self.worldObjects.discretize(self.agent.position) - self.worldObjects.discretize(self.worldObjects.player.position) == Vector2(0,0):
 			#	self.agent.place_bomb("TNT")
