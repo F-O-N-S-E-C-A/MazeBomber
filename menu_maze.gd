@@ -1,6 +1,7 @@
 extends Node2D
 
 var maze
+var players = []
 
 func _ready():
 	randomize()
@@ -76,7 +77,6 @@ func initialise_player():
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 	player.set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-	var players = []
 	players.append(preload("res://Player/Player.tscn").instance())
 	players.append(player)
 	player.my_init(get_keys_for_player(1), get_sprite_for_player(1), players, "2", null)
