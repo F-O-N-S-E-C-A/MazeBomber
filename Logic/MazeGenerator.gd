@@ -45,7 +45,6 @@ remote func syncSpawner(pos):
 	spawner.spawn()
 
 remote func syncPlayer(id):
-	print("Player " + str(id) + " syncing")
 	players.append(preload("res://Player/Player.tscn").instance())
 	var i = len(players) - 1
 	var dir = Vector2(i % 2, abs(i % 2 - i / 2))
