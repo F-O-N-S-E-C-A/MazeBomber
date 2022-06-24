@@ -37,13 +37,16 @@ func _on_BoomBox_body_entered(body):
 
 		
 func _process(_delta):
-	for player in get_parent().get_parent().get_parent().players:
-		if overlaps_body(player):
-			if GameModes.multiplayer_online:
-				if get_tree().get_network_unique_id() == player.ownerID:
-					pick_up(player)
-			else:
-				pick_up(player)
+	if GameModes.multiplayer_online:
+		var p = get_parent().get_parent().getPlayerByID(get_tree().get_network_unique_id())
+		
+		if overlaps_body(p):
+			pick_up(p)
+	else:
+		for p in get_parent().get_parent().get_parent().players:
+			if overlaps_body(p):
+				pick_up(p)
+	
 
 
 func _on_BoomBox_body_exited(body):
