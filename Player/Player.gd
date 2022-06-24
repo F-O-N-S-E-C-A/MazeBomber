@@ -13,7 +13,7 @@ var number_of_bombs = 1
 var big_bombs = 0
 var landMines = 0
 var speed_up_timer
-var c4 = 0
+var c4 = 10
 var c4_planted = null
 var updateFromNetwork = false
 var network_input_vector = Vector2.ZERO
@@ -110,16 +110,16 @@ remote func syncLandMine(p):
 	get_parent().add_child(test_bomb)
 
 remote func syncC4(p):
-	if ownerID == get_tree().get_rpc_sender_id():
-		if(c4_planted != null):
-			c4_planted.to_explode = true
-			c4_planted = null
-		if(c4_planted == null && c4 > 0):
-			c4 -= 1
-			c4_planted = preload("res://World/C4.tscn").instance()
-			c4_planted.my_init(self)
-			c4_planted.set_position(self.position)
-			get_parent().add_child(c4_planted)
+	if(c4_planted != null):
+		c4_planted.to_explode = true
+		c4_planted = null
+	elif(c4_planted == null && c4 > 0):
+		c4 -= 1
+		c4_planted = preload("res://World/C4.tscn").instance()
+		c4_planted.my_init(self)
+		c4_planted.set_position(self.position)
+		get_parent().add_child(c4_planted)
+	play_place_bomb_sound()
 
 func _process(_delta):
 	if GameModes.multiplayer_online:
@@ -163,13 +163,14 @@ func _process(_delta):
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null
+			rpc("syncC4", self.position)
 		elif(c4_planted == null && c4 > 0):
 			c4 -= 1
 			c4_planted = preload("res://World/C4.tscn").instance()
 			c4_planted.my_init(self)
 			c4_planted.set_position(self.position)
 			get_parent().add_child(c4_planted)
-		rpc("syncC4", self.position)
+			rpc("syncC4", self.position)
 
 		updateHUD()
 		play_place_bomb_sound()

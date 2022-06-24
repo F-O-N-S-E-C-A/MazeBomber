@@ -15,9 +15,18 @@ func calculate_hp(distance_to_middle):
 	set_texture()
 	pass
 
+remote func syncWallHP(hp):
+	health = hp
+	set_texture()
+
 func take_damage(damage):
 	if !border && health > 0:
 		var new_health = health - damage
+		if GameModes.multiplayer_online:
+			if get_tree().is_network_server():
+				rpc("syncWallHP", new_health)
+			else: 
+				return
 		if new_health < 0:
 			health = new_health
 			destroy()
