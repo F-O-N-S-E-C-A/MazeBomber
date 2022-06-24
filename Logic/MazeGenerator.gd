@@ -11,6 +11,12 @@ func _ready():
 
 	if GameModes.multiplayer_online:
 		selfPeerID = get_tree().get_network_unique_id()
+		
+func getPlayerByID(id):
+	for player in players:
+		if player.ownerID == id:
+			return player
+	return null
 
 remote func syncWall(b, pos, hp):
 	var wall = preload("res://World/Wall.tscn").instance()

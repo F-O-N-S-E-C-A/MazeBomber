@@ -23,6 +23,18 @@ func _on_c4PowerUp_body_entered(body):
 				pick_up(body)
 			return
 	
+	if body is player || body is agent:
+		pick_up(body)
+
+
+func _on_c4PowerUp_body_exited(body):
+	if GameModes.multiplayer_online:
+		if get_tree().get_network_unique_id() != body.ownerID:
+			return
+		else:
+			if body is player || body is agent:
+				pick_up(body)
+			return
 	
 	if body is player || body is agent:
 		pick_up(body)

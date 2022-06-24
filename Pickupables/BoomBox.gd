@@ -39,3 +39,16 @@ func _on_BoomBox_body_entered(body):
 #func _process(_delta):
 #	if my_player != null && overlaps_body(my_player):
 #		pick_up(my_player)
+
+
+func _on_BoomBox_body_exited(body):
+	if GameModes.multiplayer_online:
+		if get_tree().get_network_unique_id() != body.ownerID:
+			return
+		else:
+			if body is player || body is agent:
+				pick_up(body)
+			return
+			
+	if body is player || body is agent:
+		pick_up(body)
