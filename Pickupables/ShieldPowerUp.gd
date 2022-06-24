@@ -17,12 +17,13 @@ func pick_up(body):
 
 func _on_ShieldPowerUp_body_entered(body):
 	if GameModes.multiplayer_online:
-		if get_tree().get_network_unique_id() != body.ownerID:
-			return
-		else:
-			if body is player || body is agent:
+		if body is player || body is agent:
+			if get_tree().get_network_unique_id() != body.ownerID:
+				return
+			else:
 				pick_up(body)
-			return
+				return
+		return
 	
 	if body is player || body is agent:
 		pick_up(body)
@@ -30,12 +31,13 @@ func _on_ShieldPowerUp_body_entered(body):
 
 func _on_ShieldPowerUp_body_exited(body):
 	if GameModes.multiplayer_online:
-		if get_tree().get_network_unique_id() != body.ownerID:
-			return
-		else:
-			if body is player || body is agent:
+		if body is player || body is agent:
+			if get_tree().get_network_unique_id() != body.ownerID:
+				return
+			else:
 				pick_up(body)
-			return
+				return
+		return
 	
 	if body is player || body is agent:
 		pick_up(body)
