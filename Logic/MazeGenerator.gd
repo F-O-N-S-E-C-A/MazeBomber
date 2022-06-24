@@ -103,6 +103,16 @@ func my_init():
 		$CanvasModulate.set_color(Color(0,0,0))
 	else:
 		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
+		
+	if GameModes.multiplayer_online:
+		if get_tree().is_network_server():
+			rpc("syncFogOfWar", Settings.fog_of_war)
+
+remote func syncFogOfWar(b):
+	if b:
+		$CanvasModulate.set_color(Color(0,0,0))
+	else:
+		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
 
 func initialise_huds(n_players):
 	for i in range(n_players):
