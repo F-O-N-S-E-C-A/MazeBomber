@@ -32,7 +32,20 @@ func _process(delta):
 				play_explosion_sound()
 				doExplosion()
 	
+remote func syncLandMineExplosion():
+	if able_to_explode:
+		to_explode = true
+		$Sprite.visible = true
+	
 func _on_land_mine_body_shape_entered(body_rid, body, body_shape_index, local_shape_index):
+	if GameModes.multiplayer_online:
+		if get_tree().is_network_server():
+			if able_to_explode:
+				to_explode = true
+				$Sprite.visible = true
+				rpc("syncLandMineExplosion")
+		else:
+			return
 	if able_to_explode:
 		to_explode = true
 		$Sprite.visible = true
