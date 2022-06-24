@@ -53,9 +53,9 @@ remote func syncPlayer(id):
 
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 	if get_tree().get_network_unique_id() == id:
-		players[i].my_init(get_keys_for_player(1), get_sprite_for_player(i%2), players, str(i+1), huds[0])
+		players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), huds[0])
 	else:
-		players[i].my_init(get_keys_for_player(1), get_sprite_for_player(i%2), players, str(i+1), null)
+		players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), null)
 	#players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 	players[i].set_scale(GlobalVariables.scale_vector)
 	$YSort.add_child(players[i])
@@ -213,9 +213,9 @@ func initialise_players(n_players):
 				if get_tree().get_network_unique_id() == ids[i]:
 					var hud = initialise_hud("bottom_right")
 					huds.append(hud)
-					players[i].my_init(get_keys_for_player(1), get_sprite_for_player(i%2), players, str(i+1), hud)
+					players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), hud)
 				else:
-					players[i].my_init(get_keys_for_player(1), get_sprite_for_player(i%2), players, str(i+1), null)
+					players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), null)
 			else:
 				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, str(i+1), huds[i])
 			players[i].set_scale(GlobalVariables.scale_vector)
@@ -264,7 +264,16 @@ func get_sprite_for_player(i):
 func get_sprite_for_agent(i):
 	return load("res://Autonomous_Agent/AI" + str(i+1) + ".png")
 
-
+func get_keys_for_multiplayer(i):
+	return [i + "_right",
+			i + "_down",
+			i + "_left",
+			i + "_up",
+			i + "_bomb",
+			i + "_big_bomb",
+			i + "_land_mine",
+			i + "_c4"]
+			
 func get_keys_for_player(i):
 	return ["p" + str(i+1) + "_right",
 			"p" + str(i+1) + "_down",
