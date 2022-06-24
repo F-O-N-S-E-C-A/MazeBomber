@@ -180,7 +180,18 @@ func add_shield(shield):
 func add_hp(hp):
 	$HPBar.add_hp(hp)
 
+remote func syncTakeDamage(damage):
+	var dead = $HPBar.take_damage(damage)
+	if dead:
+		queue_free()
+		get_parent().get_parent().game_over()
+
 func take_damage(damage):
+	if GameModes.multiplayer_online:
+		if !get_tree().is_network_server():
+			return
+		rpc("syncTakeDamage", damage)
+		
 	var dead = $HPBar.take_damage(damage)
 	if dead:
 		queue_free()
