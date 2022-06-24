@@ -15,7 +15,7 @@ func _ready():
 func getPlayerByID(id):
 	for player in players:
 		if player.ownerID == id:
-			return player
+			return player 
 	return null
 
 remote func syncWall(b, pos, hp):

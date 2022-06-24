@@ -3,15 +3,17 @@ extends Area2D
 const player = preload("res://Player/Player.gd")
 const agent = preload("res://Autonomous_Agent/Autonomous_Agent.gd")
 
-remote func syncLandMinePickup():
+remote func syncLandMinePickup(id):
 	queue_free()
+	var p = get_parent().get_parent().getPlayerByID(id)
+	p.landMines += 1
 
 func pick_up(body):
 	body.landMines += 1
 	body.play_powerup_sound()
 	body.updateHUD()
 	if GameModes.multiplayer_online:
-		rpc("syncLandMinePickup")
+		rpc("syncLandMinePickup", body.ownerID)
 	queue_free()
 	
 func _on_LandMinePowerUp_body_entered(body):

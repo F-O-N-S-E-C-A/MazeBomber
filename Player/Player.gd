@@ -163,14 +163,16 @@ func _process(_delta):
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null
-			rpc("syncC4", self.position)
+			if GameModes.multiplayer_online:
+				rpc("syncC4", self.position)
 		elif(c4_planted == null && c4 > 0):
 			c4 -= 1
 			c4_planted = preload("res://World/C4.tscn").instance()
 			c4_planted.my_init(self)
 			c4_planted.set_position(self.position)
 			get_parent().add_child(c4_planted)
-			rpc("syncC4", self.position)
+			if GameModes.multiplayer_online:
+				rpc("syncC4", self.position)
 
 		updateHUD()
 		play_place_bomb_sound()
