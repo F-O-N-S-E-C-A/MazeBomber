@@ -235,31 +235,31 @@ align = 1
 stream = ExtResource( 4 )
 
 [node name="P1" type="TextureRect" parent="."]
-margin_left = 198.0
-margin_top = 232.0
-margin_right = 389.0
-margin_bottom = 494.0
+margin_left = 162.0
+margin_top = 228.0
+margin_right = 424.0
+margin_bottom = 490.0
 expand = true
 
 [node name="P2" type="TextureRect" parent="."]
-margin_left = 446.0
-margin_top = 232.0
-margin_right = 637.0
-margin_bottom = 494.0
+margin_left = 410.0
+margin_top = 228.0
+margin_right = 672.0
+margin_bottom = 490.0
 expand = true
 
 [node name="P3" type="TextureRect" parent="."]
-margin_left = 682.0
-margin_top = 232.0
-margin_right = 873.0
-margin_bottom = 494.0
+margin_left = 646.0
+margin_top = 228.0
+margin_right = 908.0
+margin_bottom = 490.0
 expand = true
 
 [node name="P4" type="TextureRect" parent="."]
-margin_left = 922.0
-margin_top = 232.0
-margin_right = 1113.0
-margin_bottom = 494.0
+margin_left = 886.0
+margin_top = 228.0
+margin_right = 1148.0
+margin_bottom = 490.0
 expand = true
 
 [connection signal="pressed" from="menu_button" to="." method="_on_menu_button_pressed"]
