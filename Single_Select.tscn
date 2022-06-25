@@ -90,9 +90,9 @@ align = 1
 stream = ExtResource( 4 )
 
 [node name="P1" type="TextureRect" parent="."]
-margin_left = 558.0
+margin_left = 522.0
 margin_top = 176.0
-margin_right = 749.0
+margin_right = 784.0
 margin_bottom = 438.0
 expand = true
 
