@@ -25,6 +25,7 @@ func _on_about_button_pressed():
 
 func _on_single_player_button_button_down():
 	GameModes.singleplayer()
+	WorldObjects.kill()
 	GameModes.agent = load("res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn").instance()
 	get_tree().change_scene("res://World.tscn")
 

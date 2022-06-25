@@ -84,18 +84,20 @@ func my_init():
 			initialise_players(len(get_tree().get_network_connected_peers())+1)
 			initialise_lights(12)
 			initialise_spawners()
+	
 	else:
 		maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 		maze.generate_maze()
 		var n_players = 2
 
 		initialise_walls()
-		initialise_huds(n_players)
+		if GameModes.multiplayer_local:
+			initialise_huds(n_players)
+		
 		initialise_players(n_players)
 		initialise_lights(12)
 		initialise_spawners()
-		#if GameModes.singlePlayer:
-			#WorldObjects.agent.get_child(0).init()
+		
 		
 	if Settings.music_enabled:
 			$music.volume_db = Settings.music_volume - 25
@@ -191,8 +193,6 @@ func initialise_players(n_players):
 		if GameModes.singlePlayer:
 			if i == 0:
 				players.append(GameModes.agent)
-				#players.append(preload("res://Autonomous_Agent/imitation_learning/imitation_learning.tscn").instance())
-				#players.append(preload("res://Autonomous_Agent/tony_agent/tony_agent.tscn").instance())
 				WorldObjects.agent = players[0]
 			else:
 				players.append(preload("res://Player/Player.tscn").instance())
@@ -206,7 +206,6 @@ func initialise_players(n_players):
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 		
 		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-		#players[i].set_position(Vector2(60,60))
 
 		if GameModes.singlePlayer:
 			if i == 0:
@@ -219,7 +218,9 @@ func initialise_players(n_players):
 				WorldObjects.spawners.append(spawner)
 				spawner.spawn()
 			else:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, "2", huds[i])
+				var hud = initialise_hud("bottom_right")
+				huds.append(hud)
+				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, "2", hud)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
