@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=31 format=2]
 
 [ext_resource path="res://Autonomous_Agent/deliberative_agent/deliberative_agent.gd" type="Script" id=1]
 [ext_resource path="res://Autonomous_Agent/deliberative_agent/AI1.png" type="Texture" id=2]

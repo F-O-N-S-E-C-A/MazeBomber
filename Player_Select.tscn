@@ -1,0 +1,278 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://optionsbackgroung.png" type="Texture" id=1]
+[ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Player_Select.gd" type="Script" id=3]
+[ext_resource path="res://Sound/mazebomber.wav" type="AudioStream" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 38
+font_data = ExtResource( 2 )
+
+[node name="Player_Select" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 1312.0
+margin_bottom = 736.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 1
+
+[node name="BlackOverlay" type="ColorRect" parent="."]
+anchor_right = 34.4
+anchor_bottom = 18.4
+margin_left = -8.0
+margin_top = -8.0
+margin_right = -43821.8
+margin_bottom = -12806.4
+color = Color( 0, 0, 0, 0.796078 )
+
+[node name="menu_button" type="Button" parent="."]
+margin_left = 64.0
+margin_top = 621.0
+margin_right = 136.0
+margin_bottom = 647.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Back"
+flat = true
+align = 0
+
+[node name="play_button" type="Button" parent="."]
+margin_left = 621.0
+margin_top = 562.0
+margin_right = 693.0
+margin_bottom = 588.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Play"
+flat = true
+
+[node name="P1L" type="Button" parent="."]
+margin_left = 233.0
+margin_top = 495.0
+margin_right = 273.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "<"
+flat = true
+
+[node name="P1C" type="Button" parent="."]
+margin_left = 274.0
+margin_top = 495.0
+margin_right = 314.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "O"
+flat = true
+
+[node name="P1R" type="Button" parent="."]
+margin_left = 313.0
+margin_top = 495.0
+margin_right = 353.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = ">"
+flat = true
+
+[node name="P2L" type="Button" parent="."]
+margin_left = 481.0
+margin_top = 495.0
+margin_right = 521.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "<"
+flat = true
+
+[node name="P2C" type="Button" parent="."]
+margin_left = 522.0
+margin_top = 495.0
+margin_right = 562.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "O"
+flat = true
+
+[node name="P2R" type="Button" parent="."]
+margin_left = 561.0
+margin_top = 495.0
+margin_right = 601.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = ">"
+flat = true
+
+[node name="P3L" type="Button" parent="."]
+margin_left = 717.0
+margin_top = 495.0
+margin_right = 757.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "<"
+flat = true
+
+[node name="P3C" type="Button" parent="."]
+margin_left = 758.0
+margin_top = 495.0
+margin_right = 798.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "O"
+flat = true
+
+[node name="P3R" type="Button" parent="."]
+margin_left = 797.0
+margin_top = 495.0
+margin_right = 837.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = ">"
+flat = true
+
+[node name="P4L" type="Button" parent="."]
+margin_left = 957.0
+margin_top = 495.0
+margin_right = 997.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "<"
+flat = true
+
+[node name="P4C" type="Button" parent="."]
+margin_left = 998.0
+margin_top = 495.0
+margin_right = 1038.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "O"
+flat = true
+
+[node name="P4R" type="Button" parent="."]
+margin_left = 1037.0
+margin_top = 495.0
+margin_right = 1077.0
+margin_bottom = 530.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = ">"
+flat = true
+
+[node name="TitleLabel" type="Label" parent="."]
+margin_left = 506.0
+margin_top = 72.0
+margin_right = 801.0
+margin_bottom = 153.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 6 )
+text = "PLAYER SELECT
+"
+align = 1
+
+[node name="LabelP1" type="Label" parent="."]
+anchor_right = 0.211
+margin_left = 144.0
+margin_top = 180.0
+margin_right = 171.168
+margin_bottom = 261.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 6 )
+text = "PLAYER 1
+"
+align = 1
+
+[node name="LabelP4" type="Label" parent="."]
+margin_left = 871.0
+margin_top = 180.0
+margin_right = 1166.0
+margin_bottom = 261.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 6 )
+text = "PLAYER 4
+"
+align = 1
+
+[node name="LabelP3" type="Label" parent="."]
+margin_left = 632.0
+margin_top = 181.0
+margin_right = 927.0
+margin_bottom = 262.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 6 )
+text = "PLAYER 3
+"
+align = 1
+
+[node name="LabelP2" type="Label" parent="."]
+margin_left = 392.0
+margin_top = 181.0
+margin_right = 687.0
+margin_bottom = 262.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 6 )
+text = "PLAYER 2
+"
+align = 1
+
+[node name="menu_music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="P1" type="TextureRect" parent="."]
+margin_left = 162.0
+margin_top = 228.0
+margin_right = 424.0
+margin_bottom = 490.0
+expand = true
+
+[node name="P2" type="TextureRect" parent="."]
+margin_left = 410.0
+margin_top = 228.0
+margin_right = 672.0
+margin_bottom = 490.0
+expand = true
+
+[node name="P3" type="TextureRect" parent="."]
+margin_left = 646.0
+margin_top = 228.0
+margin_right = 908.0
+margin_bottom = 490.0
+expand = true
+
+[node name="P4" type="TextureRect" parent="."]
+margin_left = 886.0
+margin_top = 228.0
+margin_right = 1148.0
+margin_bottom = 490.0
+expand = true
+
+[connection signal="pressed" from="menu_button" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="play_button" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="P1L" to="." method="_on_P1L_pressed"]
+[connection signal="pressed" from="P1C" to="." method="_on_P1C_pressed"]
+[connection signal="pressed" from="P1R" to="." method="_on_P1R_pressed"]
+[connection signal="pressed" from="P2L" to="." method="_on_P2L_pressed"]
+[connection signal="pressed" from="P2C" to="." method="_on_P2C_pressed"]
+[connection signal="pressed" from="P2R" to="." method="_on_P2R_pressed"]
+[connection signal="pressed" from="P3L" to="." method="_on_P3L_pressed"]
+[connection signal="pressed" from="P3C" to="." method="_on_P3C_pressed"]
+[connection signal="pressed" from="P3R" to="." method="_on_P3R_pressed"]
+[connection signal="pressed" from="P4L" to="." method="_on_P4L_pressed"]
+[connection signal="pressed" from="P4C" to="." method="_on_P4C_pressed"]
+[connection signal="pressed" from="P4R" to="." method="_on_P4R_pressed"]

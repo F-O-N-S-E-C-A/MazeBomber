@@ -3,19 +3,29 @@ extends Node2D
 var maze
 var players = []
 var selfPeerID = null
+var sprites = []
 var huds = []
 
 func _ready():
+	Settings.load_settings()
+	if Settings.p1_act:
+		sprites.append(Settings.p1)
+	if Settings.p2_act:
+		sprites.append(Settings.p2)
+	if Settings.p3_act:
+		sprites.append(Settings.p3)
+	if Settings.p4_act:
+		sprites.append(Settings.p4)
 	randomize()
 	my_init()
 
 	if GameModes.multiplayer_online:
 		selfPeerID = get_tree().get_network_unique_id()
-		
+
 func getPlayerByID(id):
 	for player in players:
 		if player.ownerID == id:
-			return player 
+			return player
 	return null
 
 remote func syncWall(b, pos, hp):
@@ -63,7 +73,7 @@ remote func syncPlayer(id):
 	maze.remove_path(players[i].position)
 	$YSort.add_child(spawner)
 	spawner.spawn()
-	
+
 remote func init_huds_everyone(n):
 	huds.append(initialise_hud("bottom_right"))
 
@@ -84,21 +94,18 @@ func my_init():
 			initialise_players(len(get_tree().get_network_connected_peers())+1)
 			initialise_lights(12)
 			initialise_spawners()
-	
+
 	else:
 		maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 		maze.generate_maze()
-		var n_players = 2
 
 		initialise_walls()
-		if GameModes.multiplayer_local:
-			initialise_huds(n_players)
-		
-		initialise_players(n_players)
+		initialise_huds(sprites.size())
+		initialise_players(sprites.size())
 		initialise_lights(12)
 		initialise_spawners()
-		
-		
+
+
 	if Settings.music_enabled:
 			$music.volume_db = Settings.music_volume - 25
 			$music.play()
@@ -107,7 +114,7 @@ func my_init():
 		$CanvasModulate.set_color(Color(0,0,0))
 	else:
 		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
-		
+
 	if GameModes.multiplayer_online:
 		if get_tree().is_network_server():
 			rpc("syncFogOfWar", Settings.fog_of_war)
@@ -132,7 +139,7 @@ func initialise_huds(n_players):
 			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
 		huds[i].set_position(pos - Vector2(0, 1))
 		$YSort.add_child(huds[i])
-		
+
 func initialise_hud(location):
 		var hud = preload("res://HUD.tscn").instance()
 		var pos = Vector2(0, 0)
@@ -173,7 +180,7 @@ func initialise_walls():
 					wall.calculate_hp(1 - pos.distance_to(mid_point)/max_dist)
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
-				
+
 				if GameModes.multiplayer_online:
 					if get_tree().is_network_server():
 						$YSort.add_child(wall)
@@ -188,6 +195,8 @@ func initialise_players(n_players):
 			ids.append(1)
 		for p in get_tree().get_network_connected_peers():
 			ids.append(p)
+	if GameModes.singlePlayer:
+		n_players = 2
 
 	for i in range(n_players):
 		if GameModes.singlePlayer:
@@ -204,7 +213,7 @@ func initialise_players(n_players):
 
 		var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
-		
+
 		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 
 		if GameModes.singlePlayer:
@@ -220,7 +229,7 @@ func initialise_players(n_players):
 			else:
 				var hud = initialise_hud("bottom_right")
 				huds.append(hud)
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, "2", hud)
+				players[i].my_init(get_keys_for_player(1), get_sprite_for_player(0), players, "2", huds[i])
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -281,7 +290,7 @@ func initialise_spawners():
 				spawner.spawn()
 
 func get_sprite_for_player(i):
-	return load("res://Player/Player" + str(i+1) + ".png")
+	return load("res://Player/Player" + str(sprites[i]) + ".png")
 
 func get_sprite_for_agent(i):
 	return load("res://Autonomous_Agent/AI1" + ".png")
@@ -295,7 +304,7 @@ func get_keys_for_multiplayer(i):
 			i + "_big_bomb",
 			i + "_land_mine",
 			i + "_c4"]
-			
+
 func get_keys_for_player(i):
 	return ["p" + str(i+1) + "_right",
 			"p" + str(i+1) + "_down",
@@ -318,9 +327,9 @@ func game_over():
 				$GameOver/Label.text = "You won!"
 			else:
 				$GameOver/Label.text = "You lost!"
-		else:	
+		else:
 			$GameOver/Label.text = str("Player ", str(GameModes.winner(players).player), " won!")
-		
+
 	hud_is_visible(false)
 	$GameOver.visible = true
 	if Settings.sound_fx_enabled:
@@ -332,7 +341,7 @@ func is_over():
 func hud_is_visible(is_visible):
 	for h in huds:
 		h.visible(is_visible)
-		
+
 func update_huds():
 	for h in huds:
 		h.updateLabels()

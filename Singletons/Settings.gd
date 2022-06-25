@@ -18,6 +18,15 @@ var static_hud: bool
 
 var agent = "res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn"
 
+var p1: int
+var p2: int
+var p3: int
+var p4: int
+var p1_act: bool
+var p2_act: bool
+var p3_act: bool
+var p4_act: bool
+
 var save_settings_file = "user://save_game.save"
 var data = {}
 
@@ -37,9 +46,17 @@ func save_settings():
 		"music_enabled" : music_enabled,
 		"sound_fx_enabled" : sound_fx_enabled,
 		"nuke_mode" : nuke_mode,
+		"agent" : agent
 		"fog_of_war" : fog_of_war,
 		"static_hud" : static_hud,
-		"agent" : agent
+		"p1" : p1,
+		"p2" : p2,
+		"p3" : p3,
+		"p4" : p4,
+		"p1_act" : p1_act,
+		"p2_act" : p2_act,
+		"p3_act" : p3_act,
+		"p4_act" : p4_act
 	}
 	file.open(save_settings_file, File.WRITE)
 	file.store_var(data)
@@ -62,6 +79,14 @@ func load_settings():
 			"fog_of_war" : false,
 			"static_hud" : false,
 			"agent" : "res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn"
+			"p1" : 1,
+			"p2" : 2,
+			"p3" : 3,
+			"p4" : 4,
+			"p1_act" : false,
+			"p2_act" : false,
+			"p3_act" : false,
+			"p4_act" : false
 		}
 		save_settings()
 	file.open(save_settings_file, File.READ)
@@ -78,4 +103,12 @@ func load_settings():
 	fog_of_war = data["fog_of_war"]
 	static_hud = data["static_hud"]
 	agent = data["agent"]
+	p1 = data["p1"]
+	p2 = data["p2"]
+	p3 = data["p3"]
+	p4 = data["p4"]
+	p1_act = data["p1_act"]
+	p2_act = data["p2_act"]
+	p3_act = data["p3_act"]
+	p4_act = data["p4_act"]
 	file.close()
