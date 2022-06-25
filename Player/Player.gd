@@ -40,6 +40,8 @@ func _ready():
 		selfPeerID = get_tree().get_network_unique_id()
 
 func my_init(k, image, otherPlayers, p, h):
+	if GameModes.multiplayer_online:
+		$Nickname.visible = true
 	hud = h
 	updateHUD()
 	player = p

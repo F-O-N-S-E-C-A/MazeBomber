@@ -269,6 +269,7 @@ stream = ExtResource( 6 )
 stream = ExtResource( 5 )
 
 [node name="Nickname" type="Label" parent="."]
+visible = false
 material = SubResource( 27 )
 margin_left = -49.0
 margin_top = -35.0
