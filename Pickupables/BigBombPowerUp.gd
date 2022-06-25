@@ -27,7 +27,7 @@ func _on_BigBombPowerUp_body_entered(body):
 				return
 		return
 
-	if body is player || body is agent:
+	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
 
 

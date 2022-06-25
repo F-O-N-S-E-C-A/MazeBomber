@@ -45,5 +45,5 @@ func _on_SpeedPowerUp_body_exited(body):
 				return
 		return
 
-if body is player || GameModes.is_an_agent(body):
+	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
