@@ -203,7 +203,8 @@ func take_damage(damage):
 	if dead:
 		GameModes.addDeath(self)
 		queue_free()
-		get_parent().get_parent().game_over()
+		if GameModes.game_is_over():
+			get_parent().get_parent().game_over()
 
 func speed_up_timer_init():
 	speed_up_timer = Timer.new()

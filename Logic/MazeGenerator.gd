@@ -128,18 +128,15 @@ remote func syncFogOfWar(b):
 
 func initialise_huds(n_players):
 	for i in range(n_players):
-		huds.append(preload("res://HUD.tscn").instance())
-		var pos = Vector2(0, 0)
 		if i == 0:
-			pos = Vector2(0, maze.height - 1) * GlobalVariables.my_scale
+			huds.append(initialise_hud("top_left"))
 		elif i == 1:
-			pos = Vector2(maze.width - 7, maze.height - 1) * GlobalVariables.my_scale
+			huds.append(initialise_hud("bottom_right"))
 		elif i == 2:
-			pos = Vector2(0, 0) * GlobalVariables.my_scale
+			huds.append(initialise_hud("top_right"))
 		elif i == 3:
-			pos = Vector2(maze.width - 7, 0) * GlobalVariables.my_scale
-		huds[i].set_position(pos - Vector2(0, 1))
-		$YSort.add_child(huds[i])
+			huds.append(initialise_hud("bottom_left"))
+			
 
 func initialise_hud(location):
 		var hud = preload("res://HUD.tscn").instance()
@@ -216,7 +213,7 @@ func initialise_players(n_players):
 		var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 
 		players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-
+	
 		if GameModes.singlePlayer:
 			if i == 0:
 				players[i].my_init(get_keys_for_player(i), get_sprite_for_agent(0), players)
@@ -257,6 +254,7 @@ func initialise_players(n_players):
 			spawner.spawn()
 			if GameModes.multiplayer_online:
 				rpc("syncPlayer", ids[i])
+	GameModes.players = players
 
 
 func initialise_lights(n_lights):
@@ -317,20 +315,21 @@ func get_keys_for_player(i):
 			"p" + str(i+1) + "_c4"]
 
 func game_over():
-	if GameModes.winner(players) != null:
+	if GameModes.winner() != null:
 		if GameModes.singlePlayer:
-			if GameModes.winner(players).player == "2":
+			if GameModes.winner().player == "2":
 				$GameOver/Label.text = "You won!"
 			else:
 				$GameOver/Label.text = "You lost!"
 		elif GameModes.multiplayer_online:
-			if GameModes.winner(players) == getPlayerByID(get_tree().get_network_unique_id()):
+			if GameModes.winner() == getPlayerByID(get_tree().get_network_unique_id()):
 				$GameOver/Label.text = "You won!"
 			else:
 				$GameOver/Label.text = "You lost!"
 		else:
-			$GameOver/Label.text = str("Player ", str(GameModes.winner(players).player), " won!")
-
+			$GameOver/Label.text = str("Player ", str(GameModes.winner().player), " won!")
+	GameModes.players = []
+	
 	hud_is_visible(false)
 	$GameOver.visible = true
 	if Settings.sound_fx_enabled:

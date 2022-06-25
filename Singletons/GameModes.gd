@@ -11,6 +11,7 @@ var agent
 var agentSprite
 
 var dead_players = []
+var players = []
 
 func multiplayer_online():
 	singlePlayer = false
@@ -42,7 +43,16 @@ func is_an_agent(var body):
 func addDeath(player):
 	dead_players.append(player)
 
-func winner(players):
+func winner():
 	for p in players:
 		if not dead_players.has(p):
 			return p
+			
+func game_is_over():
+	var c = 0
+	for p in players:
+		if not dead_players.has(p):
+			c += 1
+	if c <= 1:
+		return true 
+	return false
