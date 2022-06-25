@@ -46,7 +46,7 @@ func save_settings():
 		"music_enabled" : music_enabled,
 		"sound_fx_enabled" : sound_fx_enabled,
 		"nuke_mode" : nuke_mode,
-		"agent" : agent
+		"agent" : agent,
 		"fog_of_war" : fog_of_war,
 		"static_hud" : static_hud,
 		"p1" : p1,
@@ -63,7 +63,7 @@ func save_settings():
 	file.close()
 
 func load_settings():
-	#save_settings()
+	save_settings()
 	var file = File.new()
 	if not file.file_exists(save_settings_file):
 		data = {
@@ -78,7 +78,7 @@ func load_settings():
 			"nuke_mode" : false,
 			"fog_of_war" : false,
 			"static_hud" : false,
-			"agent" : "res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn"
+			"agent" : "res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn",
 			"p1" : 1,
 			"p2" : 2,
 			"p3" : 3,
