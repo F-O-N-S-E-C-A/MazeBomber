@@ -79,6 +79,38 @@ func doExplosion():
 		else:
 			collision_points.append(end_point)
 	update()
+	
+func sym_explosion(entity):
+	if not able_to_explode:
+		return false
+	var ds = get_world_2d().get_direct_space_state()
+	var n = GlobalVariables.number_of_rays
+	var damage_per_ray = damage/n
+	var max_range = GlobalVariables.my_scale * radius
+	
+	for i in range(n):
+		var end_point = self.position + Vector2(cos(TAU*i/n), sin(TAU*i/n)) * max_range
+		var collision = ds.intersect_ray(self.position, end_point, [self], ~collision_layer)
+		if collision != null && !collision.empty():
+			var collider = collision.get("collider")
+			if collider == entity:
+				return true
+	return false
+	
+func sym_collision_points():
+	var cp = []
+	var ds = get_world_2d().get_direct_space_state()
+	var n = GlobalVariables.number_of_rays
+	var damage_per_ray = damage/n
+	var max_range = GlobalVariables.my_scale * radius
+	for i in range(n):
+		var end_point = self.position + Vector2(cos(TAU*i/n), sin(TAU*i/n)) * max_range
+		var collision = ds.intersect_ray(self.position, end_point, [self], ~collision_layer)
+		if collision != null && !collision.empty():
+			cp.append(collision.get("position"))
+		else:
+			cp.append(end_point)
+	return cp
 
 func calculate_color(deviation): # max damage = more redish, min damage = more yellowish
 	var s = sign(-deviation)

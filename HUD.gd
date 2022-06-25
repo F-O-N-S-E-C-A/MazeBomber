@@ -12,7 +12,7 @@ func updateBombs(b):
 	updateLabels()
 	
 func updateLabels():
-	if GameModes.multiplayer_local || GameModes.multiplayer_online:
+	if GameModes.multiplayer_local || GameModes.multiplayer_online || GameModes.singlePlayer:
 		
 		if !Settings.static_hud:
 		

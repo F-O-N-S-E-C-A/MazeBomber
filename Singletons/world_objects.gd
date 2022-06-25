@@ -52,6 +52,20 @@ func _process(delta):
 	if(start_counting):
 		time_to_win = time_to_win + delta
 		
+func kill():
+	agent = null
+	agent_hp = 0
+	agent_shield_hp = 0
+	player = null
+	player_hp = 0
+	player_shield_hp = 0
+	walls = []
+	pickupables = []
+	bombs = []
+	spawners = []
+	time_to_win = 0
+	start_counting = false
+
 func start_count():
 	start_counting = true
 	

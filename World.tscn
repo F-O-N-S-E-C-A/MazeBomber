@@ -415,7 +415,7 @@ align = 0
 [connection signal="pressed" from="MazeGenerator/Pause/VBoxContainer/quit_button" to="MazeGenerator/Pause" method="_on_quit_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/ConfirmQuit/yes" to="MazeGenerator/ConfirmQuit" method="_on_yes_pressed"]
 [connection signal="pressed" from="MazeGenerator/ConfirmQuit/no" to="MazeGenerator/ConfirmQuit" method="_on_no_pressed"]
-[connection signal="pressed" from="MazeGenerator/GameOver/Restart" to="MazeGenerator/GameOver/Restart" method="_on_Restart_pressed"]
+[connection signal="pressed" from="MazeGenerator/GameOver/Restart" to="MazeGenerator/GameOver" method="_on_restart_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/restart_button" to="MazeGenerator/GameOver" method="_on_restart_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/menu_button" to="MazeGenerator/GameOver" method="_on_menu_button_pressed"]
 [connection signal="pressed" from="MazeGenerator/GameOver/VBoxContainer/quit_button" to="MazeGenerator/GameOver" method="_on_quit_button_pressed"]
