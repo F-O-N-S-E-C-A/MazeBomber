@@ -27,6 +27,7 @@ var ownerID = 1
 var player: String
 var hud = null
 
+onready var hpbar = $HPBar
 onready var animationPlayer = $AnimationPlayer
 onready var animationTree = $AnimationTree
 onready var animationState = animationTree.get("parameters/playback")

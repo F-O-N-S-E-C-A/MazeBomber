@@ -3,7 +3,6 @@ extends StaticBody2D
 onready var animationBomb = $AnimationPlayer
 const wall = preload("Wall.gd")
 var player = load("res://Player/Player.gd")
-var agent = load("res://Autonomous_Agent/Autonomous_Agent.gd")
 const base_damage = 1200
 const base_radius = 10
 var time_ellapsed = 0
@@ -14,11 +13,17 @@ var collision_color
 var exploding = false
 var collision_points = []
 
+func _ready():
+	if GameModes.singlePlayer:
+		WorldObjects.bombs.append(self)
+
 func _process(delta):
 	if exploding:
 		animationBomb.play("Explosion")
 		yield(animationBomb, "animation_finished")
 		self.queue_free()
+		if GameModes.singlePlayer:
+			WorldObjects.bombs.erase(self)
 	else:
 		time_ellapsed += delta
 		animationBomb.set_speed_scale(0.5 + .6*time_ellapsed)
@@ -57,12 +62,13 @@ func doExplosion():
 		if collision != null && !collision.empty():
 			var collider = collision.get("collider")
 			collision_points.append(collision.get("position"))
-			if collider is wall || collider is player || collider is agent:
+			if collider is wall || collider is player || GameModes.is_an_agent(collider):
 				collider.take_damage(damage_per_ray)
 		else:
 			collision_points.append(end_point)
 	play_explosion_sound()
 	update()
+	
 
 func calculate_color(deviation): # max damage = more redish, min damage = more yellowish
 	var s = sign(-deviation)

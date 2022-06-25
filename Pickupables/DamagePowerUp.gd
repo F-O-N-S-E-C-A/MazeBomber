@@ -1,7 +1,9 @@
 extends Area2D
 
 const player = preload("res://Player/Player.gd")
-const agent = preload("res://Autonomous_Agent/Autonomous_Agent.gd")
+
+func _ready():
+	WorldObjects.pickupables.append(self)
 
 remote func syncDamagePickup(id):
 	queue_free()
@@ -13,32 +15,33 @@ func pick_up(p):
 	p.play_powerup_sound()
 	if GameModes.multiplayer_online:
 		rpc("syncDamagePickup", p.ownerID)
+	WorldObjects.pickupables.erase(self)
 	queue_free()
 
 func _on_DamagePowerUp_body_entered(body):
 	if GameModes.multiplayer_online:
-		if body is player || body is agent:
+		if body is player || GameModes.is_an_agent(body):
 			if get_tree().get_network_unique_id() != body.ownerID:
 				return
 			else:
 				pick_up(body)
 				return
 		return
-	
-	if body is player || body is agent:
+
+	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
 
 
 
 func _on_DamagePowerUp_body_exited(body):
 	if GameModes.multiplayer_online:
-		if body is player || body is agent:
+		if body is player || GameModes.is_an_agent(body):
 			if get_tree().get_network_unique_id() != body.ownerID:
 				return
 			else:
 				pick_up(body)
 				return
 		return
-	
-	if body is player || body is agent:
+
+	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)

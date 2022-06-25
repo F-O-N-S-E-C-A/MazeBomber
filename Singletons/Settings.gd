@@ -16,6 +16,8 @@ var fog_of_war: bool
 
 var static_hud: bool
 
+var agent = "res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn"
+
 var save_settings_file = "user://save_game.save"
 var data = {}
 
@@ -27,7 +29,7 @@ func save_settings():
 	var file = File.new()
 	data = {
 		"explosion_damage_random" : explosion_damage_random,
-		"explosion_time_random" : explosion_time_random, 
+		"explosion_time_random" : explosion_time_random,
 		"center_room" : center_room,
 		"random_walls" : random_walls,
 		"music_volume" : music_volume,
@@ -35,20 +37,21 @@ func save_settings():
 		"music_enabled" : music_enabled,
 		"sound_fx_enabled" : sound_fx_enabled,
 		"nuke_mode" : nuke_mode,
-		"fog_of_war" : fog_of_war, 
-		"static_hud" : static_hud
+		"fog_of_war" : fog_of_war,
+		"static_hud" : static_hud,
+		"agent" : agent
 	}
 	file.open(save_settings_file, File.WRITE)
 	file.store_var(data)
 	file.close()
-	
+
 func load_settings():
 	#save_settings()
 	var file = File.new()
 	if not file.file_exists(save_settings_file):
 		data = {
 			"explosion_damage_random" : false,
-			"explosion_time_random" : false, 
+			"explosion_time_random" : false,
 			"center_room" : true,
 			"random_walls" : true,
 			"music_volume" : 5,
@@ -57,7 +60,8 @@ func load_settings():
 			"sound_fx_enabled" : true,
 			"nuke_mode" : false,
 			"fog_of_war" : false,
-			"static_hud" : false
+			"static_hud" : false,
+			"agent" : "res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn"
 		}
 		save_settings()
 	file.open(save_settings_file, File.READ)
@@ -73,7 +77,5 @@ func load_settings():
 	nuke_mode = data["nuke_mode"]
 	fog_of_war = data["fog_of_war"]
 	static_hud = data["static_hud"]
+	agent = data["agent"]
 	file.close()
-	
-
-

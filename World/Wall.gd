@@ -25,7 +25,7 @@ func take_damage(damage):
 		if GameModes.multiplayer_online:
 			if get_tree().is_network_server():
 				rpc("syncWallHP", new_health)
-			else: 
+			else:
 				return
 		if new_health < 0:
 			health = new_health
@@ -43,7 +43,7 @@ remote func syncPowerUpSpawn(pos, name):
 	power_up.set_position(pos)
 	power_up.set_scale(GlobalVariables.scale_vector)
 	get_parent().add_child(power_up)
-	
+
 remote func syncWallDestruction():
 	queue_free()
 
@@ -62,11 +62,11 @@ func destroy():
 			rpc("syncPowerUpSpawn", self.position, name)
 	if GameModes.multiplayer_online:
 		rpc("syncWallDestruction")
-		
+
+	if GameModes.singlePlayer:
+		WorldObjects.walls.erase(self)
 
 func set_texture():
 	if !border:
 		var n = 4 - floor(health*4/100)
 		$Sprite.set_texture(load("res://World/images/parede_fase" + str(n) + ".png"))
-
-	
