@@ -1,0 +1,102 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://optionsbackgroung.png" type="Texture" id=1]
+[ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://Single_Select.gd" type="Script" id=3]
+[ext_resource path="res://Sound/mazebomber.wav" type="AudioStream" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 20
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFont" id=6]
+size = 38
+font_data = ExtResource( 2 )
+
+[node name="Single_Select" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 1312.0
+margin_bottom = 736.0
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 1
+
+[node name="BlackOverlay" type="ColorRect" parent="."]
+anchor_right = 34.4
+anchor_bottom = 18.4
+margin_left = -8.0
+margin_top = -8.0
+margin_right = -43821.8
+margin_bottom = -12806.4
+color = Color( 0, 0, 0, 0.796078 )
+
+[node name="menu_button" type="Button" parent="."]
+margin_left = 64.0
+margin_top = 621.0
+margin_right = 136.0
+margin_bottom = 647.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Back"
+flat = true
+align = 0
+
+[node name="play_button" type="Button" parent="."]
+margin_left = 616.0
+margin_top = 562.0
+margin_right = 688.0
+margin_bottom = 588.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Play"
+flat = true
+
+[node name="P1L" type="Button" parent="."]
+margin_left = 609.0
+margin_top = 439.0
+margin_right = 649.0
+margin_bottom = 474.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "<"
+flat = true
+
+[node name="P1R" type="Button" parent="."]
+margin_left = 657.0
+margin_top = 439.0
+margin_right = 697.0
+margin_bottom = 474.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = ">"
+flat = true
+
+[node name="TitleLabel" type="Label" parent="."]
+margin_left = 506.0
+margin_top = 72.0
+margin_right = 801.0
+margin_bottom = 153.0
+rect_pivot_offset = Vector2( -224, 40 )
+custom_fonts/font = SubResource( 6 )
+text = "PLAYER SELECT
+"
+align = 1
+
+[node name="menu_music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
+
+[node name="P1" type="TextureRect" parent="."]
+margin_left = 558.0
+margin_top = 176.0
+margin_right = 749.0
+margin_bottom = 438.0
+expand = true
+
+[connection signal="pressed" from="menu_button" to="." method="_on_menu_button_pressed"]
+[connection signal="pressed" from="play_button" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="P1L" to="." method="_on_P1L_pressed"]
+[connection signal="pressed" from="P1R" to="." method="_on_P1R_pressed"]

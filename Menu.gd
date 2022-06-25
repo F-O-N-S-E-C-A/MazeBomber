@@ -8,7 +8,8 @@ func _ready():
 
 func _on_multiplayer_local_button_button_down():
 	GameModes.multiplayer_local()
-	get_tree().change_scene("res://World.tscn")
+	#get_tree().change_scene("res://World.tscn")
+	get_tree().change_scene("res://Player_Select.tscn")
 	GameModes.multiplayer_local()
 
 func _on_quit_button_button_down():
@@ -25,7 +26,7 @@ func _on_about_button_pressed():
 
 func _on_single_player_button_button_down():
 	GameModes.singleplayer()
-	get_tree().change_scene("res://World.tscn")
+	get_tree().change_scene("res://Single_Select.tscn")
 
 func _on_yes_pressed():
 	get_tree().quit()

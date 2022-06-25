@@ -2,10 +2,20 @@ extends Node2D
 
 var maze
 var players = []
+var sprites = []
 var selfPeerID
 var huds = []
 
 func _ready():
+	Settings.load_settings()
+	if Settings.p1_act:
+		sprites.append(Settings.p1)
+	if Settings.p2_act:
+		sprites.append(Settings.p2)
+	if Settings.p3_act:
+		sprites.append(Settings.p3)
+	if Settings.p4_act:
+		sprites.append(Settings.p4)
 	randomize()
 	my_init()
 
@@ -82,11 +92,10 @@ func my_init():
 	else:
 		maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 		maze.generate_maze()
-		var n_players = 2
 
 		initialise_walls()
-		initialise_huds(n_players)
-		initialise_players(n_players)
+		initialise_huds(sprites.size())
+		initialise_players(sprites.size())
 		initialise_lights(12)
 		initialise_spawners()
 		
@@ -169,6 +178,8 @@ func initialise_players(n_players):
 			ids.append(1)
 		for p in get_tree().get_network_connected_peers():
 			ids.append(p)
+	if GameModes.singlePlayer:
+		n_players = 2
 
 	for i in range(n_players):
 		if GameModes.singlePlayer:
@@ -195,7 +206,7 @@ func initialise_players(n_players):
 				$YSort.add_child(spawner)
 				spawner.spawn()
 			else:
-				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, "2", huds[i])
+				players[i].my_init(get_keys_for_player(1), get_sprite_for_player(0), players, "2", huds[i])
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)
@@ -254,7 +265,7 @@ func initialise_spawners():
 				spawner.spawn()
 
 func get_sprite_for_player(i):
-	return load("res://Player/Player" + str(i+1) + ".png")
+	return load("res://Player/Player" + str(sprites[i]) + ".png")
 
 func get_sprite_for_agent(i):
 	return load("res://Autonomous_Agent/AI" + str(i+1) + ".png")
