@@ -187,6 +187,7 @@ func add_hp(hp):
 remote func syncTakeDamage(damage):
 	var dead = $HPBar.take_damage(damage)
 	if dead:
+		GameModes.addDeath(self)
 		queue_free()
 		get_parent().get_parent().game_over()
 
@@ -198,6 +199,7 @@ func take_damage(damage):
 		
 	var dead = $HPBar.take_damage(damage)
 	if dead:
+		GameModes.addDeath(self)
 		queue_free()
 		get_parent().get_parent().game_over()
 

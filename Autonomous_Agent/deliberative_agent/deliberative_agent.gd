@@ -19,6 +19,7 @@ var c4_planted = null
 var model = false
 var history = []
 var safe_spot = null
+var player = "agent"
 
 
 var target_point = null
@@ -231,6 +232,7 @@ func add_hp(hp):
 func take_damage(damage):
 	var dead = $HPBar.take_damage(damage)
 	if dead:
+		GameModes.addDeath(self)
 		WorldObjects.stop_count()
 		queue_free()
 		get_parent().get_parent().game_over()

@@ -307,6 +307,20 @@ func get_keys_for_player(i):
 			"p" + str(i+1) + "_c4"]
 
 func game_over():
+	if GameModes.winner(players) != null:
+		if GameModes.singlePlayer:
+			if GameModes.winner(players).player == "2":
+				$GameOver/Label.text = "You won!"
+			else:
+				$GameOver/Label.text = "You lost!"
+		elif GameModes.multiplayer_online:
+			if GameModes.winner(players) == getPlayerByID(get_tree().get_network_unique_id()):
+				$GameOver/Label.text = "You won!"
+			else:
+				$GameOver/Label.text = "You lost!"
+		else:	
+			$GameOver/Label.text = str("Player ", str(GameModes.winner(players).player), " won!")
+		
 	hud_is_visible(false)
 	$GameOver.visible = true
 	if Settings.sound_fx_enabled:

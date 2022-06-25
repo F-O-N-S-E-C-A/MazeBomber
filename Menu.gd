@@ -7,6 +7,7 @@ func _ready():
 		$menu_music.play()
 
 func _on_multiplayer_local_button_button_down():
+	GameModes.dead_players = []
 	GameModes.multiplayer_local()
 	get_tree().change_scene("res://World.tscn")
 	GameModes.multiplayer_local()
@@ -25,6 +26,7 @@ func _on_about_button_pressed():
 
 func _on_single_player_button_button_down():
 	GameModes.singleplayer()
+	GameModes.dead_players = []
 	WorldObjects.kill()
 	GameModes.agent = load("res://Autonomous_Agent/deliberative_agent/deliberative_agent.tscn").instance()
 	get_tree().change_scene("res://World.tscn")
@@ -39,3 +41,4 @@ func _on_no_pressed():
 
 func _on_multiplayer_online_button_button_down():
 	get_tree().change_scene("res://Multiplayer/Multiplayer_Menu.tscn")
+	GameModes.dead_players = []
