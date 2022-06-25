@@ -31,17 +31,3 @@ func _on_DamagePowerUp_body_entered(body):
 	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
 
-
-
-func _on_DamagePowerUp_body_exited(body):
-	if GameModes.multiplayer_online:
-		if body is player || GameModes.is_an_agent(body):
-			if get_tree().get_network_unique_id() != body.ownerID:
-				return
-			else:
-				pick_up(body)
-				return
-		return
-
-	if body is player || GameModes.is_an_agent(body):
-		pick_up(body)
