@@ -100,7 +100,8 @@ func my_init():
 		maze.generate_maze()
 
 		initialise_walls()
-		initialise_huds(sprites.size())
+		if not GameModes.singlePlayer:
+			initialise_huds(sprites.size())
 		initialise_players(sprites.size())
 		initialise_lights(12)
 		initialise_spawners()
@@ -229,7 +230,7 @@ func initialise_players(n_players):
 			else:
 				var hud = initialise_hud("bottom_right")
 				huds.append(hud)
-				players[i].my_init(get_keys_for_player(1), get_sprite_for_player(0), players, "2", huds[i])
+				players[i].my_init(get_keys_for_player(1), get_sprite_for_player(0), players, "2", hud)
 				players[i].set_scale(GlobalVariables.scale_vector)
 				$YSort.add_child(players[i])
 				var spawner = load("res://Logic/BoomBoxSpawner.gd").new(players[i].position)

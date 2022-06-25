@@ -2,7 +2,9 @@ extends Control
 
 func _ready():
 	Settings.load_settings()
-
+	Settings.p1_act = true 
+	if Settings.p1 == 0:
+		Settings.p1 = 2
 	$P1.texture = load("res://Player/Player" + str(Settings.p1) + "f.png")
 		
 	if Settings.music_enabled:
@@ -17,7 +19,6 @@ func _on_play_button_pressed():
 	Settings.save_settings()
 	get_tree().change_scene("res://World.tscn")
 	
-
 
 #Player 1 ------------------------------------------------------------------------------------------
 func _on_P1R_pressed():
