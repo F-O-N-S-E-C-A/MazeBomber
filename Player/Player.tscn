@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://Player/Player.gd" type="Script" id=1]
 [ext_resource path="res://World/images/Light.png" type="Texture" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Sound/powerup.wav" type="AudioStream" id=4]
 [ext_resource path="res://Sound/load.wav" type="AudioStream" id=5]
 [ext_resource path="res://Sound/impact.wav" type="AudioStream" id=6]
+[ext_resource path="res://SmallPixelFont.ttf" type="DynamicFontData" id=7]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 1
@@ -209,6 +210,12 @@ light_mode = 1
 radius = 7.0
 height = 1.0
 
+[sub_resource type="CanvasItemMaterial" id=27]
+blend_mode = 1
+
+[sub_resource type="DynamicFont" id=26]
+font_data = ExtResource( 7 )
+
 [node name="Player" type="KinematicBody2D"]
 script = ExtResource( 1 )
 
@@ -260,3 +267,15 @@ stream = ExtResource( 6 )
 
 [node name="load_fx" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 5 )
+
+[node name="Nickname" type="Label" parent="."]
+material = SubResource( 27 )
+margin_left = -49.0
+margin_top = -35.0
+margin_right = 50.0
+margin_bottom = -19.0
+rect_pivot_offset = Vector2( 49, 0 )
+size_flags_vertical = 1
+custom_fonts/font = SubResource( 26 )
+text = "Player"
+align = 1
