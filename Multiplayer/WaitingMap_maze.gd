@@ -14,6 +14,8 @@ func _player_disconnected(id) -> void:
 
 func _connected_to_server() -> void:
 	add_player(Settings.p1_name, Settings.p1)
+	players[len(players)-1].ownerID = get_tree().get_network_unique_id()
+	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
 	rpc("sync_player", Settings.p1_name, Settings.p1)
 
 func _ready():
