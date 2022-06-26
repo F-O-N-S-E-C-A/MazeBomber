@@ -16,7 +16,9 @@ func client_init():
 	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 	maze.generate_maze()
 	
-	#sync every shit first
+	initialise_walls()
+	
+	write_title()
 	
 	add_player(Settings.p1_name, Settings.p1)
 	rpc("sync_player", Settings.p1_name, Settings.p1)
@@ -61,6 +63,7 @@ func write_title():
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
 				wall.calculate_hp(0.7)
+				wall.set_border()
 				$YSort.add_child(wall)
 			letter_count+=5
 			if letter == M:
