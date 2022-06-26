@@ -5,13 +5,23 @@ var players = []
 
 func _ready():
 	randomize()
-	my_init()
 	if !get_tree().is_network_server():
-		$Join_server.visible = false
+		$Start_Game.visible = false
+		client_init()
 	else:
 		add_child(Network.advertiser)
+		server_init()
 
-func my_init():
+func client_init():
+	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
+	maze.generate_maze()
+	
+	#sync every shit first
+	
+	add_player(Settings.p1_name, Settings.p1)
+	
+	
+func server_init():
 	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 	for i in range(GlobalVariables.my_width):
 		for j in range(GlobalVariables.my_height - 0,GlobalVariables.my_height):
@@ -23,7 +33,7 @@ func my_init():
 
 	initialise_walls()
 	
-	initialise_player()
+	add_player(Settings.p1_name, Settings.p1)
 	write_title()
 	
 	
@@ -75,22 +85,26 @@ func initialise_walls():
 					wall.set_scale(GlobalVariables.scale_vector)
 					$YSort.add_child(wall)
 
-func initialise_player():
+sync func add_player(nick, skin):
 	var player = preload("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 	player.set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-	players.append(preload("res://Player/Player.tscn").instance())
 	players.append(player)
-	player.my_init(get_keys_for_player(1), get_sprite_for_player(1), players, "2", null)
+	player.my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(skin), players, "2", null)
 	player.set_scale(GlobalVariables.scale_vector)
-	player.get_node("Nickname").text = Settings.p1_name
+	player.get_node("Nickname").text = nick
 	player.get_node("Nickname").visible = true
+	player.number_of_bombs = 1
+	player.big_bombs = 1
+	player.c4 = 1
+	player.landMines = 1
 	$YSort.add_child(player)
-	var spawner = load("res://Logic/BoomBoxSpawner.gd").new(player.position)
 	maze.remove_path(player.position)
-	$YSort.add_child(spawner)
-	spawner.spawn()
+	if len(players) == 1:
+		var spawner = load("res://Logic/BoomBoxSpawner.gd").new(player.position)
+		$YSort.add_child(spawner)
+		spawner.spawn()
 		
 func get_keys_for_player(i):
 	return ["p" + str(i+1) + "_right",
@@ -101,9 +115,19 @@ func get_keys_for_player(i):
 			"p" + str(i+1) + "_big_bomb",
 			"p" + str(i+1) + "_land_mine",
 			"p" + str(i+1) + "_c4"]
+			
+func get_keys_for_multiplayer(i):
+	return [i + "_right",
+			i + "_down",
+			i + "_left",
+			i + "_up",
+			i + "_bomb",
+			i + "_big_bomb",
+			i + "_land_mine",
+			i + "_c4"]
 
 func get_sprite_for_player(i):
-	return load("res://Player/Player" + str(i+1) + ".png")
+	return load("res://Player/Player" + str(i) + ".png")
 	
 func game_over():
 	pass
