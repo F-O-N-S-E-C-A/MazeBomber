@@ -1,0 +1,120 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Multiplayer/Multiplayer_Menu.gd" type="Script" id=1]
+[ext_resource path="res://optionsbackgroung.png" type="Texture" id=2]
+[ext_resource path="res://PeaberryBase.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 40
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 43
+font_data = ExtResource( 3 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 20
+font_data = ExtResource( 3 )
+
+[node name="Multiplayer_Menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 2.0
+margin_top = 14.0
+margin_right = 2.0
+margin_bottom = 14.0
+script = ExtResource( 1 )
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 1312.0
+margin_bottom = 736.0
+texture = ExtResource( 2 )
+expand = true
+stretch_mode = 1
+
+[node name="BlackOverlay" type="ColorRect" parent="."]
+anchor_right = 34.4
+anchor_bottom = 18.4
+margin_left = -9.0
+margin_top = -8.0
+margin_right = -43822.8
+margin_bottom = -12806.4
+color = Color( 0, 0, 0, 0.796078 )
+
+[node name="Server_IP_Address" type="LineEdit" parent="."]
+visible = false
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -308.5
+margin_top = 93.0
+margin_right = 308.5
+margin_bottom = 172.0
+align = 1
+placeholder_text = "127.0.0.1"
+
+[node name="Host_Server" type="Button" parent="."]
+margin_left = 281.0
+margin_top = 605.0
+margin_right = 551.0
+margin_bottom = 683.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Host Server"
+flat = true
+
+[node name="Join_Server2" type="Button" parent="."]
+margin_left = 773.0
+margin_top = 602.0
+margin_right = 1043.0
+margin_bottom = 680.0
+custom_colors/font_color_hover = Color( 1, 0.960784, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "Join Server"
+flat = true
+
+[node name="Create_Server" type="Button" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -219.5
+margin_top = 64.0
+margin_right = 219.5
+margin_bottom = 457.0
+text = "Create Server"
+
+[node name="Join_Server" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 0.418
+anchor_right = 0.5
+anchor_bottom = 0.418
+margin_left = 288.0
+margin_top = 0.35199
+margin_right = 622.0
+margin_bottom = 81.352
+custom_fonts/font = SubResource( 2 )
+text = "Join Server"
+
+[node name="User_Name" type="LineEdit" parent="."]
+light_mask = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -306.0
+margin_top = 122.0
+margin_right = 311.0
+margin_bottom = 201.0
+custom_fonts/font = SubResource( 3 )
+align = 1
+placeholder_text = "Enter your player name here"
+placeholder_alpha = 0.609
+
+[node name="Device_IP_Address" type="Label" parent="."]
+margin_left = 19.0
+margin_top = 705.0
+margin_right = 364.0
+margin_bottom = 726.0
+text = "127.0.0.1"
+
+[connection signal="text_changed" from="Server_IP_Address" to="." method="_on_Server_IP_Address_text_changed"]
+[connection signal="pressed" from="Create_Server" to="." method="_on_Create_Server_pressed"]
+[connection signal="pressed" from="Join_Server" to="." method="_on_Join_Server_pressed"]

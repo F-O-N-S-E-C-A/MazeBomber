@@ -6,11 +6,12 @@ var players = []
 func _ready():
 	randomize()
 	my_init()
+	add_child(Network.advertiser)
 
 func my_init():
 	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 	for i in range(GlobalVariables.my_width):
-		for j in range(GlobalVariables.my_height):
+		for j in range(GlobalVariables.my_height - 0,GlobalVariables.my_height):
 			var wall = preload("res://World/Wall.tscn").instance()
 			wall.set_position(Vector2(i+.5, j+.5) * GlobalVariables.my_scale)
 			wall.set_scale(GlobalVariables.scale_vector)
@@ -41,7 +42,7 @@ func write_title():
 			for i in letter:
 				var wall = preload("res://World/Wall.tscn").instance()
 				var x = i[0] + letter_count
-				var y = i[1] + word_count
+				var y = 3 + i[1] + word_count
 				var pos = Vector2(x+.5, y+.5) * GlobalVariables.my_scale
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
@@ -80,6 +81,8 @@ func initialise_player():
 	players.append(player)
 	player.my_init(get_keys_for_player(1), get_sprite_for_player(1), players, "2", null)
 	player.set_scale(GlobalVariables.scale_vector)
+	player.get_node("Nickname").text = Settings.p1_name
+	player.get_node("Nickname").visible = true
 	$YSort.add_child(player)
 	var spawner = load("res://Logic/BoomBoxSpawner.gd").new(player.position)
 	maze.remove_path(player.position)

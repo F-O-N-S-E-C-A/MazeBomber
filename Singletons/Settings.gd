@@ -26,6 +26,7 @@ var p1_act: bool
 var p2_act: bool
 var p3_act: bool
 var p4_act: bool
+var p1_name = "Player"
 
 var save_settings_file = "user://save_game.save"
 var data = {}
@@ -56,13 +57,15 @@ func save_settings():
 		"p1_act" : p1_act,
 		"p2_act" : p2_act,
 		"p3_act" : p3_act,
-		"p4_act" : p4_act
+		"p4_act" : p4_act,
+		"p1_name": p1_name
 	}
 	file.open(save_settings_file, File.WRITE)
 	file.store_var(data)
 	file.close()
 
 func load_settings():
+
 	#save_settings()
 	var file = File.new()
 	if not file.file_exists(save_settings_file):
@@ -86,7 +89,8 @@ func load_settings():
 			"p1_act" : false,
 			"p2_act" : false,
 			"p3_act" : false,
-			"p4_act" : false
+			"p4_act" : false,
+			"p1_name": "Player"
 		}
 		save_settings()
 	file.open(save_settings_file, File.READ)
@@ -111,4 +115,5 @@ func load_settings():
 	p2_act = data["p2_act"]
 	p3_act = data["p3_act"]
 	p4_act = data["p4_act"]
+	p1_name = data["p1_name"]
 	file.close()
