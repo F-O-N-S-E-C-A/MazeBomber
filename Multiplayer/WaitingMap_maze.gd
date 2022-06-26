@@ -7,18 +7,18 @@ var connected = false
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
+		
 
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")
 
 remote func register_player(nick, skin):
+	add_player(nick, skin, get_tree().get_rpc_sender_id())
 	for p in playersInfo:
-		rpc_id(get_tree().get_rpc_sender_id(), "add_player", p[0], p[1])
-	add_player(nick, skin)
-	rpc_id(get_tree().get_rpc_sender_id(), "add_player", nick, skin)
+		rpc_id(get_tree().get_rpc_sender_id(), "add_player", p[0], p[1], p[2])
 	
 func _connected_to_server() -> void:
-	rpc_id(1, "register_player",Settings.p1_name, Settings.p1)
+	rpc_id(1, "register_player", Settings.p1_name, Settings.p1)
 
 func _ready():
 	randomize()
@@ -54,7 +54,7 @@ func server_init():
 
 	initialise_walls()
 	
-	rpc("add_player", Settings.p1_name, Settings.p1)
+	add_player(Settings.p1_name, Settings.p1, 1)
 	write_title()
 	
 	
@@ -107,7 +107,7 @@ func initialise_walls():
 					wall.set_scale(GlobalVariables.scale_vector)
 					$YSort.add_child(wall)
 
-remote func add_player(nick, skin):
+remote func add_player(nick, skin, id):
 	var player = preload("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
@@ -127,9 +127,9 @@ remote func add_player(nick, skin):
 		var spawner = load("res://Logic/BoomBoxSpawner.gd").new(player.position)
 		$YSort.add_child(spawner)
 		spawner.spawn()
-	players[len(players)-1].ownerID = get_tree().get_rpc_sender_id()
+	players[len(players)-1].ownerID = id
 	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
-	playersInfo.append([nick, skin])
+	playersInfo.append([nick, skin, id])
 		
 func get_keys_for_player(i):
 	return ["p" + str(i+1) + "_right",
