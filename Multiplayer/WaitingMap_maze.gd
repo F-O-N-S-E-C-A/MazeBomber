@@ -6,9 +6,10 @@ var players = []
 func _ready():
 	randomize()
 	my_init()
-	add_child(Network.advertiser)
 	if !get_tree().is_network_server():
 		$Join_server.visible = false
+	else:
+		add_child(Network.advertiser)
 
 func my_init():
 	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
