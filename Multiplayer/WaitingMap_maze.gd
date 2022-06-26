@@ -6,7 +6,7 @@ var connected = false
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
-	
+	rpc_id(id, "add_player", Settings.p1_name, Settings.p1)
 	#if connected_players == Network.MAX_CLIENTS - 1:
 
 func _player_disconnected(id) -> void:
@@ -18,6 +18,7 @@ func _connected_to_server() -> void:
 
 func _ready():
 	randomize()
+	GameModes.waiting_lobby()
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	get_tree().connect("connected_to_server", self, "_connected_to_server")
@@ -51,6 +52,8 @@ func server_init():
 	initialise_walls()
 	
 	add_player(Settings.p1_name, Settings.p1)
+	players[len(players)-1].ownerID = 1
+	players[len(players)-1].selfPeerID = 1
 	write_title()
 	
 	
@@ -106,7 +109,9 @@ func initialise_walls():
 remote func sync_player(nick, skin):
 	print("Syncing")
 	add_player(nick, skin)
+	print(get_tree().get_rpc_sender_id())
 	players[len(players)-1].ownerID = get_tree().get_rpc_sender_id()
+	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
 
 func add_player(nick, skin):
 	var player = preload("res://Player/Player.tscn").instance()

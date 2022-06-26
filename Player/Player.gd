@@ -26,6 +26,7 @@ var selfPeerID
 var ownerID = 1
 var player: String
 var hud = null
+var lobby = false
 
 onready var hpbar = $HPBar
 onready var animationPlayer = $AnimationPlayer
@@ -62,13 +63,15 @@ func _physics_process(delta):
 	if updateFromNetwork:
 		input_vector = network_input_vector
 	else:
-		if selfPeerID == ownerID || !GameModes.multiplayer_online:
+		if GameModes.waiting_lobby or GameModes.multiplayer_online:
+			if selfPeerID == ownerID:
+				input_vector.x = Input.get_action_strength(key_map[0]) - Input.get_action_strength(key_map[2])
+				input_vector.y = Input.get_action_strength(key_map[1]) - Input.get_action_strength(key_map[3])
+				input_vector = input_vector.normalized()
+		else:
 			input_vector.x = Input.get_action_strength(key_map[0]) - Input.get_action_strength(key_map[2])
 			input_vector.y = Input.get_action_strength(key_map[1]) - Input.get_action_strength(key_map[3])
 			input_vector = input_vector.normalized()
-		else:
-			#input_vector = Vector2.ZERO
-			pass
 
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
@@ -125,7 +128,7 @@ remote func syncC4(p):
 	play_place_bomb_sound()
 
 func _process(_delta):
-	if GameModes.multiplayer_online:
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
 		if selfPeerID != ownerID:
 			return
 

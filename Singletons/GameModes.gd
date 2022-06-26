@@ -6,6 +6,7 @@ preload("res://Autonomous_Agent/deliberative_agent/deliberative_agent.gd")]
 var singlePlayer: bool
 var multiplayer_online: bool
 var multiplayer_local: bool
+var waiting_lobby: bool
 
 var agent
 var agentSprite
@@ -13,25 +14,35 @@ var agentSprite
 var dead_players = []
 var players = []
 
+func waiting_lobby():
+	singlePlayer = false
+	multiplayer_online = false
+	multiplayer_local = false
+	waiting_lobby = true
+
 func multiplayer_online():
 	singlePlayer = false
 	multiplayer_online = true
 	multiplayer_local = false
+	waiting_lobby = false
 
 func multiplayer_local():
 	singlePlayer = false
 	multiplayer_online = false
 	multiplayer_local = true
+	waiting_lobby = false
 
 func singleplayer():
 	singlePlayer = true
 	multiplayer_online = false
 	multiplayer_local = false
+	waiting_lobby = false
 
 func menu():
 	singlePlayer = false
 	multiplayer_online = false
 	multiplayer_local = false
+	waiting_lobby = false
 
 func is_an_agent(var body):
 	if singlePlayer:
