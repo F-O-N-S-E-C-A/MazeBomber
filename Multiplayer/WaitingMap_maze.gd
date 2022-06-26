@@ -6,7 +6,7 @@ var connected = false
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
-	rpc_id(id, "add_player", Settings.p1_name, Settings.p1)
+	rpc_id(id, "sync_player", Settings.p1_name, Settings.p1)
 	#if connected_players == Network.MAX_CLIENTS - 1:
 
 func _player_disconnected(id) -> void:
