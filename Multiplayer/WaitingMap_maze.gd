@@ -62,7 +62,7 @@ func write_title():
 				var pos = Vector2(x+.5, y+.5) * GlobalVariables.my_scale
 				wall.set_position(pos)
 				wall.set_scale(GlobalVariables.scale_vector)
-				wall.calculate_hp(0.7)
+				wall.health = 100
 				wall.set_border()
 				$YSort.add_child(wall)
 			letter_count+=5
