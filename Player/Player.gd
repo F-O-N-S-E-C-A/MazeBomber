@@ -139,7 +139,7 @@ func _process(_delta):
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
-		if GameModes.multiplayer_online:
+		if GameModes.multiplayer_online or GameModes.waiting_lobby:
 			rpc("syncTNT", self.position)
 		updateHUD()
 		play_place_bomb_sound()
@@ -150,7 +150,7 @@ func _process(_delta):
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
-		if GameModes.multiplayer_online:
+		if GameModes.multiplayer_online or GameModes.waiting_lobby:
 			rpc("syncBigBomb", self.position)
 		updateHUD()
 		play_place_bomb_sound()
@@ -161,7 +161,7 @@ func _process(_delta):
 		test_bomb.my_init(self)
 		test_bomb.set_position(self.position)
 		get_parent().add_child(test_bomb)
-		if GameModes.multiplayer_online:
+		if GameModes.multiplayer_online or GameModes.waiting_lobby:
 			rpc("syncLandMine", self.position)
 		updateHUD()
 		play_place_bomb_sound()
@@ -170,7 +170,7 @@ func _process(_delta):
 		if(c4_planted != null):
 			c4_planted.to_explode = true
 			c4_planted = null
-			if GameModes.multiplayer_online:
+			if GameModes.multiplayer_online or GameModes.waiting_lobby:
 				rpc("syncC4", self.position)
 		elif(c4_planted == null && c4 > 0):
 			c4 -= 1
