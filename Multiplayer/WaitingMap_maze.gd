@@ -14,7 +14,7 @@ func _player_disconnected(id) -> void:
 remote func register_player(nick, skin):
 	for p in playersInfo:
 		rpc_id(get_tree().get_rpc_sender_id(), "add_player", p[0], p[1])
-	rpc_id(1, "add_player", nick, skin)
+	add_player(nick, skin)
 	rpc_id(get_tree().get_rpc_sender_id(), "add_player", nick, skin)
 	
 func _connected_to_server() -> void:
@@ -54,7 +54,7 @@ func server_init():
 
 	initialise_walls()
 	
-	rpc_id(1, "add_player", Settings.p1_name, Settings.p1)
+	rpc("add_player", Settings.p1_name, Settings.p1)
 	write_title()
 	
 	
