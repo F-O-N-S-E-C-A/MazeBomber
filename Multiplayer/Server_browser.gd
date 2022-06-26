@@ -39,4 +39,4 @@ func _on_Join_server_pressed():
 	Network.join_server()
 
 func _on_Go_back_pressed():
-	get_tree().reload_current_scene()
+	get_tree().change_scene("res://Multiplayer/Multiplayer_Menu.tscn")
