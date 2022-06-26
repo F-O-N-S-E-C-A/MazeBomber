@@ -197,6 +197,8 @@ remote func syncTakeDamage(damage):
 		get_parent().get_parent().game_over()
 
 func take_damage(damage):
+	if GameModes.waiting_lobby:
+		return
 	if GameModes.multiplayer_online:
 		if !get_tree().is_network_server():
 			return

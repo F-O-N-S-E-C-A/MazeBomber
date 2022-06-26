@@ -6,17 +6,17 @@ var connected = false
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
-	rpc_id(id, "sync_player", Settings.p1_name, Settings.p1)
+	if get_tree().is_network_server():
+		for i in players:
+			rpc_id(id, "add_player", Settings.p1_name, Settings.p1)
+		rpc("add_player", Settings.p1_name, Settings.p1)
 	#if connected_players == Network.MAX_CLIENTS - 1:
 
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")
 
 func _connected_to_server() -> void:
-	add_player(Settings.p1_name, Settings.p1)
-	players[len(players)-1].ownerID = get_tree().get_network_unique_id()
-	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
-	rpc("sync_player", Settings.p1_name, Settings.p1)
+	pass
 
 func _ready():
 	randomize()
@@ -37,7 +37,6 @@ func client_init():
 	maze.generate_maze()
 	
 	initialise_walls()
-	
 	write_title()
 	
 	
@@ -53,9 +52,7 @@ func server_init():
 
 	initialise_walls()
 	
-	add_player(Settings.p1_name, Settings.p1)
-	players[len(players)-1].ownerID = 1
-	players[len(players)-1].selfPeerID = 1
+	rpc("add_player", Settings.p1_name, Settings.p1)
 	write_title()
 	
 	
@@ -108,14 +105,7 @@ func initialise_walls():
 					wall.set_scale(GlobalVariables.scale_vector)
 					$YSort.add_child(wall)
 
-remote func sync_player(nick, skin):
-	print("Syncing")
-	add_player(nick, skin)
-	print(get_tree().get_rpc_sender_id())
-	players[len(players)-1].ownerID = get_tree().get_rpc_sender_id()
-	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
-
-func add_player(nick, skin):
+remotesync func add_player(nick, skin):
 	var player = preload("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
@@ -135,6 +125,8 @@ func add_player(nick, skin):
 		var spawner = load("res://Logic/BoomBoxSpawner.gd").new(player.position)
 		$YSort.add_child(spawner)
 		spawner.spawn()
+	players[len(players)-1].ownerID = get_tree().get_rpc_sender_id()
+	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
 		
 func get_keys_for_player(i):
 	return ["p" + str(i+1) + "_right",
