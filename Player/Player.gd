@@ -178,7 +178,7 @@ func _process(_delta):
 			c4_planted.my_init(self)
 			c4_planted.set_position(self.position)
 			get_parent().add_child(c4_planted)
-			if GameModes.multiplayer_online:
+			if GameModes.multiplayer_online or GameModes.waiting_lobby:
 				rpc("syncC4", self.position)
 
 		updateHUD()

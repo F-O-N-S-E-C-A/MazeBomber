@@ -115,10 +115,10 @@ remote func add_player(nick, skin, id):
 	player.set_scale(GlobalVariables.scale_vector)
 	player.get_node("Nickname").text = nick
 	player.get_node("Nickname").visible = true
-	player.number_of_bombs = 1
-	player.big_bombs = 1
-	player.c4 = 1
-	player.landMines = 1
+	player.number_of_bombs = 1000
+	player.big_bombs = 1000
+	player.c4 = 1000
+	player.landMines = 1000
 	
 	players[len(players)-1].ownerID = id
 	players[len(players)-1].name = "Player" + str(id)
