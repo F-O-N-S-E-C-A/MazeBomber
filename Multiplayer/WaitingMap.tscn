@@ -26,15 +26,17 @@ script = ExtResource( 3 )
 
 [node name="YSort" type="YSort" parent="MazeGenerator"]
 
-[node name="Join_server" type="Button" parent="."]
+[node name="Start_Game" type="Button" parent="MazeGenerator"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-margin_left = -107.0
-margin_top = -29.0
-margin_right = 107.0
-margin_bottom = -5.0
+margin_left = 549.0
+margin_top = 707.0
+margin_right = 763.0
+margin_bottom = 731.0
 custom_colors/font_color_hover = Color( 0.992157, 1, 0, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "START GAME"
+
+[connection signal="pressed" from="MazeGenerator/Start_Game" to="MazeGenerator" method="_on_Start_Game_pressed"]

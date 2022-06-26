@@ -7,6 +7,8 @@ func _ready():
 	randomize()
 	my_init()
 	add_child(Network.advertiser)
+	if !get_tree().is_network_server():
+		$Join_server.visible = false
 
 func my_init():
 	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
@@ -107,3 +109,13 @@ func game_over():
 	
 func is_over():
 	pass
+
+remote func gameStart():
+	GameModes.multiplayer_online()
+	get_tree().change_scene("res://World.tscn")
+
+func _on_Start_Game_pressed():
+	if get_tree().is_network_server():
+		GameModes.multiplayer_online()
+		get_tree().change_scene("res://World.tscn")
+		rpc("gameStart")
