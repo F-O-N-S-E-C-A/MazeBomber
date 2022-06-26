@@ -3,8 +3,19 @@ extends Node2D
 var maze
 var players = []
 
+func _player_connected(id) -> void:
+	print("Player " + str(id) + " has connected")
+	
+	#if connected_players == Network.MAX_CLIENTS - 1:
+
+func _player_disconnected(id) -> void:
+	print("Player " + str(id) + " has disconnected")
+
 func _ready():
 	randomize()
+	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	
 	if !get_tree().is_network_server():
 		get_parent().get_node("Start_Game").visible = false
 		client_init()

@@ -37,6 +37,7 @@ func _on_Join_server_pressed():
 	Network.ip_address = server_ip_text_edit.text
 	hide()
 	Network.join_server()
+	queue_free()
 	get_tree().change_scene("res://Multiplayer/WaitingMap.tscn")
 
 func _on_Go_back_pressed():
