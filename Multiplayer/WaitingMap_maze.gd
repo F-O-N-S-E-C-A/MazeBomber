@@ -53,11 +53,9 @@ func server_init():
 	maze.generate_maze()
 
 	initialise_walls()
-	
-	add_player(Settings.p1_name, Settings.p1, 1)
 	write_title()
 	
-	
+	add_player(Settings.p1_name, Settings.p1, 1)
 
 func write_title():
 	var M = [[1,1],[1,2],[1,3],[1,4],[1,5],[2,2],[3,3],[4,2],[5,1],[5,2],[5,3],[5,4],[5,5]]
@@ -108,7 +106,7 @@ func initialise_walls():
 					$YSort.add_child(wall)
 
 remote func add_player(nick, skin, id):
-	var player = preload("res://Player/Player.tscn").instance()
+	var player = load("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 	player.set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
@@ -121,15 +119,12 @@ remote func add_player(nick, skin, id):
 	player.big_bombs = 1
 	player.c4 = 1
 	player.landMines = 1
-	$YSort.add_child(player)
-	maze.remove_path(player.position)
-	if len(players) == 1:
-		var spawner = load("res://Logic/BoomBoxSpawner.gd").new(player.position)
-		$YSort.add_child(spawner)
-		spawner.spawn()
+	
 	players[len(players)-1].ownerID = id
 	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
 	playersInfo.append([nick, skin, id])
+	$YSort.add_child(player)
+	maze.remove_path(player.position)
 		
 func get_keys_for_player(i):
 	return ["p" + str(i+1) + "_right",
