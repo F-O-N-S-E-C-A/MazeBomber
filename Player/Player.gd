@@ -36,8 +36,9 @@ onready var animationState = animationTree.get("parameters/playback")
 func setOwnerID(id):
 	ownerID = id
 
+
 func _ready():
-	if GameModes.multiplayer_online:
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
 		selfPeerID = get_tree().get_network_unique_id()
 
 func my_init(k, image, otherPlayers, p, h):

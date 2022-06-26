@@ -121,6 +121,7 @@ remote func add_player(nick, skin, id):
 	player.landMines = 1
 	
 	players[len(players)-1].ownerID = id
+	players[len(players)-1].name = "Player" + str(id)
 	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
 	playersInfo.append([nick, skin, id])
 	$YSort.add_child(player)
