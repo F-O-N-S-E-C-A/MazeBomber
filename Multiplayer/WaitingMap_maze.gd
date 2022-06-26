@@ -90,6 +90,7 @@ func initialise_walls():
 					$YSort.add_child(wall)
 
 remote func sync_player(nick, skin):
+	print("Syncing")
 	add_player(nick, skin)
 
 func add_player(nick, skin):
