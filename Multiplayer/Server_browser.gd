@@ -9,7 +9,8 @@ func _ready() -> void:
 	server_ip_text_edit.hide()
 
 func _on_Server_listener_new_server(serverInfo):
-	var server_node = server_container.add_child(load("res://Server_display.tscn").instance())
+	var server_node = load("res://Multiplayer/Server_display.tscn").instance()
+	server_container.add_child(server_node)
 	server_node.text = "%s - %s" % [serverInfo.ip, serverInfo.name]
 	server_node.ip_address = str(serverInfo.ip)
 
