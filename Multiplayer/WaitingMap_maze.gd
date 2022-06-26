@@ -2,6 +2,7 @@ extends Node2D
 
 var maze
 var players = []
+var connected = false
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
@@ -11,10 +12,15 @@ func _player_connected(id) -> void:
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")
 
+func _connected_to_server() -> void:
+	add_player(Settings.p1_name, Settings.p1)
+	rpc("sync_player", Settings.p1_name, Settings.p1)
+
 func _ready():
 	randomize()
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	get_tree().connect("connected_to_server", self, "_connected_to_server")
 	
 	if !get_tree().is_network_server():
 		get_parent().get_node("Start_Game").visible = false
@@ -30,9 +36,6 @@ func client_init():
 	initialise_walls()
 	
 	write_title()
-	
-	add_player(Settings.p1_name, Settings.p1)
-	rpc("sync_player", Settings.p1_name, Settings.p1)
 	
 	
 func server_init():
@@ -103,6 +106,7 @@ func initialise_walls():
 remote func sync_player(nick, skin):
 	print("Syncing")
 	add_player(nick, skin)
+	players[len(players)-1].ownerID = get_tree().get_rpc_sender_id()
 
 func add_player(nick, skin):
 	var player = preload("res://Player/Player.tscn").instance()
