@@ -6,7 +6,7 @@ var players = []
 func _ready():
 	randomize()
 	if !get_tree().is_network_server():
-		$Start_Game.visible = false
+		get_parent().get_node("Start_Game").visible = false
 		client_init()
 	else:
 		add_child(Network.advertiser)
@@ -19,6 +19,7 @@ func client_init():
 	#sync every shit first
 	
 	add_player(Settings.p1_name, Settings.p1)
+	rpc("sync_player", Settings.p1_name, Settings.p1)
 	
 	
 func server_init():
@@ -85,7 +86,10 @@ func initialise_walls():
 					wall.set_scale(GlobalVariables.scale_vector)
 					$YSort.add_child(wall)
 
-sync func add_player(nick, skin):
+remote func sync_player(nick, skin):
+	add_player(nick, skin)
+
+func add_player(nick, skin):
 	var player = preload("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
