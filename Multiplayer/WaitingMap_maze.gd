@@ -121,7 +121,7 @@ remote func add_player(id, nick, skin):
 	var player = load("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
-	player.set_position(GlobalVariables.my_scale * Vector2(maze.width/2, maze.height/2))
+	player.set_position(GlobalVariables.my_scale * Vector2(maze.width/2, maze.height/2) + Vector2(rand_range(0, 10), rand_range(0,10)))
 	playerList[id] = [player, nick, skin]
 	playersInfo[id] = [nick, skin]
 	player.my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(skin), players, "2", null)
