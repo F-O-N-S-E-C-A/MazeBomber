@@ -34,7 +34,7 @@ func _on_Host_Server_pressed():
 		if $User_Name.text != "":
 			Settings.p1_name = $User_Name.text.substr(0, 10)
 		Settings.save_settings()
-		get_tree().change_scene("res://Multiplayer/Waiting Lobby.tscn")
+		get_tree().change_scene("res://Multiplayer/WaitingMap.tscn")
 
 
 func _on_P1L_pressed():

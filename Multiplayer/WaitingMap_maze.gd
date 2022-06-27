@@ -2,20 +2,32 @@ extends Node2D
 
 var maze
 var players = []
-var playersInfo = []
+var playerList = {}
+var playersInfo = {}
 var connected = false
+
+	
+remote func syncPlayers(pl):
+	for p in pl.keys():
+		var new = true
+		for p1 in playerList.keys():
+			if p == p1:
+				new = false
+		if new:
+			pass
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
-		
+	#connected_players += 1
 
 func _player_disconnected(id) -> void:
 	print("Player " + str(id) + " has disconnected")
+	#connected_players -= 1
 
 remote func register_player(nick, skin):
-	add_player(nick, skin, get_tree().get_rpc_sender_id())
-	for p in playersInfo:
-		rpc_id(get_tree().get_rpc_sender_id(), "add_player", p[0], p[1], p[2])
+	add_player(get_tree().get_rpc_sender_id(), nick, skin)
+	for p in playerList.keys():
+		rpc_id(get_tree().get_rpc_sender_id(), "add_player", p, p[1], p[2])
 	
 func _connected_to_server() -> void:
 	rpc_id(1, "register_player", Settings.p1_name, Settings.p1)
@@ -55,7 +67,7 @@ func server_init():
 	initialise_walls()
 	write_title()
 	
-	add_player(Settings.p1_name, Settings.p1, 1)
+	add_player(1, Settings.p1_name, Settings.p1)
 
 func write_title():
 	var M = [[1,1],[1,2],[1,3],[1,4],[1,5],[2,2],[3,3],[4,2],[5,1],[5,2],[5,3],[5,4],[5,5]]
@@ -105,12 +117,13 @@ func initialise_walls():
 					wall.set_scale(GlobalVariables.scale_vector)
 					$YSort.add_child(wall)
 
-remote func add_player(nick, skin, id):
+remote func add_player(id, nick, skin):
 	var player = load("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 	player.set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
-	players.append(player)
+	playerList[id] = [player, nick, skin]
+	playersInfo[id] = [nick, skin]
 	player.my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(skin), players, "2", null)
 	player.set_scale(GlobalVariables.scale_vector)
 	player.get_node("Nickname").text = nick
@@ -120,10 +133,9 @@ remote func add_player(nick, skin, id):
 	player.c4 = 1000
 	player.landMines = 1000
 	
-	players[len(players)-1].ownerID = id
-	players[len(players)-1].name = "Player" + str(id)
-	players[len(players)-1].selfPeerID = get_tree().get_network_unique_id()
-	playersInfo.append([nick, skin, id])
+	playerList[id][0].ownerID = id
+	playerList[id][0].name = "Player" + str(id)
+	playerList[id][0].selfPeerID = get_tree().get_network_unique_id()
 	$YSort.add_child(player)
 	maze.remove_path(player.position)
 		
@@ -158,10 +170,12 @@ func is_over():
 
 remote func gameStart():
 	GameModes.multiplayer_online()
+	Network.players = playersInfo
 	get_tree().change_scene("res://World.tscn")
 
 func _on_Start_Game_pressed():
 	if get_tree().is_network_server():
+		Network.players = playersInfo
 		GameModes.multiplayer_online()
 		get_tree().change_scene("res://World.tscn")
 		rpc("gameStart")
