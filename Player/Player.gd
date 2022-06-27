@@ -40,6 +40,7 @@ func setOwnerID(id):
 func _ready():
 	if GameModes.multiplayer_online or GameModes.waiting_lobby:
 		selfPeerID = get_tree().get_network_unique_id()
+		self.name = Network.getName()
 
 func my_init(k, image, otherPlayers, p, h):
 	if GameModes.multiplayer_online:

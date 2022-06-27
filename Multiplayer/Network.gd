@@ -9,6 +9,8 @@ var server = null
 var advertiser = null
 var listener = null
 
+var syncNumber = 0
+
 var ip_address = "127.0.0.1"
 
 func _ready():
@@ -46,3 +48,7 @@ func _server_disconnected() -> void:
 
 func _connection_failed() -> void:
 	print("Connecion Failed")
+	
+func getName():
+	syncNumber += 1
+	return "syncVar" + str(syncNumber)
