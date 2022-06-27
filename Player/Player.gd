@@ -43,6 +43,13 @@ func _ready():
 	if GameModes.multiplayer_online or GameModes.waiting_lobby:
 		selfPeerID = get_tree().get_network_unique_id()
 		self.name = Network.getName()
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+		
+func _player_disconnected(id):
+	print(str(id) + " disconnected")
+	if ownerID == id:
+		get_parent().get_parent().players.erase(self)
+		queue_free()
 
 func my_init(k, image, otherPlayers, p, h):
 	if GameModes.multiplayer_online:
