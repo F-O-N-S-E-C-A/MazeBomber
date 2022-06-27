@@ -4,6 +4,10 @@ var timer
 
 var boomBoxHere = false
 
+func _ready():
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
+		self.name = Network.getName()
+
 func _init(pos):
 	position = pos
 	timer = Timer.new()
