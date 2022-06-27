@@ -15,6 +15,9 @@ func _ready():
 
 func _on_Join_Server_pressed():
 	get_tree().change_scene("res://Multiplayer/Server_browser.tscn")
+	if $User_Name.text != "":
+		Settings.p1_name = $User_Name.text.substr(0, 10)
+		Settings.save_settings()
 
 func instance_player(id) -> void:
 	pass
