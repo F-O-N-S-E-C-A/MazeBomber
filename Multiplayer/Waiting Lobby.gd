@@ -12,6 +12,7 @@ func _ready():
 		self.get_node("CanvasLayer/Player_List/Button").visible = false
 	else:
 		addPlayer(1, Settings.p1_name, Settings.p1)
+		add_child(Network.advertiser)
 
 func addPlayer(id, nick, skin):
 	playerlist[id] = [nick, skin]
