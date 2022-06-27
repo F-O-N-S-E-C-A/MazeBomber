@@ -39,4 +39,18 @@ custom_colors/font_color_hover = Color( 0.992157, 1, 0, 1 )
 custom_fonts/font = SubResource( 1 )
 text = "START GAME"
 
+[node name="Back" type="Button" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -653.0
+margin_top = -29.0
+margin_right = -504.0
+margin_bottom = -5.0
+custom_colors/font_color_hover = Color( 0.992157, 1, 0, 1 )
+custom_fonts/font = SubResource( 1 )
+text = "BACK"
+
 [connection signal="pressed" from="Start_Game" to="MazeGenerator" method="_on_Start_Game_pressed"]
+[connection signal="pressed" from="Back" to="MazeGenerator" method="_on_Back_pressed"]

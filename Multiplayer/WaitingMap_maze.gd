@@ -180,3 +180,7 @@ func _on_Start_Game_pressed():
 		GameModes.multiplayer_online()
 		get_tree().change_scene("res://World.tscn")
 		rpc("gameStart")
+
+func _on_Back_pressed():
+	GameModes.menu()
+	get_tree().change_scene("res://Menu.tscn")
