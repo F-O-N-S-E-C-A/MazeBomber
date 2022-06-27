@@ -1,4 +1,4 @@
-extends StaticBody2D
+extends Node2D
 
 
 # Declare member variables here. Examples:
@@ -10,6 +10,5 @@ extends StaticBody2D
 func _ready():
 	if GameModes.multiplayer_online or GameModes.waiting_lobby:
 		self.name = Network.getName()
-	
 
 	
