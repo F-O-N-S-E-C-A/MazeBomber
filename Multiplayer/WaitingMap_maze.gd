@@ -15,6 +15,7 @@ remote func syncPlayers(pl):
 				new = false
 		if new:
 			add_player(p, pl[p][1], pl[p][2])
+			print(playerList)
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
@@ -120,7 +121,7 @@ remote func add_player(id, nick, skin):
 	var player = load("res://Player/Player.tscn").instance()
 	var dir = Vector2(1 % 2, abs(1 % 2 - 1 / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
-	player.set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
+	player.set_position(GlobalVariables.my_scale * Vector2(maze.width/2, maze.height/2))
 	playerList[id] = [player, nick, skin]
 	playersInfo[id] = [nick, skin]
 	player.my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(skin), players, "2", null)
