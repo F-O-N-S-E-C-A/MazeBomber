@@ -19,4 +19,3 @@ scale = Vector2( 0.5625, 0.5625 )
 texture = ExtResource( 1 )
 
 [connection signal="body_entered" from="." to="." method="_on_c4PowerUp_body_entered"]
-[connection signal="body_exited" from="." to="." method="_on_c4PowerUp_body_exited"]
