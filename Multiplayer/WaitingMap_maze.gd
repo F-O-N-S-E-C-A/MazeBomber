@@ -14,7 +14,7 @@ remote func syncPlayers(pl):
 			if p == p1:
 				new = false
 		if new:
-			pass
+			add_player(p, pl[p][1], pl[p][2])
 
 func _player_connected(id) -> void:
 	print("Player " + str(id) + " has connected")
@@ -26,8 +26,7 @@ func _player_disconnected(id) -> void:
 
 remote func register_player(nick, skin):
 	add_player(get_tree().get_rpc_sender_id(), nick, skin)
-	for p in playerList.keys():
-		rpc_id(get_tree().get_rpc_sender_id(), "add_player", p, playerList[p][1], playerList[p][2])
+	rpc("syncPlayers", playerList)
 	
 func _connected_to_server() -> void:
 	rpc_id(1, "register_player", Settings.p1_name, Settings.p1)
