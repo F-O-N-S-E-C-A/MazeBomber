@@ -1,6 +1,7 @@
 extends Control
 
 func _ready():
+	get_tree().network_peer = null
 	Settings.load_settings()
 	if Settings.music_enabled:
 		$menu_music.volume_db = Settings.music_volume - 25
