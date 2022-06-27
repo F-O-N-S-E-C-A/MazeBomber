@@ -21,8 +21,8 @@ func addPlayer(id, nick, skin):
 	
 remote func syncPlayers(pl):
 	playerlist = pl
-	for p in playerlist:
-		get_node("CanvasLayer/Player_List").add_item(p[0])
+	for p in playerlist.keys():
+		get_node("CanvasLayer/Player_List").add_item(pl[p][0])
 
 remote func gameStart():
 	GameModes.multiplayer_online()
