@@ -7,15 +7,19 @@ var sprites = []
 var huds = []
 
 func _ready():
-	Settings.load_settings()
-	if Settings.p1_act:
-		sprites.append(Settings.p1)
-	if Settings.p2_act:
-		sprites.append(Settings.p2)
-	if Settings.p3_act:
-		sprites.append(Settings.p3)
-	if Settings.p4_act:
-		sprites.append(Settings.p4)
+	if GameModes.multiplayer_online:
+		for p in Network.players.keys():
+			sprites.append(Network.players[p][1])
+	else:
+		Settings.load_settings()
+		if Settings.p1_act:
+			sprites.append(Settings.p1)
+		if Settings.p2_act:
+			sprites.append(Settings.p2)
+		if Settings.p3_act:
+			sprites.append(Settings.p3)
+		if Settings.p4_act:
+			sprites.append(Settings.p4)
 	randomize()
 	my_init()
 
@@ -238,12 +242,13 @@ func initialise_players(n_players):
 		else:
 			#IP
 			if GameModes.multiplayer_online:
+				players[i].setNickname(Network.players[ids[i]][0])
 				if get_tree().get_network_unique_id() == ids[i]:
 					var hud = initialise_hud("bottom_right")
 					huds.append(hud)
-					players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), hud)
+					players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_multiplayer(Network.players[ids[i]][1]), players, str(i+1), hud)
 				else:
-					players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), null)
+					players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_multiplayer(Network.players[ids[i]][1]), players, str(i+1), null)
 			else:
 				players[i].my_init(get_keys_for_player(i), get_sprite_for_player(i), players, str(i+1), huds[i])
 			players[i].set_scale(GlobalVariables.scale_vector)
@@ -287,6 +292,9 @@ func initialise_spawners():
 				$YSort.add_child(spawner)
 				WorldObjects.spawners.append(spawner)
 				spawner.spawn()
+
+func get_sprite_for_multiplayer(i):
+	return load("res://Player/Player" + str(i) + ".png")
 
 func get_sprite_for_player(i):
 	return load("res://Player/Player" + str(sprites[i]) + ".png")

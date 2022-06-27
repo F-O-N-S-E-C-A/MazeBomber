@@ -10,6 +10,7 @@ var advertiser = null
 var listener = null
 
 var syncNumber = 0
+var players = {}
 
 var ip_address = "127.0.0.1"
 
