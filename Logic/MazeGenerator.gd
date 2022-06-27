@@ -29,6 +29,8 @@ func _ready():
 
 func getPlayerByID(id):
 	for player in players:
+		if player == null:
+			return null
 		if player.ownerID == id:
 			return player
 	return null
