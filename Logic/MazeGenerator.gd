@@ -64,6 +64,7 @@ remote func syncPlayer(id):
 	var dir = Vector2(i % 2, abs(i % 2 - i / 2))
 	var aux = GlobalVariables.my_scale * 1.5 * (Vector2.ONE - dir * 2)
 	players[i].ownerID = id
+	players[i].setNickname(Network.players[id][0])
 
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 	if get_tree().get_network_unique_id() == id:
