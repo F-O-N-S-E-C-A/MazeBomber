@@ -4,6 +4,8 @@ var health
 var border = false
 
 func _ready():
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
+		self.name = Network.getName()
 	self.set_scale(GlobalVariables.scale_vector)
 	pass
 

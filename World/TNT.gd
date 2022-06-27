@@ -16,6 +16,8 @@ var collision_points = []
 func _ready():
 	if GameModes.singlePlayer:
 		WorldObjects.bombs.append(self)
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
+		self.name = Network.getName()
 
 
 func _process(delta):

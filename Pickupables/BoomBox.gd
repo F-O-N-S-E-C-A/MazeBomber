@@ -4,6 +4,10 @@ const player = preload("res://Player/Player.gd")
 var spawner
 var my_player
 
+func _ready():
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
+		self.name = Network.getName()
+
 func my_init(s):
 	spawner = s
 

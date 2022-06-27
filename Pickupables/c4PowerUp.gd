@@ -5,6 +5,8 @@ const player = preload("res://Player/Player.gd")
 
 func _ready():
 	WorldObjects.pickupables.append(self)
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
+		self.name = Network.getName()
 
 remote func syncC4Pickup(id):
 	queue_free()

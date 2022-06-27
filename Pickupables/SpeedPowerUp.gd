@@ -6,6 +6,8 @@ var receiver
 
 func _ready():
 	WorldObjects.pickupables.append(self)
+	if GameModes.multiplayer_online or GameModes.waiting_lobby:
+		self.name = Network.getName()
 
 remote func syncSpeedPickup(id):
 	var p = get_parent().get_parent().getPlayerByID(id)
