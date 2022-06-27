@@ -67,9 +67,9 @@ remote func syncPlayer(id):
 
 	players[i].set_position(dir * GlobalVariables.my_scale * Vector2(maze.width, maze.height) + aux)
 	if get_tree().get_network_unique_id() == id:
-		players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), huds[0])
+		players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_multiplayer(Network.players[id][1]), players, str(i+1), huds[0])
 	else:
-		players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_player(i%2), players, str(i+1), null)
+		players[i].my_init(get_keys_for_multiplayer("multiplayer"), get_sprite_for_multiplayer(Network.players[id][1]), players, str(i+1), null)
 	#players[i].my_init(get_keys_for_player(0), get_sprite_for_player(i%2), players, str(i+1), null)
 	players[i].set_scale(GlobalVariables.scale_vector)
 	$YSort.add_child(players[i])
