@@ -26,13 +26,11 @@ remote func syncPlayers(pl):
 
 remote func gameStart():
 	GameModes.multiplayer_online()
-	queue_free()
 	get_tree().change_scene("res://World.tscn")
 
 func _on_Button_pressed():
 	if get_tree().is_network_server():
 		GameModes.multiplayer_online()
-		queue_free()
 		get_tree().change_scene("res://World.tscn")
 		rpc("gameStart")
 
