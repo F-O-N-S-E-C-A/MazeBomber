@@ -33,6 +33,7 @@ func _connected_to_server() -> void:
 	rpc_id(1, "register_player", Settings.p1_name, Settings.p1)
 
 func _ready():
+	Network.syncNumber = 0
 	randomize()
 	GameModes.waiting_lobby()
 	get_tree().connect("network_peer_connected", self, "_player_connected")

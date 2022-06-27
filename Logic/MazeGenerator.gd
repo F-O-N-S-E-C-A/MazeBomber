@@ -7,6 +7,7 @@ var sprites = []
 var huds = []
 
 func _ready():
+	Network.syncNumber = 0
 	if GameModes.multiplayer_online:
 		for p in Network.players.keys():
 			sprites.append(Network.players[p][1])
