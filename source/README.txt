@@ -1,0 +1,2 @@
+There is no real build instructions necessary for Godot. Simply open the pre-installed Godot and import the .project file present within
+this folder. Then all you have to do is press play to start the game, if you so desire.
