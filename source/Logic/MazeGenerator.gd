@@ -122,7 +122,7 @@ func my_init():
 	if Settings.fog_of_war:
 		$CanvasModulate.set_color(Color(0,0,0))
 	else:
-		$CanvasModulate.set_color(Color(0.8,0.8,0.8))
+		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
 
 	if GameModes.multiplayer_online:
 		if get_tree().is_network_server():
