@@ -21,6 +21,18 @@ var start_counting = false
 
 export(bool) var ready = false
 
+# ** rewards **
+var player_health_reward = 0 
+var player_shield_reward = 0
+var agent_health_reward = 0
+var agent_shield_reward = 0
+var pickup_bombs_reward = 0 # 1 for each that was picked up
+var pickup_xp_reward = 0 # 1 for each that was picked up
+var pickup_hp_reward = 0 # 1 for each that was picked up
+var destroy_walls_reward = 0 # 1 for each that was destroied
+var weaken_walls_reward = 0 # cumulative sum of the damage in every wall
+
+
 var pickupable_classes = [preload("res://Pickupables/BigBombPowerUp.gd"),
 preload("res://Pickupables/c4PowerUp.gd"),
 preload("res://Pickupables/DamagePowerUp.gd"),
@@ -105,9 +117,6 @@ func map_obs():
 				#print(obs[posX(b)][posY(b)][2], " - (", posX(b), ",", posY(b), ")")
 	return obs
 	
-
-	
-	
 func player_obs_continuous():
 	return [	player.position[0], player.position[1],
 	agent.position[0], agent.position[1], 
@@ -125,6 +134,19 @@ func obs_discrete():
 	posX(agent), posY(agent), 
 	agent.hpbar.health, player.hpbar.health, agent.hpbar.shield, player.hpbar.shield, 
 	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
+	
+func update_player_hp(new_hp, new_shiled_hp):
+	player_health_reward += new_hp - player_hp
+	player_shield_reward += new_shiled_hp - player_shield_hp
+	player_hp = new_hp
+	player_shield_hp = new_shiled_hp
+	
+func update_agent_hp(new_hp, new_shiled_hp):
+	agent_health_reward += new_hp - player_hp
+	agent_shield_reward += new_shiled_hp - agent_shield_hp
+	agent_hp = new_hp
+	agent_shield_hp = new_shiled_hp
+
 	
 func init_obs():
 	var obs = []
@@ -160,6 +182,29 @@ func get_maze_mat():
 		obs[posX(p)][posY(p)] = 1	
 	
 	return obs
+	
+func get_rewards():
+	var rewards = [player_health_reward,
+	player_shield_reward,
+	agent_health_reward,
+	agent_shield_reward,
+	pickup_bombs_reward,
+	pickup_xp_reward,
+	pickup_hp_reward,
+	destroy_walls_reward, 
+	weaken_walls_reward]
+	
+	player_health_reward = 0 
+	player_shield_reward = 0
+	agent_health_reward = 0
+	agent_shield_reward = 0
+	pickup_bombs_reward = 0
+	pickup_xp_reward = 0
+	pickup_hp_reward = 0
+	destroy_walls_reward = 0
+	weaken_walls_reward = 0
+	
+	return rewards
 	
 func discretize(p):
 	return Vector2(int(p[0]/GlobalVariables.my_scale), int(p[1]/GlobalVariables.my_scale))

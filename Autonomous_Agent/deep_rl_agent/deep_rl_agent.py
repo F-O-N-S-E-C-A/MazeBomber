@@ -116,7 +116,7 @@ class Autonomous_Agent(Control):
 			
 		if self.n_steps % 300 == 0:
 			self.epsilon = 0
-			print("Comulative Reward: ", self.comulativeReward)
+			#print("Comulative Reward: ", self.comulativeReward)
 			
 		if self.n_steps % 350 == 0:
 			self.get_parent().reset()
@@ -215,7 +215,7 @@ class Autonomous_Agent(Control):
 			return random.randint(0, len(self.actions) - 1)
 
 		q_values = self.q_network.predict(state, verbose = 0)
-		print(q_values[0])
+		#print(q_values[0])
 		return np.argmax(q_values[0])
 		
 	def retrain(self, batch_size):

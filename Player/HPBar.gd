@@ -18,8 +18,7 @@ func take_damage(damage):
 		shield = 0
 	update()
 	if GameModes.singlePlayer:
-		WorldObjects.player_hp = health
-		WorldObjects.player_shield_hp = shield
+		WorldObjects.update_player_hp(health, shield)
 	return health <= 0
 
 func add_hp(hp):

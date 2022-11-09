@@ -18,9 +18,13 @@ func calculate_hp(distance_to_middle):
 func take_damage(damage):
 	if !border && health > 0:
 		var new_health = health - damage
+		if GameModes.singlePlayer: 
+			WorldObjects.weaken_walls_reward += damage
 		if new_health < 0:
 			health = new_health
 			destroy()
+			if GameModes.singlePlayer: 
+				WorldObjects.destroy_walls_reward += 1
 			queue_free()
 		else:
 			health = new_health

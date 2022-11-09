@@ -14,3 +14,5 @@ func _on_DamagePowerUp_body_entered(body):
 		pick_up(body)
 		queue_free()
 		WorldObjects.pickupables.erase(self)
+		if GameModes.is_an_agent(body):
+			WorldObjects.pickup_xp_reward += 1

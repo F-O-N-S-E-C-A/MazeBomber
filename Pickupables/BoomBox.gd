@@ -15,11 +15,13 @@ func pick_up(p):
 		queue_free()
 		spawner.start_timer()
 		p.updateHUD()
-
+	
+	
 func _on_BoomBox_body_entered(body):
 	if body is player || GameModes.is_an_agent(body):
 		pick_up(body)
-
+		if GameModes.is_an_agent(body):
+			WorldObjects.pickup_bombs_reward += 1
 		
 func _process(_delta):
 	if my_player != null && overlaps_body(my_player):
