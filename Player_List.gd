@@ -34,8 +34,8 @@ func _on_Button_pressed():
 		GameModes.player = load("res://Player/Player.tscn").instance()
 		GameModes.playerSprite = load("res://Player/Player2.png")
 	elif self.is_selected(2):
-		GameModes.agent = load("res://Autonomous_Agent/imitation_learning/imitation_learning.tscn").instance()
-		GameModes.agentSprite = load("res://Autonomous_Agent/imitation_learning/AI1.png")
+		GameModes.agent = load("res://Autonomous_Agent/deep_rl_agent/deep_rl_agent.tscn").instance()
+		GameModes.agentSprite = load("res://Autonomous_Agent/deep_rl_agent/AI1.png")
 		GameModes.player = load("res://Player/Player.tscn").instance()
 		GameModes.playerSprite = load("res://Player/Player2.png")
 	elif self.is_selected(3):

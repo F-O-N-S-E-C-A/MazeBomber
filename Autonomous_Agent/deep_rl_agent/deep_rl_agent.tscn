@@ -1,7 +1,7 @@
 [gd_scene load_steps=32 format=2]
 
-[ext_resource path="res://Autonomous_Agent/imitation_learning/imitation_learning.gd" type="Script" id=1]
-[ext_resource path="res://Autonomous_Agent/imitation_learning/imitation_learning.py" type="Script" id=2]
+[ext_resource path="res://Autonomous_Agent/deep_rl_agent/deep_rl_agent.gd" type="Script" id=1]
+[ext_resource path="res://Autonomous_Agent/deep_rl_agent/deep_rl_agent.py" type="Script" id=2]
 [ext_resource path="res://World/images/Light.png" type="Texture" id=3]
 [ext_resource path="res://Sound/load.wav" type="AudioStream" id=4]
 [ext_resource path="res://Autonomous_Agent/HPBar.gd" type="Script" id=5]

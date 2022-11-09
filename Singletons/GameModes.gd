@@ -4,7 +4,7 @@ const agent_classes = [preload("res://Autonomous_Agent/Agent Template/Template.g
 preload("res://Autonomous_Agent/deliberative_agent/deliberative_agent.gd"), 
 preload("res://Autonomous_Agent/tony_agent/tony_agent.gd"),
 preload("res://Autonomous_Agent/RandomAgent/random_agent.gd"),
-preload("res://Autonomous_Agent/imitation_learning/imitation_learning.gd")]
+preload("res://Autonomous_Agent/deep_rl_agent/deep_rl_agent.gd")]
 
 var singlePlayer: bool
 var multiplayer_online: bool
