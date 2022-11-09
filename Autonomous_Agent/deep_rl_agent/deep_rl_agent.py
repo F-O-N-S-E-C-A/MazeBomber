@@ -53,7 +53,7 @@ class Autonomous_Agent(Control):
 	def _process(self, delta):
 		if not self.ready:
 			return
-			
+		
 		self.position = np.array([[self.get_parent().position.x, self.get_parent().position.y]])
 		
 		#action = self.act(self.state)
