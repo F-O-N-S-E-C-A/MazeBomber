@@ -105,6 +105,9 @@ func map_obs():
 				#print(obs[posX(b)][posY(b)][2], " - (", posX(b), ",", posY(b), ")")
 	return obs
 	
+
+	
+	
 func player_obs_continuous():
 	return [	player.position[0], player.position[1],
 	agent.position[0], agent.position[1], 
@@ -112,6 +115,12 @@ func player_obs_continuous():
 	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
 	
 func player_obs_discrete():
+	return [posX(player), posY(player), 
+	posX(agent), posY(agent), 
+	agent.hpbar.health, player.hpbar.health, agent.hpbar.shield, player.hpbar.shield, 
+	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
+	
+func obs_discrete():
 	return [map_obs(), posX(player), posY(player), 
 	posX(agent), posY(agent), 
 	agent.hpbar.health, player.hpbar.health, agent.hpbar.shield, player.hpbar.shield, 
