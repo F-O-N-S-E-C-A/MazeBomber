@@ -32,6 +32,10 @@ var initialPosition = Vector2(0,0)
 
 var opponent = null
 
+func _input(ev):
+	if Input.is_key_pressed(KEY_Z):
+		VisualServer.render_loop_enabled = !VisualServer.render_loop_enabled
+
 func reset():
 	self.position = initialPosition
 	$HPBar.health = 100
