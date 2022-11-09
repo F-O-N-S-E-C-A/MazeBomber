@@ -1,6 +1,7 @@
 .DS_Store
 addons/**
 addons/
+pythonscript.gdnlib
 *.md5
 *.pyc
 *.stex
