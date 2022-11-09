@@ -41,6 +41,9 @@ func setVec(x, y):
 	input_vector.x = x
 	input_vector.y = y
 
+func init():
+	pass
+
 func my_init(k, image, otherPlayers, a, b):
 	self.set_scale(GlobalVariables.scale_vector)
 	for p in otherPlayers:
