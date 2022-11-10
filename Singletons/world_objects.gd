@@ -215,3 +215,8 @@ func posX(p):
 func posY(p):
 	return int(p.position[1]/GlobalVariables.my_scale)
 		
+func getPlayerHP():
+	return player_hp
+
+func getAgentHP():
+	return agent_hp
