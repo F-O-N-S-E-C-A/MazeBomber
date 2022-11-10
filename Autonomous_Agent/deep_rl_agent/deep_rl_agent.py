@@ -76,7 +76,7 @@ class Autonomous_Agent(Control):
 				self.alighn_target_model()
 				return
 				
-			if self.step % 1000 == 0 and len(self.expirience_replay) > self.batchSize:
+			if self.step % 300 == 0 and len(self.expirience_replay) > self.batchSize:
 				#self.retrain(self.batchSize)
 				t = threading.Thread(target=self.retrain, args=(self.batchSize,))
 				t.start()
@@ -162,15 +162,15 @@ class Autonomous_Agent(Control):
 		
 		for state, action, reward, next_state, terminated in minibatch:
 			
-			target = self.q_network.predict(state, verbose = 0)
+			target = self.q_network.predict(state.reshape((1, self.stateSize)), verbose = 0)
 			
 			if terminated:
 				target[0][action] = reward
 			else:
-				t = self.target_network.predict(next_state, verbose = 0)
+				t = self.target_network.predict(next_state.reshape((1, self.stateSize)), verbose = 0)
 				target[0][action] = reward + self.gamma * np.amax(t)
 			
-			self.q_network.fit(state, target, epochs=1, verbose=0)
+			self.q_network.fit(state.reshape((1, self.stateSize)), target, epochs=1, verbose=0)
 		self.alighn_target_model()
 		return	
 	
