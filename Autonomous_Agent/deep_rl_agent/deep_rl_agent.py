@@ -27,9 +27,25 @@ class Autonomous_Agent(Control):
 		self.action = 0
 		self.terminated = False
 		
+	def godotToPython(self, array):
+		lst_out = []
+		for i in range(len(array)):
+			if type(array[i]) is object:
+				print("int")
+				for j in flatten_recursively(array[i]):
+					lst_out.append(j)
+			else:
+				lst_out.append(array[i])
+		return lst_out
+		
 	def init(self):
 		self.lastState = np.array(self.get_parent().world_objects.obs_discrete(), dtype=object)
 		self.nextState = self.lastState
+		
+		for i in range(len(self.nextState)):
+			print(not type(self.nextState[i]) is int)
+		
+		print(self.godotToPython(self.lastState))
 		
 		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY", "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
 		self.stateSize = len(self.lastState)
