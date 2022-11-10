@@ -61,14 +61,13 @@ class Autonomous_Agent(Control):
 		#get_tree().reload_current_scene()
 		
 		if(self.step < self.n_steps):
+			self.lastState = np.array(self.nextState)
 			self.nextState = np.asarray(self.toList(self.get_parent().world_objects.obs_discrete())).astype('float32').flatten()
 			reward = self.calculate_reward()
 			self.cumulativeReward += reward
 			
 			self.store(self.lastState, self.action, reward, self.nextState, self.terminated)
 			print("State check:\n", self.nextState)
-			
-			self.lastState = np.array(self.nextState)
 			
 			self.action = self.act(self.nextState)
 			self.perform_action(self.action)
@@ -99,6 +98,7 @@ class Autonomous_Agent(Control):
 			self.get_parent().place_bomb(self.actions[a])
 			pass
 			
+
 	def calculate_reward(self):
 		if self.get_parent().world_objects.getPlayerHP() < 0:
 			self.terminated = True
@@ -135,12 +135,15 @@ class Autonomous_Agent(Control):
 		
 	def build_compile_model(self):
 		model = Sequential()
-		model.add(InputLayer(input_shape = (1,), batch_size = 1))
-		model.add(Dense(units = 64, kernel_initializer=initializers.RandomNormal(0, 1), bias_initializer=initializers.RandomNormal(0, 1), activation='relu'))
-		model.add(Dense(units = 64, kernel_initializer=initializers.RandomNormal(0, 1), bias_initializer=initializers.RandomNormal(0, 1), activation='relu'))
+		model.add(InputLayer(input_shape = (self.stateSize,), batch_size = 1))
+		model.add(Dense(units = 32, kernel_initializer=initializers.RandomUniform(-1, 1), bias_initializer=initializers.Zeros(), activation='relu'))
+		model.add(Dense(units = 32, kernel_initializer=initializers.RandomUniform(-1, 1), bias_initializer=initializers.Zeros(), activation='relu'))
+		model.add(Dense(units = 32, kernel_initializer=initializers.RandomUniform(-1, 1), bias_initializer=initializers.Zeros(), activation='relu'))
+		model.add(Dense(units = 32, kernel_initializer=initializers.RandomUniform(-1, 1), bias_initializer=initializers.Zeros(), activation='relu'))
 		model.add(Dense(self.action_size, activation='linear'))
 		
 		model.compile(loss='mse', optimizer=self.optimizer)
+		model.summary()
 		return model
 		
 	def alighn_target_model(self):
@@ -150,7 +153,7 @@ class Autonomous_Agent(Control):
 		if np.random.rand() <= self.epsilon:
 			return random.randint(0, len(self.actions) - 1)
 
-		q_values = self.q_network.predict(state, verbose = 0)
+		q_values = self.q_network.predict(state.reshape((1, self.stateSize)), verbose = 0)
 		print(q_values[0])
 		return np.argmax(q_values[0])
 		
