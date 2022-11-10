@@ -213,15 +213,15 @@ func get_maze_mat():
 	return obs
 	
 func get_rewards():
-	var rewards = [player_health_reward,
-	player_shield_reward,
-	agent_health_reward,
-	agent_shield_reward,
+	var rewards = [player_health_reward/100,
+	player_shield_reward/100,
+	agent_health_reward/100,
+	agent_shield_reward/100,
 	pickup_bombs_reward,
 	pickup_xp_reward,
 	pickup_hp_reward,
 	destroy_walls_reward, 
-	weaken_walls_reward]
+	weaken_walls_reward/100]
 	
 	player_health_reward = 0 
 	player_shield_reward = 0
