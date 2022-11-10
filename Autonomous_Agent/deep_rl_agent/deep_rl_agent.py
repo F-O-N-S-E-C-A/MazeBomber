@@ -14,6 +14,8 @@ import tensorflow as tf
 import numpy as np
 import time
 import threading
+import os, types
+import itertools
 
 @exposed
 class Autonomous_Agent(Control):
@@ -22,32 +24,22 @@ class Autonomous_Agent(Control):
 		self.n_episodes = 300
 		self.step = 0
 		self.n_steps = 20000
-		self.batchSize = 100
+		self.batchSize = 32
 		self.cumulativeReward = 0
 		self.action = 0
 		self.terminated = False
 		
-	def godotToPython(self, array):
-		lst_out = []
-		for i in range(len(array)):
-			if type(array[i]) is object:
-				print("int")
-				for j in flatten_recursively(array[i]):
-					lst_out.append(j)
-			else:
-				lst_out.append(array[i])
-		return lst_out
-		
+	def toList(self, lst):
+		l = []
+		for i in lst:
+			l.append(i)
+		return l
+	
 	def init(self):
-		self.lastState = np.array(self.get_parent().world_objects.obs_discrete(), dtype=object)
-		self.nextState = self.lastState
+		self.lastState = np.asarray(self.toList(self.get_parent().world_objects.obs_discrete())).astype('float32').flatten()
+		self.nextState = np.array(self.lastState)
 		
-		for i in range(len(self.nextState)):
-			print(not type(self.nextState[i]) is int)
-		
-		print(self.godotToPython(self.lastState))
-		
-		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY", "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
+		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY"]#, "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
 		self.stateSize = len(self.lastState)
 		self.action_size = len(self.actions)
 		
@@ -57,7 +49,7 @@ class Autonomous_Agent(Control):
 		# Hyperparameters
 		self.optimizer = Adam(learning_rate=0.00025)
 		self.gamma = 0.999
-		self.epsilon = 0.75
+		self.epsilon = 0.5
 		
 		# Build networks
 		self.q_network = self.build_compile_model()
@@ -68,27 +60,27 @@ class Autonomous_Agent(Control):
 		#print("Comulative Reward: ", self.comulativeReward)
 		#get_tree().reload_current_scene()
 		
-		while(self.step < self.n_steps):
-			self.nextState = np.array(self.get_parent().world_objects.obs_discrete(), dtype=object)
+		if(self.step < self.n_steps):
+			self.nextState = np.asarray(self.toList(self.get_parent().world_objects.obs_discrete())).astype('float32').flatten()
 			reward = self.calculate_reward()
 			self.cumulativeReward += reward
 			
 			self.store(self.lastState, self.action, reward, self.nextState, self.terminated)
+			print("State check:\n", self.nextState)
 			
-			self.lastState = self.nextState
+			self.lastState = np.array(self.nextState)
 			
 			self.action = self.act(self.nextState)
 			self.perform_action(self.action)
 			
 			if self.terminated:
 				self.alighn_target_model()
-				break
+				return
 				
-			if len(self.expirience_replay) > self.batchSize:
-				pass
+			if self.step % 1000 == 0 and len(self.expirience_replay) > self.batchSize:
 				#self.retrain(self.batchSize)
-				#t = threading.Thread(target=self.retrain, args=(self.batchSize,))
-				#t.start()
+				t = threading.Thread(target=self.retrain, args=(self.batchSize,))
+				t.start()
 			
 			self.step += 1
 
@@ -144,8 +136,8 @@ class Autonomous_Agent(Control):
 	def build_compile_model(self):
 		model = Sequential()
 		model.add(InputLayer(input_shape = (1,), batch_size = 1))
-		model.add(Dense(units = 64, kernel_initializer=initializers.RandomNormal(0, 1), bias_initializer=initializers.Zeros(), activation='relu'))
-		model.add(Dense(units = 64, kernel_initializer=initializers.RandomNormal(0, 1), bias_initializer=initializers.Zeros(), activation='relu'))
+		model.add(Dense(units = 64, kernel_initializer=initializers.RandomNormal(0, 1), bias_initializer=initializers.RandomNormal(0, 1), activation='relu'))
+		model.add(Dense(units = 64, kernel_initializer=initializers.RandomNormal(0, 1), bias_initializer=initializers.RandomNormal(0, 1), activation='relu'))
 		model.add(Dense(self.action_size, activation='linear'))
 		
 		model.compile(loss='mse', optimizer=self.optimizer)
@@ -159,6 +151,7 @@ class Autonomous_Agent(Control):
 			return random.randint(0, len(self.actions) - 1)
 
 		q_values = self.q_network.predict(state, verbose = 0)
+		print(q_values[0])
 		return np.argmax(q_values[0])
 		
 	def retrain(self, batch_size):
@@ -175,6 +168,7 @@ class Autonomous_Agent(Control):
 				target[0][action] = reward + self.gamma * np.amax(t)
 			
 			self.q_network.fit(state, target, epochs=1, verbose=0)
+		self.alighn_target_model()
 		return	
 	
 	

@@ -117,6 +117,19 @@ func map_obs():
 				#print(obs[posX(b)][posY(b)][2], " - (", posX(b), ",", posY(b), ")")
 	return obs
 	
+
+func flatten(array):
+	var lst_out = []
+	
+	for i in range(len(array)):
+		if typeof(array[i]) == TYPE_ARRAY:
+			for j in flatten(array[i]):
+				lst_out.append(j)
+		else:
+			lst_out.append(array[i])
+			
+	return lst_out
+
 func player_obs_continuous():
 	return [	player.position[0], player.position[1],
 	agent.position[0], agent.position[1], 
@@ -130,10 +143,26 @@ func player_obs_discrete():
 	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
 	
 func obs_discrete():
-	return [map_obs(), posX(player), posY(player), 
-	posX(agent), posY(agent), 
-	agent.hpbar.health, player.hpbar.health, agent.hpbar.shield, player.hpbar.shield, 
-	agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
+	var l = []
+	for i in flatten(map_obs()):
+		l.append(1.0*i)
+	l.append(1.0 * posX(player))
+	l.append(1.0 * posY(player))
+	l.append(1.0 * posX(agent))
+	l.append(1.0 * posY(agent))
+	l.append(1.0 * agent.hpbar.health)
+	l.append(1.0 * player.hpbar.health)
+	l.append(1.0 * agent.hpbar.shield)
+	l.append(1.0 * player.hpbar.shield)
+	l.append(1.0 * agent.number_of_bombs)
+	l.append(1.0 * agent.big_bombs)
+	l.append(1.0 * agent.landMines)
+	l.append(1.0 * agent.c4)
+	
+	return l #[flatten(map_obs()), posX(player), posY(player), 
+	#posX(agent), posY(agent), 
+	#agent.hpbar.health, player.hpbar.health, agent.hpbar.shield, player.hpbar.shield, 
+	#agent.number_of_bombs, agent.big_bombs, agent.landMines, agent.c4]
 	
 func update_player_hp(new_hp, new_shiled_hp):
 	player_health_reward += new_hp - player_hp
