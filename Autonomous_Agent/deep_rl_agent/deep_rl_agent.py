@@ -12,6 +12,7 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import initializers
 import tensorflow as tf
 
+
 import numpy as np
 import time
 import threading
@@ -21,12 +22,16 @@ import itertools
 @exposed
 class Autonomous_Agent(Control):
 	def _ready(self):
-		#print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+		#print("Num GPUs Available: ", len(tf.config.list_physical_devices()))
+		#config = tf.compat.v1.ConfigProto( device_count = {'GPU': 2 , 'CPU': 1} )
+		#sess = tf.Session(config=config)
+		#keras.backend.set_session(sess)
+		
 		self.episode = 0
-		self.n_episodes = 300
+		self.n_episodes = 10000
 		self.step = 0
-		self.n_steps = 1000
-		self.batchSize = 32
+		self.n_steps = 500
+		self.batchSize = 128
 		self.cumulativeReward = 0
 		self.action = 0
 		self.terminated = False
@@ -51,7 +56,7 @@ class Autonomous_Agent(Control):
 		# Hyperparameters
 		self.optimizer = Adam(learning_rate=0.00025)
 		self.gamma = 0.999
-		self.epsilon = 0.4
+		self.epsilon = 0.2
 		
 		# Build networks
 		self.q_network = self.build_compile_model()
@@ -70,22 +75,30 @@ class Autonomous_Agent(Control):
 			reward = self.calculate_reward()
 			self.cumulativeReward += reward
 			
+			if self.step >= self.n_steps:
+				self.get_parent().world_objects.reset_game(self.get_parent())
+				
 			self.terminated = self.get_parent().world_objects.game_over()
+				
 			self.store(self.lastState, self.action, reward, self.nextState, self.terminated)
 			#print("State check:\n", self.nextState)
 			
 			self.action = self.act(self.nextState)
 			#print(self.actions[self.action])
 			self.perform_action(self.action)
-			
-			if self.terminated or self.step == self.n_steps:
+		
+				
+			if self.terminated :
 				self.alighn_target_model()
-				self.q_network.save('../models/q_net')
-				self.target_network.save('../models/policy_net')
+				print("Episode ", self.episode, " ended")
+				
+				if self.episode % 5 == 0:
+					self.q_network.save('../models/q_net')
+					self.target_network.save('../models/policy_net')
+					print("- Models saved -")
 				self.episode += 1
 				self.step = 0
 				print("\n********\nComulative Reward: ", self.cumulativeReward, "\n********\n")
-				print("Episode ", self.episode, " ended\n- Models saved -")
 				self.cumulativeReward = 0
 				self.terminated = False
 				return
@@ -120,13 +133,15 @@ class Autonomous_Agent(Control):
 		if self.get_parent().world_objects.player_dead():
 			return 1
 			
-		totalReward = 0
+		totalReward = 0.0000001
 		
 		'''
 		Rewards
 		
-		player_health_reward, player_shield_reward,
-		agent_health_reward, agent_shield_reward,
+		player_health_reward, 
+		player_shield_reward,
+		agent_health_reward, 
+		agent_shield_reward,
 		pickup_bombs_reward,
 		pickup_xp_reward,
 		pickup_hp_reward,
@@ -134,7 +149,8 @@ class Autonomous_Agent(Control):
 		weaken_walls_reward
 		'''
 		
-		rewardsWeight = [-0.1, -0.1, 0.05, 0.05, 0.001, 0.001, 0.001, 0.001, 0.001]
+		#rewardsWeight = [-0.1, -0.1, 0.05, 0.05, 0.001, 0.001, 0.001, 0.001, 0.001]
+		rewardsWeight = [0, 0, 0, 0, 0.5, 0, 0, 1, 1]
 		rewards = self.get_parent().world_objects.get_rewards()
 		
 		for i in range(len(rewards)):
