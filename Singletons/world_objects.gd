@@ -19,6 +19,7 @@ var spawners = []
 var time_to_win = 0
 var start_counting = false
 
+
 export(bool) var ready = false
 
 # ** rewards **
@@ -32,6 +33,11 @@ var pickup_hp_reward = 0 # 1 for each that was picked up
 var destroy_walls_reward = 0 # 1 for each that was destroied
 var weaken_walls_reward = 0 # cumulative sum of the damage in every wall
 
+var game_over = false
+var agent_dead = false
+var player_dead = false
+
+var maze
 
 var pickupable_classes = [preload("res://Pickupables/BigBombPowerUp.gd"),
 preload("res://Pickupables/c4PowerUp.gd"),
@@ -234,6 +240,33 @@ func get_rewards():
 	weaken_walls_reward = 0
 	
 	return rewards
+	
+func reset_game(entity):
+	game_over = true
+	
+	agent.reset()
+	player.reset()
+	if entity == agent:
+		agent_dead = true
+	elif entity == player:
+		player_dead = true
+	maze.reset_world()
+		
+func player_dead():
+	var previous = player_dead
+	player_dead = false
+	return previous
+	
+func agent_dead():
+	var previous = agent_dead
+	agent_dead = false
+	return previous
+	
+func game_over(): 
+	var previous = game_over
+	game_over = false
+	return previous
+	
 	
 func discretize(p):
 	return Vector2(int(p[0]/GlobalVariables.my_scale), int(p[1]/GlobalVariables.my_scale))

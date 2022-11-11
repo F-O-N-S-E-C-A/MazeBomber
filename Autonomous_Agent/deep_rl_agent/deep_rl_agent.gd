@@ -60,6 +60,7 @@ func my_init(k, image, otherPlayers, a, b):
 func _ready():
 	rng.randomize()
 
+
 func _physics_process(delta):
 	if input_vector != Vector2.ZERO:
 		animationTree.set("parameters/Idle/blend_position", input_vector)
@@ -132,7 +133,10 @@ func add_hp(hp):
 func take_damage(damage):
 	var dead = $HPBar.take_damage(damage)
 	if dead:
-		self.reset()
+		#self.reset()
+		
+		WorldObjects.game_over = true
+		WorldObjects.reset_game(self)
 		#queue_free()
 		#get_parent().get_parent().game_over()
 
@@ -164,3 +168,4 @@ func play_load_sound():
 		
 func updateHUD():
 	pass
+

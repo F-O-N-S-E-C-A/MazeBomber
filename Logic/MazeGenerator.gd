@@ -91,6 +91,7 @@ func my_init():
 		initialise_spawners()
 		if GameModes.singlePlayer:
 			WorldObjects.agent.get_child(0).init()
+			WorldObjects.maze = self
 		
 	if Settings.music_enabled:
 			$music.volume_db = Settings.music_volume - 25
@@ -101,6 +102,13 @@ func my_init():
 	else:
 		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
 
+func reset_world(): 
+	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
+	maze.generate_maze()
+	initialise_walls()
+	initialise_lights(12)
+	initialise_spawners()
+	
 func initialise_huds(n_players):
 	for i in range(n_players):
 		huds.append(preload("res://HUD.tscn").instance())
@@ -164,6 +172,7 @@ func initialise_walls():
 				else:
 					$YSort.add_child(wall)
 					WorldObjects.walls.append(wall)
+					
 func initialise_players(n_players):
 	var ids = []
 	if GameModes.multiplayer_online:

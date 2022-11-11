@@ -5,6 +5,7 @@ from collections import deque
 import time
 import math
 
+from tensorflow import keras
 from tensorflow.keras import Model, Sequential
 from tensorflow.keras.layers import Dense, Embedding, Reshape, InputLayer
 from tensorflow.keras.optimizers import Adam
@@ -39,7 +40,7 @@ class Autonomous_Agent(Control):
 		self.lastState = np.asarray(self.toList(self.get_parent().world_objects.obs_discrete())).astype('float32').flatten()
 		self.nextState = np.array(self.lastState)
 		
-		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY"]#, "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
+		self.actions = ["UP", "DOWN", "LEFT", "RIGHT", "STAY", "TNT", "BIG_BOMB", "LAND_MINE", "C4"]
 		self.stateSize = len(self.lastState)
 		self.action_size = len(self.actions)
 		
@@ -56,9 +57,12 @@ class Autonomous_Agent(Control):
 		self.target_network = self.build_compile_model()
 		self.alighn_target_model()
 		
+		self.load_models()
+		
 	def _process(self, delta):
 		#print("Comulative Reward: ", self.comulativeReward)
 		#get_tree().reload_current_scene()
+		
 		
 		if(self.step < self.n_steps):
 			self.lastState = np.array(self.nextState)
@@ -67,19 +71,30 @@ class Autonomous_Agent(Control):
 			self.cumulativeReward += reward
 			
 			self.store(self.lastState, self.action, reward, self.nextState, self.terminated)
-			print("State check:\n", self.nextState)
+			#print("State check:\n", self.nextState)
 			
 			self.action = self.act(self.nextState)
+			#print(self.actions[self.action])
 			self.perform_action(self.action)
 			
-			if self.terminated:
+			terminated = self.get_parent().world_objects.game_over()
+			if terminated:
 				self.alighn_target_model()
+				self.q_network.save('../models/q_net')
+				self.target_network.save('../models/policy_net')
+				self.episode += 1
+				print("Episode ", self.episode, " ended\n- Models saved -")
 				return
-				
+								
 			if self.step % 300 == 0 and len(self.expirience_replay) > self.batchSize:
-				#self.retrain(self.batchSize)
-				t = threading.Thread(target=self.retrain, args=(self.batchSize,))
-				t.start()
+				self.retrain(self.batchSize)
+				#t = threading.Thread(target=self.retrain, args=(self.batchSize,))
+				#t.start()
+			
+			if self.step % 1000 == 0:
+				self.alighn_target_model()
+				print("\n********\nComulative Reward: ", self.cumulativeReward, "\n********\n")
+				self.cumulativeReward = 0
 			
 			self.step += 1
 
@@ -100,14 +115,13 @@ class Autonomous_Agent(Control):
 			
 
 	def calculate_reward(self):
-		if self.get_parent().world_objects.getPlayerHP() < 0:
-			self.terminated = True
-			return 1
-		elif self.get_parent().world_objects.getAgentHP() < 0:
-			self.terminated = True
+		
+		if self.get_parent().world_objects.agent_dead():
 			return 0
+		if self.get_parent().world_objects.player_dead():
+			return 1
 			
-		totalReward = 0
+		totalReward = 0.0000000000001
 		
 		'''
 		Rewards
@@ -143,7 +157,7 @@ class Autonomous_Agent(Control):
 		model.add(Dense(self.action_size, activation='linear'))
 		
 		model.compile(loss='mse', optimizer=self.optimizer)
-		model.summary()
+		#model.summary()
 		return model
 		
 	def alighn_target_model(self):
@@ -154,7 +168,7 @@ class Autonomous_Agent(Control):
 			return random.randint(0, len(self.actions) - 1)
 
 		q_values = self.q_network.predict(state.reshape((1, self.stateSize)), verbose = 0)
-		print(q_values[0])
+		#print(q_values[0])
 		return np.argmax(q_values[0])
 		
 	def retrain(self, batch_size):
@@ -174,4 +188,13 @@ class Autonomous_Agent(Control):
 		self.alighn_target_model()
 		return	
 	
+	def load_models(self):
+		print('- Loading models... - ')
+		try:
+			self.q_network = keras.models.load_model('../models/q_net')
+			self.target_network = keras.models.load_model('../models/policy_net')
+			print('- Models loaded - ')
+		except:
+			print('- No models previously saved - ')
+		
 	

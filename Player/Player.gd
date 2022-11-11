@@ -24,6 +24,7 @@ var selfPeerID
 var ownerID = 1
 var player: String
 var hud = null
+var initialPosition
 
 var opponent = null
 
@@ -40,6 +41,7 @@ func _ready():
 		selfPeerID = get_tree().get_network_unique_id()
 
 func my_init(k, image, otherPlayers, p, h):
+	initialPosition = self.position
 	hud = h
 	updateHUD()
 	player = p
@@ -170,6 +172,8 @@ func _process(_delta):
 
 		updateHUD()
 		play_place_bomb_sound()
+	
+		
 
 func add_shield(shield):
 	$HPBar.add_shield(shield)
@@ -180,8 +184,17 @@ func add_hp(hp):
 func take_damage(damage):
 	var dead = $HPBar.take_damage(damage)
 	if dead:
-		queue_free()
-		get_parent().get_parent().game_over()
+		if GameModes.singlePlayer:
+			WorldObjects.game_over = true
+			WorldObjects.reset_game(self)
+		else:
+			queue_free()
+			get_parent().get_parent().game_over()
+			
+func reset():
+	self.position = initialPosition
+	$HPBar.health = 100
+	$HPBar.shield = 0
 
 func speed_up_timer_init():
 	speed_up_timer = Timer.new()
