@@ -103,7 +103,7 @@ func my_init():
 		$CanvasModulate.set_color(Color(0.5,0.5,0.5))
 
 func reset_world(): 
-	#maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
+	maze = load("res://Logic/Maze.gd").new(GlobalVariables.my_width, GlobalVariables.my_height)
 	maze.generate_maze()
 	initialise_walls()
 	initialise_lights(12)

@@ -12,6 +12,8 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import initializers
 import tensorflow as tf
 
+import matplotlib as plt
+
 
 import numpy as np
 import time
@@ -35,6 +37,7 @@ class Autonomous_Agent(Control):
 		self.cumulativeReward = 0
 		self.action = 0
 		self.terminated = False
+		self.cumulativeRewardHistory = []
 		
 	def toList(self, lst):
 		l = []
@@ -100,6 +103,7 @@ class Autonomous_Agent(Control):
 				self.step = 0
 				print("\n********\nComulative Reward: ", self.cumulativeReward, "\n********\n")
 				self.cumulativeReward = 0
+				self.cumulativeRewardHistory.append(cumulativeReward)
 				self.terminated = False
 				return
 								
