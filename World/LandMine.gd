@@ -105,3 +105,5 @@ func play_explosion_sound():
 		$explosion_sound_fx.play()
 
 
+func kill():
+	queue_free()

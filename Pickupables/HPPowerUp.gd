@@ -16,3 +16,6 @@ func _on_HPPowerUp_body_entered(body):
 		WorldObjects.pickupables.erase(self)
 		if GameModes.is_an_agent(body):
 			WorldObjects.pickup_hp_reward += 1
+
+func kill():
+	queue_free()

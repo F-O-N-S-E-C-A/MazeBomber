@@ -17,3 +17,6 @@ func _on_LandMinePowerUp_body_entered(body):
 		WorldObjects.pickupables.erase(self)
 		if GameModes.is_an_agent(body):
 			WorldObjects.pickup_bombs_reward += 1
+
+func kill():
+	queue_free()

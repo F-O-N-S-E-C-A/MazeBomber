@@ -237,7 +237,7 @@ func get_rewards():
 	pickup_xp_reward = 0
 	pickup_hp_reward = 0
 	destroy_walls_reward = 0
-	weaken_walls_reward = 0
+	weaken_walls_reward = 0 
 	
 	return rewards
 	
@@ -250,7 +250,20 @@ func reset_game(entity):
 		agent_dead = true
 	elif entity == player:
 		player_dead = true
+	for w in walls: 
+		w.kill()
+	for p in pickupables:
+		p.kill()
+	for s in spawners:
+		s.kill()
+	for b in bombs:
+		b.kill()
+	walls = []
+	pickupables = []
+	spawners = []
+	bombs = []
 	maze.reset_world()
+	
 		
 func player_dead():
 	var previous = player_dead

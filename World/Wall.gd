@@ -15,6 +15,7 @@ func calculate_hp(distance_to_middle):
 	set_texture()
 	pass
 
+
 func take_damage(damage):
 	if !border && health > 0:
 		var new_health = health - damage
@@ -57,4 +58,6 @@ func set_texture():
 		var n = 4 - floor(health*4/100)
 		$Sprite.set_texture(load("res://World/images/parede_fase" + str(n) + ".png"))
 
+func kill():
+	queue_free()
 	

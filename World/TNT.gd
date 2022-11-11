@@ -99,3 +99,6 @@ func play_explosion_sound():
 	if Settings.sound_fx_enabled:
 		$explosion_sound_fx.volume_db = Settings.sound_fx_volume - 25
 		$explosion_sound_fx.play()
+
+func kill():
+	queue_free()

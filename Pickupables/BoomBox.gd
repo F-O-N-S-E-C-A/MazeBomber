@@ -26,3 +26,6 @@ func _on_BoomBox_body_entered(body):
 func _process(_delta):
 	if my_player != null && overlaps_body(my_player):
 		pick_up(my_player)
+
+func kill():
+	queue_free()

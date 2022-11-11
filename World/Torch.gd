@@ -11,3 +11,5 @@ func _ready():
 	pass
 
 	
+func kill():
+	queue_free()

@@ -9,16 +9,16 @@ var damage_multiplier = 1
 var radius_multiplier = 1
 var max_speed = BASEMAXSPEED
 #var max_bombs = 1
-var max_bombs = 1000
+var max_bombs = 1
 #var number_of_bombs = 1
-var number_of_bombs = 1000
+var number_of_bombs = 1
 #var big_bombs = 0
-var big_bombs = 1000
+var big_bombs = 0
 #var landMines = 0
-var landMines = 1000
+var landMines = 0
 var speed_up_timer
 #var c4 = 0
-var c4 = 1000
+var c4 = 0
 var c4_planted = null
 var model = false
 
@@ -45,6 +45,7 @@ func reset():
 	self.position = initialPosition
 	$HPBar.health = 100
 	$HPBar.shield = 0
+	c4_planted = null
 
 func setVec(x, y):
 	input_vector.x = x

@@ -19,3 +19,6 @@ func _on_c4PowerUp_body_entered(body):
 		if GameModes.is_an_agent(body):
 			WorldObjects.pickup_bombs_reward += 1
 			 
+
+func kill():
+	queue_free()

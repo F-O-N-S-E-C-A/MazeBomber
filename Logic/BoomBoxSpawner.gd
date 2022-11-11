@@ -25,3 +25,7 @@ func spawn():
 	boom_box.my_init(self)
 	add_child(boom_box)
 	timer.stop()
+
+func kill():
+	queue_free()
+	

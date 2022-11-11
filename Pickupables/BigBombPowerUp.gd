@@ -18,3 +18,5 @@ func _on_BigBombPowerUp_body_entered(body):
 		queue_free()
 		WorldObjects.pickupables.erase(self)
 	
+func kill():
+	queue_free()

@@ -50,7 +50,9 @@ func my_init(owner):
 	radius = base_radius * owner.radius_multiplier
 	if Settings.nuke_mode:
 		radius = 5000
-	
+
+
+
 func doExplosion():
 	var ds = get_world_2d().get_direct_space_state()
 	var n = GlobalVariables.number_of_rays
@@ -93,3 +95,5 @@ func play_explosion_sound():
 		$explosion_sound_fx.volume_db = Settings.sound_fx_volume - 15
 		$explosion_sound_fx.play()
 
+func kill():
+	queue_free()
