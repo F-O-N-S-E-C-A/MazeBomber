@@ -77,7 +77,7 @@ class Autonomous_Agent(Control):
 			print(self.actions[self.action])
 			self.perform_action(self.action)
 			
-			if self.terminated or self.step % self.n_steps == 0:
+			if self.terminated or self.step == self.n_steps:
 				self.alighn_target_model()
 				self.q_network.save('../models/q_net')
 				self.target_network.save('../models/policy_net')
