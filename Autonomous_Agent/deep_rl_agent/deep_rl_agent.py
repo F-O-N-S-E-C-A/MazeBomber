@@ -24,7 +24,7 @@ class Autonomous_Agent(Control):
 		self.episode = 0
 		self.n_episodes = 300
 		self.step = 0
-		self.n_steps = 20000
+		self.n_steps = 1000
 		self.batchSize = 32
 		self.cumulativeReward = 0
 		self.action = 0
@@ -50,7 +50,7 @@ class Autonomous_Agent(Control):
 		# Hyperparameters
 		self.optimizer = Adam(learning_rate=0.00025)
 		self.gamma = 0.999
-		self.epsilon = 0.5
+		self.epsilon = 0.3
 		
 		# Build networks
 		self.q_network = self.build_compile_model()
@@ -63,38 +63,36 @@ class Autonomous_Agent(Control):
 		#print("Comulative Reward: ", self.comulativeReward)
 		#get_tree().reload_current_scene()
 		
-		
-		if(self.step < self.n_steps):
+		if(self.step <= self.n_steps):
 			self.lastState = np.array(self.nextState)
 			self.nextState = np.asarray(self.toList(self.get_parent().world_objects.obs_discrete())).astype('float32').flatten()
 			reward = self.calculate_reward()
 			self.cumulativeReward += reward
 			
+			self.terminated = self.get_parent().world_objects.game_over()
 			self.store(self.lastState, self.action, reward, self.nextState, self.terminated)
 			#print("State check:\n", self.nextState)
 			
 			self.action = self.act(self.nextState)
-			#print(self.actions[self.action])
+			print(self.actions[self.action])
 			self.perform_action(self.action)
 			
-			terminated = self.get_parent().world_objects.game_over()
-			if terminated:
+			if self.terminated or self.step % self.n_steps == 0:
 				self.alighn_target_model()
 				self.q_network.save('../models/q_net')
 				self.target_network.save('../models/policy_net')
 				self.episode += 1
+				self.step = 0
+				print("\n********\nComulative Reward: ", self.cumulativeReward, "\n********\n")
 				print("Episode ", self.episode, " ended\n- Models saved -")
+				self.cumulativeReward = 0
+				self.terminated = False
 				return
 								
-			if self.step % 300 == 0 and len(self.expirience_replay) > self.batchSize:
-				self.retrain(self.batchSize)
-				#t = threading.Thread(target=self.retrain, args=(self.batchSize,))
-				#t.start()
-			
-			if self.step % 1000 == 0:
-				self.alighn_target_model()
-				print("\n********\nComulative Reward: ", self.cumulativeReward, "\n********\n")
-				self.cumulativeReward = 0
+			if self.step % 250 == 0 and len(self.expirience_replay) > self.batchSize:
+				#self.retrain(self.batchSize)
+				t = threading.Thread(target=self.retrain, args=(self.batchSize,))
+				t.start()
 			
 			self.step += 1
 
@@ -168,7 +166,7 @@ class Autonomous_Agent(Control):
 			return random.randint(0, len(self.actions) - 1)
 
 		q_values = self.q_network.predict(state.reshape((1, self.stateSize)), verbose = 0)
-		#print(q_values[0])
+		print(q_values[0])
 		return np.argmax(q_values[0])
 		
 	def retrain(self, batch_size):
