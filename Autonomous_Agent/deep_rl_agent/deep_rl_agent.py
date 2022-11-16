@@ -12,7 +12,6 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import initializers
 import tensorflow as tf
 
-import matplotlib as plt
 
 
 import numpy as np
@@ -102,8 +101,8 @@ class Autonomous_Agent(Control):
 				self.episode += 1
 				self.step = 0
 				print("\n********\nComulative Reward: ", self.cumulativeReward, "\n********\n")
+				self.cumulativeRewardHistory.append(self.cumulativeReward)
 				self.cumulativeReward = 0
-				self.cumulativeRewardHistory.append(cumulativeReward)
 				self.terminated = False
 				return
 								
@@ -137,7 +136,7 @@ class Autonomous_Agent(Control):
 		if self.get_parent().world_objects.player_dead():
 			return 1
 			
-		totalReward = 0.0000001
+		totalReward = 0.5
 		
 		'''
 		Rewards
@@ -153,8 +152,8 @@ class Autonomous_Agent(Control):
 		weaken_walls_reward
 		'''
 		
-		#rewardsWeight = [-0.1, -0.1, 0.05, 0.05, 0.001, 0.001, 0.001, 0.001, 0.001]
-		rewardsWeight = [0, 0, 0, 0, 0.5, 0, 0, 1, 1]
+		rewardsWeight = [-0.1, -0.1, 0.05, 0.05, 0.001, 0.001, 0.001, 0.001, 0.001]
+		#rewardsWeight = [0, 0, 0, 0, 0.5, 0, 0, 1, 1]
 		rewards = self.get_parent().world_objects.get_rewards()
 		
 		for i in range(len(rewards)):
